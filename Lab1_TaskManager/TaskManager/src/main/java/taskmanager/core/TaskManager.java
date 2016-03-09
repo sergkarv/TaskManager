@@ -6,7 +6,7 @@ import java.util.Collection;
 
 /**
  * Интерфейс класса для работы с журналом задач
- * @author Головин, Карасев
+ * @author Карасев
  * @version 1.0
  */
 public interface TaskManager {
