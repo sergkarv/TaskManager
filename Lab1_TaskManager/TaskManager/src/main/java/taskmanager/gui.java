@@ -432,7 +432,6 @@ public class gui extends javax.swing.JFrame implements Listener {
         jDateChooser.setCalendar(new GregorianCalendar());
 
         completedTasksDialog.setMinimumSize(new java.awt.Dimension(663, 396));
-        completedTasksDialog.setModal(true);
         completedTasksDialog.setResizable(false);
 
         completedTasksListPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
