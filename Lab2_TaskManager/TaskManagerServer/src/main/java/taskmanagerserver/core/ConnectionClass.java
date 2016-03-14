@@ -17,7 +17,7 @@ import taskmanagerserver.GUI;
 import user.User;
 
 public class ConnectionClass implements Listener {
-
+    //update
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private Thread receiveThread;
