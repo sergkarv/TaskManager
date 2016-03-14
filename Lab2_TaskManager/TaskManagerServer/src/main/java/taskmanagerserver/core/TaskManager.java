@@ -3,6 +3,7 @@ package taskmanagerserver.core;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 import task.Task;
 import user.User;
 
@@ -22,11 +23,11 @@ public interface TaskManager {
     public void addTask(Task task);
     public void removeTask(long id);
     public Task getTask(long id);
-    public Task[] getWorkOnTasks();
-    public Task[] getCompletedTasks();
-    public Task[] getFinishedTasks();
-    public Task[] getHighPrioritedTasks();
-    public Task[] getNormalPrioritedTasks();
+    public List<Task> getWorkOnTasks();
+    public List<Task> getCompletedTasks();
+    public List<Task> getFinishedTasks();
+    public List<Task> getHighPrioritedTasks();
+    public List<Task> getNormalPrioritedTasks();
     public Collection<Task> getCollectionTask();
     public void addUser(User user);
     public User getUser(long id);

@@ -123,17 +123,17 @@ public class ConcreteTaskManager implements TaskManager {
     }
     
     @Override
-    public Task[] getWorkOnTasks(){
+    public List<Task> getWorkOnTasks(){
         ArrayList<Task> list = new ArrayList<>();
         for (Task task : this.getCollectionTask()) {
             if (task.getWorkOnTask()) {                
                 list.add(task);
             }
         }
-        if (list.toArray().length == 0) {
+        if (list.size() == 0) {
             return null;
         }
-        return this.toArray(list);
+        return Collections.unmodifiableList(list);
     }
     
     /**
@@ -142,7 +142,7 @@ public class ConcreteTaskManager implements TaskManager {
      * @return Массив выполненных задач
      */
     @Override
-    public Task[] getCompletedTasks()
+    public List<Task> getCompletedTasks()
     {
         ArrayList<Task> list = new ArrayList<>();
         for (Task task: this.getCollectionTask()) {
@@ -152,23 +152,10 @@ public class ConcreteTaskManager implements TaskManager {
                 list.add(task);
             }
         }
-        if (list.toArray().length == 0) {
+        if (list.size() == 0) {
             return null;
         }
-        return this.toArray(list);        
-    }
-
-    /**
-     * Превращает List<Task> в массив задач Task[]
-     * @param list List<Task>, который требуется превратить в массив
-     * @return Массив задач
-     */
-    private Task[] toArray(List<Task> list) {
-        Task[] array = new Task[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-        return array;
+        return Collections.unmodifiableList(list);        
     }
 
     /**
@@ -176,7 +163,7 @@ public class ConcreteTaskManager implements TaskManager {
      * @return Массив завершённых задач
      */
     @Override
-    public Task[] getFinishedTasks(){
+    public List<Task> getFinishedTasks(){
         ArrayList<Task> list = new ArrayList<>();
         for (Task task: this.getCollectionTask()) {
             if (task.isFinished()) {
@@ -184,11 +171,11 @@ public class ConcreteTaskManager implements TaskManager {
             }
         }
         
-        if (list.toArray().length == 0) {
+        if (list.size() == 0) {
             return null;
         }
 
-        return this.toArray(list);
+        return Collections.unmodifiableList(list);
     }
 
     /**
@@ -196,7 +183,7 @@ public class ConcreteTaskManager implements TaskManager {
      * @return Массив задач с высоким приоритетом
      */
     @Override
-    public Task[] getHighPrioritedTasks() {
+    public List<Task> getHighPrioritedTasks() {
         ArrayList<Task> list = new ArrayList<>();
         for (Task task: this.getCollectionTask()) {
             if (task.isHighPriority()) {
@@ -204,11 +191,11 @@ public class ConcreteTaskManager implements TaskManager {
             }
         }
         
-        if (list.toArray().length == 0) {
+        if (list.size() == 0) {
             return null;
         }
         
-        return this.toArray(list);
+        return Collections.unmodifiableList(list);
     }
 
     /**
@@ -216,7 +203,7 @@ public class ConcreteTaskManager implements TaskManager {
      * @return Массив задач с обычным приоритетом
      */
     @Override
-    public Task[] getNormalPrioritedTasks() {
+    public List<Task> getNormalPrioritedTasks() {
         ArrayList<Task> list = new ArrayList<>();
         for (Task task: this.getCollectionTask()) {
             if (!task.isHighPriority()) {
@@ -224,11 +211,11 @@ public class ConcreteTaskManager implements TaskManager {
             }
         }
         
-        if (list.toArray().length == 0) {
+        if (list.size() == 0) {
             return null;
         }
         
-        return this.toArray(list);
+        return Collections.unmodifiableList(list);
     }
     
     @Override

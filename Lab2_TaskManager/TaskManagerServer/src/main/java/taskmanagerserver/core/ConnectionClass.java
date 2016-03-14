@@ -20,9 +20,7 @@ public class ConnectionClass implements Listener {
 
     private ObjectInputStream in;
     private ObjectOutputStream out;
-    private Thread sendThread;
     private Thread receiveThread;
-    private volatile DataPackage dataPackage;
     private GUI gui;
     private static List<Long> alertTasks = new ArrayList<>();
     private User connectUser;
@@ -33,29 +31,7 @@ public class ConnectionClass implements Listener {
         in = new ObjectInputStream(s.getInputStream());
         out = new ObjectOutputStream(s.getOutputStream());
         this.manager = manager;
-        //отправляем пользователю нужные задания упакованные в объект класс DataPackage
-        sendThread = new Thread() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (dataPackage != null) {
-                        try {
 
-                            out.flush();
-                            out.writeObject(dataPackage);
-                            out.flush();
-                        } catch (IOException ioe) {
-                            JOptionPane.showMessageDialog(gui,
-                                    "Ошибка при передаче команды клиенту",
-                                    "Ошибка",
-                                    JOptionPane.ERROR_MESSAGE);
-                        }
-                        dataPackage = null;
-                    }
-
-                }
-            }
-        };
         receiveThread = new Thread() {
             @Override
             public void run() {
@@ -64,11 +40,11 @@ public class ConnectionClass implements Listener {
                     try {
                         receivedCommand = (DataPackage) in.readObject();
                         //Command com = receivedCommand.getName();
-                        
+
                         switch (receivedCommand.getName()) {
-                            
-                            case NAME_USER : {
-                                synchronized (manager) {
+
+                            case NAME_USER: {
+                                synchronized (ConnectionClass.this.manager) {
                                     String userName = (String) receivedCommand.getValue();
                                     boolean flag
                                             = manager.containsUser(userName);
@@ -81,127 +57,112 @@ public class ConnectionClass implements Listener {
                                         connectUser = user;
                                     }
                                 }
-                                
-                                gui.update();
+
+                                ConnectionClass.this.gui.update();
                                 sendTaskAndAlertTask();
                                 break;
                             }
-                            case ADD : {
-                                synchronized (manager) {
-                                    Task task = (Task)receivedCommand.getValue();
+                            case ADD: {
+                                synchronized (ConnectionClass.this.manager) {
+                                    Task task = (Task) receivedCommand.getValue();
                                     task.setUser(connectUser);
                                     manager.addTask(task);
                                 }
-                                gui.update();
+                                ConnectionClass.this.gui.update();
                                 break;
                             }
-                            case REMOVE : {
-                                try {
-                                    long idTask = (long) receivedCommand
-                                            .getValue();
-                                    synchronized (manager) {
-                                        synchronized(alertTasks){
-                                            alertTasks.remove(idTask);
-                                            manager.removeTask(idTask);
-                                        }
+                            case REMOVE: {
+                                long idTask = (long) receivedCommand
+                                        .getValue();
+                                synchronized (ConnectionClass.this.manager) {
+                                    synchronized (alertTasks) {
+                                        alertTasks.remove(idTask);
+                                        manager.removeTask(idTask);
                                     }
-                                    gui.update();
-                                } catch (ArrayIndexOutOfBoundsException e) {
-                                    dataPackage = new DataPackage(Command.FAIL);
                                 }
+                                ConnectionClass.this.gui.update();
                                 break;
                             }
-                            case REMOVE_ALERT : {//вероятно лишнее
-                                try {
-                                    long idTask = (long) receivedCommand
-                                            .getValue();
-                                    synchronized (manager) {
-                                        synchronized(alertTasks){
-                                            alertTasks.remove(idTask);
-                                            manager.removeTask(idTask);
-                                        }
+                            case REMOVE_ALERT: {//вероятно лишнее
+                                long idTask = (long) receivedCommand
+                                        .getValue();
+                                synchronized (ConnectionClass.this.manager) {
+                                    synchronized (alertTasks) {
+                                        alertTasks.remove(idTask);
+                                        manager.removeTask(idTask);
                                     }
-                                    gui.update();
-                                } catch (ArrayIndexOutOfBoundsException ex) {
-                                    dataPackage = new DataPackage(Command.FAIL);
                                 }
+                                ConnectionClass.this.gui.update();
                                 break;
                             }
-                            case EDIT : {
-                                synchronized (manager) {
+                            case EDIT: {
+                                synchronized (ConnectionClass.this.manager) {
                                     Task task = (Task) receivedCommand
                                             .getValue();
-                                    try {
 
-                                        long index = task.getId();
-                                        if(!task.getWorkOnTask()){
-                                            synchronized(alertTasks){
-                                                alertTasks.remove(index);
-                                            }                                            
+                                    long index = task.getId();
+                                    if (!task.getWorkOnTask()) {
+                                        synchronized (alertTasks) {
+                                            alertTasks.remove(index);
                                         }
-                                        synchronized(manager){
-                                            manager.setTask(task.getId(), task.getName(),
-                                                    task.getDescription(), task.getContacts(),
-                                                    task.getDate(), task.isFinished(),
-                                                    task.isHighPriority(), task.getSoundFileName(),
-                                                    task.getWorkOnTask(), connectUser);
-                                        }
-                                                                                
-                                        gui.update();
-                                    } catch (ArrayIndexOutOfBoundsException e) {
-                                        dataPackage = new DataPackage(Command.FAIL);
-                                    }                                                                        
-                                }
-                                break;
-                            }
-                            case EDIT_ALERT : {
-                                synchronized (manager) {
-                                    Task task = (Task) receivedCommand
-                                            .getValue();
-                                    try {
-                                        synchronized(alertTasks){
-                                            alertTasks.remove(task.getId());
-                                        }                                        
-                                        task.setWorkOnTask(false);
+                                    }
+                                    synchronized (ConnectionClass.this.manager) {
                                         manager.setTask(task.getId(), task.getName(),
-                                                    task.getDescription(), task.getContacts(),
-                                                    task.getDate(), task.isFinished(),
-                                                    task.isHighPriority(), task.getSoundFileName(),
-                                                    task.getWorkOnTask(), connectUser);
-                                        //manager.removeTask(task.getId());
-                                        //manager.addTask(task);
-                                        gui.update();
-                                    } catch (ArrayIndexOutOfBoundsException e) {
-                                        dataPackage = new DataPackage(Command.FAIL);
+                                                task.getDescription(), task.getContacts(),
+                                                task.getDate(), task.isFinished(),
+                                                task.isHighPriority(), task.getSoundFileName(),
+                                                task.getWorkOnTask(), connectUser);
                                     }
+
+                                    ConnectionClass.this.gui.update();
+                                }
+                                break;
+                            }
+                            case EDIT_ALERT: {
+                                synchronized (ConnectionClass.this.manager) {
+                                    Task task = (Task) receivedCommand
+                                            .getValue();
+                                    synchronized (alertTasks) {
+                                        alertTasks.remove(task.getId());
+                                    }
+                                    task.setWorkOnTask(false);
+                                    manager.setTask(task.getId(), task.getName(),
+                                            task.getDescription(), task.getContacts(),
+                                            task.getDate(), task.isFinished(),
+                                            task.isHighPriority(), task.getSoundFileName(),
+                                            task.getWorkOnTask(), connectUser);
+                                    //manager.removeTask(task.getId());
+                                    //manager.addTask(task);
+                                    ConnectionClass.this.gui.update();
                                 }
                                 break;
                             }
 
-                            case GET_ALL : {
+                            case GET_ALL: {
                                 //sendTasks();
                                 sendTaskAndAlertTask();
                                 break;
                             }
                         }
                     } catch (SocketException e) {
-                        JOptionPane.showMessageDialog(gui,
+                        JOptionPane.showMessageDialog(ConnectionClass.this.gui,
                                 "Потеряно соединение с клиентом",
                                 "Ошибка", JOptionPane.INFORMATION_MESSAGE);
-                        ConnectionClass.this.disconnect(gui);
+                        ConnectionClass.this.disconnect(ConnectionClass.this.gui);
                         break;
                     } catch (ClassNotFoundException | IOException ex) {
-                        JOptionPane.showMessageDialog(gui,
+                        JOptionPane.showMessageDialog(ConnectionClass.this.gui,
                                 "Ошибка при получении команды от клиента",
                                 "Ошибка", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
         };
-        //sendThread.start();
+
         receiveThread.start();
     }
     
+    //отправляем пользователю нужные задания упакованные в объект класс DataPackage
     public void sendData(DataPackage data) {
         if (data != null) {
             try {
@@ -223,7 +184,6 @@ public class ConnectionClass implements Listener {
         Collection<Task> tasks= null;
         synchronized (this.manager) {
             tasks = manager.getCollectionTasksForUser(connectUser.getId());
-            
             //manager.getCompletedTasks();
         }
         DataPackage data = new DataPackage(Command.ALL_TASKS, tasks.toArray(), alertTasks.toArray());
@@ -235,14 +195,12 @@ public class ConnectionClass implements Listener {
         Collection<Task> tasks= null;
         synchronized (this.manager) {
             tasks = manager.getCollectionTasksForUser(connectUser.getId());
-            
             //manager.getCompletedTasks();
         }
         
         //если задача удалена на сервере, но была в работе
         //найти не существующий id в alertTasks и удалить
         synchronized (this.alertTasks){
-            
             
             boolean flag = false;
             for(long id : alertTasks){
@@ -262,15 +220,14 @@ public class ConnectionClass implements Listener {
                     alertTasks.remove(id);
                 }
             }
-            
-            DataPackage data = dataPackage
+            DataPackage data
                     = new DataPackage(Command.ALL_TASKS_AND_ALERT, tasks.toArray(), alertTasks.toArray());
             this.sendData(data);
         }
     }
     
     //оповещаем пользователя о наступивших задачах
-    public void sendAlertTasks(Task[] tasks) {
+    public void sendAlertTasks(List<Task> tasks) {
        //ArrayList<Task> list = new ArrayList<>();
         synchronized (this.alertTasks) {
             for (Task task : tasks) {
@@ -285,46 +242,14 @@ public class ConnectionClass implements Listener {
     }
 
     private void disconnect(GUI gui) {
-        //sendThread.interrupt();
         receiveThread.interrupt();
         gui.disconnect(this);
     }
 
     @Override
     public void update(Object value) {
-        Task[] tasks = (Task[])value;//!!! Возможно вызовет исключение
+        List<Task> tasks = (List<Task>)value;//!!! Warning
         sendAlertTasks(tasks);
     }
 
-    //Сервер удалил задачу i
-    //Нужно поправить список индексов
-//    public void deleteAlert(int index) {
-//        alertTasks.remove((Object) index);
-//        for (int i = 0; i < alertTasks.size(); i++) {
-//            int value = (int) alertTasks.get(i);
-//            if (value > index) {
-//                alertTasks.set(i, --value);
-//            }
-//        }
-//        gui.update();
-//    }
-    
-    public void addIndexTasks(long[] array){
-        for (long i : array) {
-            alertTasks.add(i);
-        }
-    }
-    
-    public void removeIndexTasks(long id){
-        alertTasks.remove(id);
-    }
-    
-    private Task[] toArrayTask(List<Task> list){
-        Task[] tasks = new Task[list.size()];
-        for(int i = 0; i< list.size(); i++){
-            tasks[i] = list.get(i);
-        }
-        return tasks;
-    }
-    
 }

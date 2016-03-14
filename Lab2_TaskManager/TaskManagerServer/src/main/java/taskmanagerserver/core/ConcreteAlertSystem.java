@@ -10,6 +10,7 @@
 package taskmanagerserver.core;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import task.Task;
@@ -56,7 +57,7 @@ public class ConcreteAlertSystem implements AlertSystem, Runnable {
      * @param tasks Массив выполненных заданий
      */
     @Override
-    public void notifyListener(Task[] tasks) {
+    public void notifyListener(List<Task> tasks) {
         
         //ConnectionClass.addIndexTasks(tasks);
         for(Listener listener: arrayListeners){
@@ -67,7 +68,7 @@ public class ConcreteAlertSystem implements AlertSystem, Runnable {
     /** Проверяет список заданий, оповещает слушателя при необходимости */
     @Override
     public void check() {
-        Task[] tasks =  manager.getCompletedTasks();
+        List<Task> tasks =  manager.getCompletedTasks();
         if (tasks != null) {
             notifyListener(tasks);
         }

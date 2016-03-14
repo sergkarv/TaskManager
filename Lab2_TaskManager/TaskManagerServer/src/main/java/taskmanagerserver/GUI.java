@@ -24,7 +24,8 @@ public class GUI extends javax.swing.JFrame {
 
     /* Поток, обрабатывающий подключения к серверу */
     private ServerSocket serverSocket;
-    /* Динамический массив подключений */
+    /* Динамический массив подключений; Для каждого соединения с клиентом
+       свой объект ConnectionClass*/
     private List<ConnectionClass> connections;
     /* Объект для работы со списком задач */
     private TaskManager manager;
@@ -102,63 +103,18 @@ public class GUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
  
-    //Вызывается при удалённом изменении списка задач
+    //Вызывается при изменении задач
     public void update() {
         EventQueue.invokeLater(new Runnable(){
            public void run(){
-               String nameUser = (String) usersComboBox.getSelectedItem();
-               fillTableSelectedUser(nameUser);
+               User user = (User) usersComboBox.getSelectedItem();
+               //String nameUser = (String) usersComboBox.getSelectedItem();
+               fillTableSelectedUser(user.getName());
                notifyConnections();
            }
         });        
     }
 
-    //Заполнение таблицы всеми задачами
-//    public void fillTable() {
-//        Object[] column = {"Id","Название", "Дата/время", "Завершённость"};
-//        DefaultTableModelNotEdit model = new DefaultTableModelNotEdit();
-//        model.setColumnIdentifiers(column);
-//        //Task task;
-//        synchronized (manager) {
-//            Collection<Task> list = manager.getCollectionTask();
-//            for (Task task : list) {
-//                if (task.isFinished()) {
-//                    model.addRow(new Object[]{task,
-//                                task.getDate().getTime(), "Завершена"});
-//                } else {
-//                    model.addRow(new Object[]{task,
-//                                task.getDate().getTime(), "Не завершена"});
-//                }
-//            }
-//        }
-//        taskTable.setModel(model);
-//        /* Выделение приоритета красным, добавление сортировки в таблицу */
-//        renderer = new DefaultTableCellRenderer() {
-//            @Override
-//            public Component getTableCellRendererComponent(JTable table,
-//                    Object value, boolean isSelected, boolean hasFocus,
-//                    int row, int column) {
-//                Component cell = super.getTableCellRendererComponent(table,
-//                        value, hasFocus, hasFocus, row, column);
-//                long idTask = (long) table.getValueAt(row, 0);
-//                Task cellValue = manager.getTask(idTask);
-//                if (cellValue.isHighPriority()) {
-//                    cell.setForeground(Color.RED);
-//                } else {
-//                    cell.setForeground(Color.BLACK);
-//                }
-//                return cell;
-//            }
-//        };
-//        for (int i = 0; i < taskTable.getColumnCount(); i++) {
-//            taskTable.getColumnModel().getColumn(i).setCellRenderer(renderer);
-//        }
-//        if (taskTable.getRowCount() == 0) {
-//            editButton.setEnabled(false);
-//            deleteButton.setEnabled(false);
-//            viewButton.setEnabled(false);
-//        }
-//    }
     
     //заполнение таблицы задачами в зависимости от выбранного значения userComboBox
     public void fillTableSelectedUser(String name) {
@@ -668,8 +624,7 @@ public class GUI extends javax.swing.JFrame {
         DefaultComboBoxModel<User> comboBoxModel = 
                 new DefaultComboBoxModel(users.toArray());
         selectUserComboBox.setModel(comboBoxModel);
-        selectUserComboBox.setSelectedIndex(0);
-        
+        selectUserComboBox.setSelectedIndex(0);                
         //И делаем их доступными для ввода
         nameTextField.setEditable(true);
         descriptionTextArea.setEditable(true);
@@ -707,7 +662,12 @@ public class GUI extends javax.swing.JFrame {
                 highPriorityRadioButton.setSelected(true);
             } else {
                 normalPriorityRadioButton.setSelected(true);
-            }
+            }            
+            
+            DefaultComboBoxModel<User> comboBoxModel
+                    = new DefaultComboBoxModel(new User[]{t.getUser()});
+            selectUserComboBox.setModel(comboBoxModel);
+            selectUserComboBox.setSelectedIndex(0);
             //Разрешаем изменение данных
             nameTextField.setEditable(true);
             descriptionTextArea.setEditable(true);
@@ -743,6 +703,10 @@ public class GUI extends javax.swing.JFrame {
         } else {
             normalPriorityRadioButton.setSelected(true);
         }
+        DefaultComboBoxModel<User> comboBoxModel
+                = new DefaultComboBoxModel(new User[]{t.getUser()});
+        selectUserComboBox.setModel(comboBoxModel);
+        selectUserComboBox.setSelectedIndex(0);
         //Запрещаем изменение данных
         nameTextField.setEditable(false);
         descriptionTextArea.setEditable(false);
@@ -783,7 +747,7 @@ public class GUI extends javax.swing.JFrame {
             case "Добавить задачу": {
                 //чтобы добавить определенному пользователю задачу
                 //его нужно выбрать в главном окне
-                if(!testNameSpace(nameTextField.getText())){
+                if(!checkNameSpace(nameTextField.getText())){
                     JOptionPane.showMessageDialog(taskDialog, "Неверный формат имени!");
                     return;
                 }
@@ -793,12 +757,12 @@ public class GUI extends javax.swing.JFrame {
                         dateChooser.getCalendar().get(Calendar.DAY_OF_MONTH),
                         hourSpinField.getValue(), minuteSpinField.getValue(),
                         secondSpinField.getValue());
-                if(!testDataNewTask(calendar)){
+                if(!checkDataNewTask(calendar)){
                     JOptionPane.showMessageDialog(taskDialog, "Нельзя вводить дату меньше текущей!");
                     return;
                 }
                 synchronized (manager) {
-                    User user = manager.searchUser((String)usersComboBox.getSelectedItem());
+                    User user = (User)selectUserComboBox.getSelectedItem();
                     manager.addTask(new Task(nameTextField.getText(),
                             descriptionTextArea.getText(),
                             contactsTextArea.getText(),
@@ -807,14 +771,15 @@ public class GUI extends javax.swing.JFrame {
                             null,user
                     ));
                 }
-                String nameUser = (String) usersComboBox.getSelectedItem();
-                fillTableSelectedUser(nameUser);
+                User user = (User)usersComboBox.getSelectedItem();
+                //String nameUser = (String) usersComboBox.getSelectedItem();
+                fillTableSelectedUser(user.getName());
                 taskDialog.setVisible(false);
                 notifyConnections();
             }
             break;
             case "Изменить задачу": {
-                if(!testNameSpace(nameTextField.getText())){
+                if(!checkNameSpace(nameTextField.getText())){
                     JOptionPane.showMessageDialog(taskDialog, "Неверный формат имени!");
                     return;
                 }
@@ -828,7 +793,7 @@ public class GUI extends javax.swing.JFrame {
                             dateChooser.getCalendar().get(Calendar.DAY_OF_MONTH),
                             hourSpinField.getValue(), minuteSpinField.getValue(),
                             secondSpinField.getValue());
-                    if (!testDataNewTask(calendar)) {
+                    if (!checkDataNewTask(calendar)) {
                         JOptionPane.showMessageDialog(taskDialog, "Нельзя вводить дату меньше текущей!");
                         return;
                     }
@@ -839,15 +804,11 @@ public class GUI extends javax.swing.JFrame {
                     t.setHighPriority(highPriorityRadioButton.isSelected());
                     if (t.getWorkOnTask()) {
                         t.setWorkOnTask(false);
-                        //String index = t.getID();
-                        //ConnectionClass.removeIndexTasks(index);
-
                     }
-                    //manager.setTask(t);
-                    //ConcreteTaskManager.getInstance().removeTask(t.getID());
-                    //ConcreteTaskManager.getInstance().addTask(t);
-                    String nameUser = (String) usersComboBox.getSelectedItem();
-                    fillTableSelectedUser(nameUser);
+                    
+                    User user = (User) usersComboBox.getSelectedItem();
+                    //String nameUser = (String) usersComboBox.getSelectedItem();
+                    fillTableSelectedUser(user.getName());
                     taskDialog.setVisible(false);
                     notifyConnections();
                 }
@@ -883,13 +844,9 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_taskTableMouseClicked
 
     private void usersComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersComboBoxActionPerformed
-        if(usersComboBox.getSelectedIndex() == 0){//All users
-            String nameUser = (String) usersComboBox.getSelectedItem();
-            fillTableSelectedUser(nameUser);
-        }
-        else{
-            String nameUser = (String)usersComboBox.getSelectedItem();
-        }
+        User user = (User) usersComboBox.getSelectedItem();
+        //String nameUser = (String) usersComboBox.getSelectedItem();
+        fillTableSelectedUser(user.getName());
     }//GEN-LAST:event_usersComboBoxActionPerformed
 
     /**
@@ -921,6 +878,7 @@ public class GUI extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new GUI().setVisible(false);
             }
@@ -977,22 +935,12 @@ public class GUI extends javax.swing.JFrame {
         connections.remove(aThis);
     }
     
-    private boolean testName(String name){
-        DefaultTableModel model = (DefaultTableModel) taskTable.getModel();
-        for(int i=0; i< model.getRowCount(); i++){
-            if( ((Task)model.getValueAt(i, 0)).getName().equals(name) ){
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    private boolean testDataNewTask(Calendar calendar){
+    private boolean checkDataNewTask(Calendar calendar){
         return calendar.after(GregorianCalendar.getInstance());
         
     }
     
-    private boolean testNameSpace(String value){
+    private boolean checkNameSpace(String value){
         if(value.equals("")) return false;
         char[] array=value.toCharArray();
         for(int i=0; i< array.length; i++){

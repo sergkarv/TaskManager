@@ -1,6 +1,7 @@
 
 package taskmanagerserver.core;
 
+import java.util.List;
 import task.Task;
 
 /**
@@ -21,7 +22,7 @@ public interface AlertSystem
     /** Оповещает слушателя об выполненных заданиях
      * @param tasks Массив выполненных заданий
      */
-    public void notifyListener(Task[] tasks);
+    public void notifyListener(List<Task> tasks);
     /**
      * Проверка списка задач на наличие выполненных.
      * В случае, если такие задачи обнаружены, оповещаются слушатели, подписанные на систему оповещения.
