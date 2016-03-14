@@ -884,7 +884,7 @@ public class gui extends javax.swing.JFrame implements Listener {
         Calendar currentTime = Calendar.getInstance();        
         hourSpinField.setValue(currentTime.get(Calendar.HOUR_OF_DAY));
         minuteSpinField.setValue(currentTime.get(Calendar.MINUTE));
-        secondSpinField.setValue(currentTime.get(Calendar.SECOND));
+        secondSpinField.setValue(currentTime.get(Calendar.SECOND));        
         newTaskDialog.setVisible(true);
     }//GEN-LAST:event_addButtonActionPerformed
 

@@ -186,7 +186,7 @@ public class ConnectionClass implements Listener {
             tasks = manager.getCollectionTasksForUser(connectUser.getId());
             //manager.getCompletedTasks();
         }
-        DataPackage data = new DataPackage(Command.ALL_TASKS, tasks.toArray(), alertTasks.toArray());
+        DataPackage data = new DataPackage(Command.ALL_TASKS, tasks, alertTasks);
         this.sendData(data);
     }
     
@@ -221,7 +221,7 @@ public class ConnectionClass implements Listener {
                 }
             }
             DataPackage data
-                    = new DataPackage(Command.ALL_TASKS_AND_ALERT, tasks.toArray(), alertTasks.toArray());
+                    = new DataPackage(Command.ALL_TASKS_AND_ALERT, tasks, alertTasks);
             this.sendData(data);
         }
     }
@@ -236,7 +236,7 @@ public class ConnectionClass implements Listener {
                     alertTasks.add(task.getId());//только здесь добавляется
                 }
             }
-            DataPackage data = new DataPackage(Command.ALERT_TASKS, null, alertTasks.toArray());
+            DataPackage data = new DataPackage(Command.ALERT_TASKS, null, alertTasks);
             this.sendData(data);
         }
     }
