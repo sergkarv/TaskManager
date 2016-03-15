@@ -83,24 +83,14 @@ public class ConnectionClass implements Listener {
                                 ConnectionClass.this.gui.update();
                                 break;
                             }
-                            case REMOVE_ALERT: {//вероятно лишнее
-                                long idTask = (long) receivedCommand
-                                        .getValue();
-                                synchronized (ConnectionClass.this.manager) {
-                                    synchronized (alertTasks) {
-                                        alertTasks.remove(idTask);
-                                        manager.removeTask(idTask);
-                                    }
-                                }
-                                ConnectionClass.this.gui.update();
-                                break;
-                            }
                             case EDIT: {
                                 synchronized (ConnectionClass.this.manager) {
                                     Task task = (Task) receivedCommand
                                             .getValue();
 
                                     long index = task.getId();
+                                    //если задача была активной
+                                    //после каждого изменения задача считается отложенной
                                     if (!task.getWorkOnTask()) {
                                         synchronized (alertTasks) {
                                             alertTasks.remove(index);
@@ -116,31 +106,6 @@ public class ConnectionClass implements Listener {
 
                                     ConnectionClass.this.gui.update();
                                 }
-                                break;
-                            }
-                            case EDIT_ALERT: {
-                                synchronized (ConnectionClass.this.manager) {
-                                    Task task = (Task) receivedCommand
-                                            .getValue();
-                                    synchronized (alertTasks) {
-                                        alertTasks.remove(task.getId());
-                                    }
-                                    task.setWorkOnTask(false);
-                                    manager.setTask(task.getId(), task.getName(),
-                                            task.getDescription(), task.getContacts(),
-                                            task.getDate(), task.isFinished(),
-                                            task.isHighPriority(), task.getSoundFileName(),
-                                            task.getWorkOnTask(), connectUser);
-                                    //manager.removeTask(task.getId());
-                                    //manager.addTask(task);
-                                    ConnectionClass.this.gui.update();
-                                }
-                                break;
-                            }
-
-                            case GET_ALL: {
-                                //sendTasks();
-                                sendTaskAndAlertTask();
                                 break;
                             }
                         }
