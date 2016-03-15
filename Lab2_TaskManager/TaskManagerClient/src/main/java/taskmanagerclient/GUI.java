@@ -2,6 +2,7 @@ package taskmanagerclient;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.EventQueue;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -1383,56 +1384,66 @@ public class GUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     //Заполнение таблицы задач
-    public void fillTable(Collection<Task> tasks) {
-        DefaultTableModel model = (DefaultTableModelNotEdit) taskTable.getModel();
-        model.setRowCount(0);
-        for (Task task: tasks) {
-            if (task.isFinished()) {
-                model.addRow(new Object[]{task.getId(), task.getName(), 
-                    task.getDate().getTime(), "Завершена"});
-            } else {
-                model.addRow(new Object[]{task.getId(), task.getName(), 
-                    task.getDate().getTime(), "Не завершена"});
-            }
-        }
-        for (int i = 0; i < taskTable.getColumnCount(); i++) {
-            taskTable.getColumnModel().getColumn(i).setCellRenderer(renderer);
-        }        
+    public void fillTable(final Collection<Task> tasks) {
+        EventQueue.invokeLater( new Runnable(){
+           @Override
+           public void run(){
+               DefaultTableModel model = (DefaultTableModelNotEdit) taskTable.getModel();
+               model.setRowCount(0);
+               for (Task task : tasks) {
+                   if (task.isFinished()) {
+                       model.addRow(new Object[]{task.getId(), task.getName(),
+                           task.getDate().getTime(), "Завершена"});
+                   } else {
+                       model.addRow(new Object[]{task.getId(), task.getName(),
+                           task.getDate().getTime(), "Не завершена"});
+                   }
+               }
+               for (int i = 0; i < taskTable.getColumnCount(); i++) {
+                   taskTable.getColumnModel().getColumn(i).setCellRenderer(renderer);
+               }
+           } 
+        });
     }
 
     //Заполнение списка задач на оповещение по индексам в списке всех задач
-    public void alert(List<Long> alertTasksId, boolean soundFlag, boolean visibleDialog) {
-        //Пришёл пустой
-        if (alertTasksId.isEmpty()) {
-            ((DefaultListModel<Task>) completedTasksList.getModel()).clear();
-            completedTasksDialog.setVisible(false);
-            openCompleteTaskDialogButton.setEnabled(false);
-            return;
-        }
-        if (soundFlag) {
-            //устанавливаем звуковой файл
-            sound.playFile(new File(pathSound));
-            //запускаем звуковой файл в потоке
-            sound.start();
-        }
+    public void alert(final List<Long> alertTasksId, final boolean soundFlag, final boolean visibleDialog) {
+        EventQueue.invokeLater( new Runnable(){
+           @Override
+           public void run(){
+               //Пришёл пустой
+               if (alertTasksId.isEmpty()) {
+                   ((DefaultListModel<Task>) completedTasksList.getModel()).clear();
+                   completedTasksDialog.setVisible(false);
+                   openCompleteTaskDialogButton.setEnabled(false);
+                   return;
+               }
+               if (soundFlag) {
+                   //устанавливаем звуковой файл
+                   sound.playFile(new File(pathSound));
+                   //запускаем звуковой файл в потоке
+                   sound.start();
+               }
 
-        //Перезаполняем таблицу задач на оповещение
-        ((DefaultListModel<Task>) completedTasksList.getModel()).clear();
-        for (Task t : connection.getAllUserTasks()) {
-            ((DefaultListModel<Task>) completedTasksList.getModel())
-                    .addElement(t);
-        }
-        //И заполняем данными окно при необходимости
-        if (completedTasksList.getSelectedIndex() == -1) {
-            completedTasksList.setSelectedIndex(0);
-            Task t = (Task) completedTasksList.getSelectedValue();
-            completedTaskNameTextField.setText(t.getName());
-            completedTaskContactsTextArea.setText(t.getContacts());
-            completedTaskDescriptionTextArea.setText(t.getDescription());
-            openCompleteTaskDialogButton.setEnabled(true);
-        }
-        openCompleteTaskDialogButton.setEnabled(true);
-        completedTasksDialog.setVisible(visibleDialog);
+               //Перезаполняем таблицу задач на оповещение
+               ((DefaultListModel<Task>) completedTasksList.getModel()).clear();
+               for (Task t : connection.getAllUserTasks()) {
+                   ((DefaultListModel<Task>) completedTasksList.getModel())
+                           .addElement(t);
+               }
+               //И заполняем данными окно при необходимости
+               if (completedTasksList.getSelectedIndex() == -1) {
+                   completedTasksList.setSelectedIndex(0);
+                   Task t = (Task) completedTasksList.getSelectedValue();
+                   completedTaskNameTextField.setText(t.getName());
+                   completedTaskContactsTextArea.setText(t.getContacts());
+                   completedTaskDescriptionTextArea.setText(t.getDescription());
+                   openCompleteTaskDialogButton.setEnabled(true);
+               }
+               openCompleteTaskDialogButton.setEnabled(true);
+               completedTasksDialog.setVisible(visibleDialog);
+           }
+        });
     }
 
     public void disconnect() {
