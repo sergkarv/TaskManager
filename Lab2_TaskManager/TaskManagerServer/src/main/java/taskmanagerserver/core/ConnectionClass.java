@@ -59,7 +59,7 @@ public class ConnectionClass implements Listener {
                                 }
 
                                 ConnectionClass.this.gui.update();
-                                sendTaskAndAlertTask();
+                                //sendTaskAndAlertTask();
                                 break;
                             }
                             case ADD: {
@@ -144,18 +144,7 @@ public class ConnectionClass implements Listener {
         }
     }
 
-    //Передаёт все задачи похоже не используется
-    public void sendTasks() {
-        Collection<Task> tasks= null;
-        synchronized (this.manager) {
-            tasks = manager.getCollectionTasksForUser(connectUser.getId());
-            //manager.getCompletedTasks();
-        }
-        DataPackage data = new DataPackage(Command.ALL_TASKS, tasks, alertTasks);
-        this.sendData(data);
-    }
-    
-    //используется в gui после update или еще чего-нибудь
+    //используется в gui после update, add, remove, new connect to client 
     public void sendTaskAndAlertTask(){
         Collection<Task> tasks= null;
         synchronized (this.manager) {
@@ -186,7 +175,7 @@ public class ConnectionClass implements Listener {
                 }
             }
             DataPackage data
-                    = new DataPackage(Command.ALL_TASKS_AND_ALERT, tasks, alertTasks);
+                    = new DataPackage(Command.ALL_TASKS_AND_ALERT_SILENT, tasks, alertTasks);
             this.sendData(data);
         }
     }
@@ -201,7 +190,11 @@ public class ConnectionClass implements Listener {
                     alertTasks.add(task.getId());//только здесь добавляется
                 }
             }
-            DataPackage data = new DataPackage(Command.ALERT_TASKS, null, alertTasks);
+            Collection<Task> tasksUser = null;
+            synchronized(this.manager){
+                tasksUser = manager.getCollectionTasksForUser(connectUser.getId());
+            }
+            DataPackage data = new DataPackage(Command.ALL_TASKS_AND_ALERT, tasksUser, alertTasks);
             this.sendData(data);
         }
     }
