@@ -10,7 +10,6 @@ package protocol;
  * @author Администратор
  */
 public enum Command {
-
     ADD, REMOVE, EDIT, FAIL,
     ALL_TASKS_AND_ALERT, ALL_TASKS_AND_ALERT_SILENT, NAME_USER
 }
