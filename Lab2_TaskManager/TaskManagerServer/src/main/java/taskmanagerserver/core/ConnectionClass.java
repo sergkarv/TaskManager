@@ -156,7 +156,7 @@ public class ConnectionClass implements Listener {
         //если задача удалена на сервере, но была в работе
         //найти не существующий id в alertTasks и удалить
         synchronized (this.alertTasks){
-            
+            ArrayList<Long> removeIdList = new ArrayList<>();
             boolean flag = false;
             for(long id : alertTasks){
                 flag = false;
@@ -172,9 +172,15 @@ public class ConnectionClass implements Listener {
                     }
                 }
                 if(!flag){
-                    alertTasks.remove(id);
+                    //alertTasks.remove(id);
+                    removeIdList.add(id);
                 }
             }
+            
+            for(long id : removeIdList){
+                alertTasks.remove(id);
+            }
+            removeIdList.clear();
             DataPackage data
                     = new DataPackage(Command.ALL_TASKS_AND_ALERT_SILENT, tasks, alertTasks);
             this.sendData(data);
