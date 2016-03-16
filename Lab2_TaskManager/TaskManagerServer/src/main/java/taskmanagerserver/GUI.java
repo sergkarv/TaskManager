@@ -15,7 +15,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import task.Task;
 import taskmanagerserver.core.*;
 import user.User;
@@ -96,8 +95,8 @@ public class GUI extends javax.swing.JFrame {
         alertThread.start();
         serverSocketThread.start();
         //Заполняем таблицу задачами
-        String nameUser = (String) usersComboBox.getSelectedItem();
-        fillTableSelectedUser(nameUser);
+        User nameUser = (User) usersComboBox.getSelectedItem();
+        fillTableSelectedUser(nameUser.getName());
         taskTable.setAutoCreateRowSorter(true);
         //Ставим по центру
         this.setLocationRelativeTo(null);
@@ -106,6 +105,7 @@ public class GUI extends javax.swing.JFrame {
     //Вызывается при изменении задач
     public void update() {
         EventQueue.invokeLater(new Runnable(){
+           @Override
            public void run(){
                User user = (User) usersComboBox.getSelectedItem();
                //String nameUser = (String) usersComboBox.getSelectedItem();
@@ -115,6 +115,15 @@ public class GUI extends javax.swing.JFrame {
         });        
     }
 
+    public void addUserToComboBox(final User user){
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                //usersComboBox.addItem(user);
+                ((DefaultComboBoxModel<User>)usersComboBox.getModel()).addElement(user);
+            }
+        });
+    }
     
     //заполнение таблицы задачами в зависимости от выбранного значения userComboBox
     public void fillTableSelectedUser(String name) {
@@ -135,10 +144,10 @@ public class GUI extends javax.swing.JFrame {
                         
             for (Task task : list) {
                 if (task.isFinished()) {
-                    model.addRow(new Object[]{task,
+                    model.addRow(new Object[]{task.getId(), task.getName(),
                         task.getDate().getTime(), "Завершена"});
                 } else {
-                    model.addRow(new Object[]{task,
+                    model.addRow(new Object[]{task.getId(), task.getName(),
                         task.getDate().getTime(), "Не завершена"});
                 }
             }
@@ -221,7 +230,7 @@ public class GUI extends javax.swing.JFrame {
         usersComboBox = new javax.swing.JComboBox();
 
         taskDialog.setLocationByPlatform(true);
-        taskDialog.setMinimumSize(new java.awt.Dimension(400, 450));
+        taskDialog.setMinimumSize(new java.awt.Dimension(410, 480));
         taskDialog.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         taskDialog.setResizable(false);
 
@@ -487,6 +496,7 @@ public class GUI extends javax.swing.JFrame {
         model.setColumnIdentifiers(column);
         taskTable.setModel(model);
         taskTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        taskTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
         taskTable.setSelectionBackground(new java.awt.Color(0, 204, 204));
         taskTable.getTableHeader().setReorderingAllowed(false);
         taskTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -606,8 +616,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         //Подготавливаем окно для ввода данных
-        taskDialog.setTitle("Добавить задачу");
-        taskDialog.setVisible(true);
+        taskDialog.setTitle("Добавить задачу");        
         nameTextField.setText("");
         descriptionTextArea.setText("");
         contactsTextArea.setText("");
@@ -621,10 +630,14 @@ public class GUI extends javax.swing.JFrame {
         synchronized(manager){
             users = manager.getCollectionUser();
         }
+        if(users.isEmpty()){
+            JOptionPane.showMessageDialog(taskDialog, "Нет подключенных пользователей");
+            return;
+        }
         DefaultComboBoxModel<User> comboBoxModel = 
                 new DefaultComboBoxModel(users.toArray());
         selectUserComboBox.setModel(comboBoxModel);
-        selectUserComboBox.setSelectedIndex(0);                
+        selectUserComboBox.setSelectedIndex(0);
         //И делаем их доступными для ввода
         nameTextField.setEditable(true);
         descriptionTextArea.setEditable(true);
@@ -639,11 +652,16 @@ public class GUI extends javax.swing.JFrame {
         deleteButton.setEnabled(false);
         editButton.setEnabled(false);
         viewButton.setEnabled(false);
+        taskDialog.setVisible(true);
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        Task t = (Task) taskTable.getModel().getValueAt(
+        Long idTask = (long) taskTable.getModel().getValueAt(
                 taskTable.getSelectedRow(), 0);
+        Task t = null;
+        synchronized(manager){
+            t = manager.getTask(idTask);
+        }
         if (t.isFinished()) {
             //Завершённые задачи можно только просматривать
             viewButtonActionPerformed(evt);
@@ -688,8 +706,12 @@ public class GUI extends javax.swing.JFrame {
     private void viewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewButtonActionPerformed
         taskDialog.setTitle("Просмотреть задачу");
         taskDialog.setVisible(true);
-        Task t = (Task) taskTable.getModel().getValueAt(
+        Long idTask = (long) taskTable.getModel().getValueAt(
                 taskTable.getSelectedRow(), 0);
+        Task t = null;
+        synchronized(manager){
+            t = manager.getTask(idTask);
+        }
         //Заполняем окно данными о команде
         nameTextField.setText(t.getName());
         descriptionTextArea.setText(t.getDescription());
