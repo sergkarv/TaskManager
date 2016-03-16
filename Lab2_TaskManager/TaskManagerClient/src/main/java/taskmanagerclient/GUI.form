@@ -359,7 +359,7 @@
       <Properties>
         <Property name="title" type="java.lang.String" value="&#x421;&#x43e;&#x435;&#x434;&#x438;&#x43d;&#x435;&#x43d;&#x438;&#x435; &#x441; &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x43e;&#x43c;"/>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[283, 183]"/>
+          <Dimension value="[320, 220]"/>
         </Property>
         <Property name="modal" type="boolean" value="true"/>
         <Property name="resizable" type="boolean" value="false"/>
@@ -394,9 +394,9 @@
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
-                  <Component id="okParamButton" min="-2" pref="108" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
+                  <Component id="okParamButton" min="-2" pref="120" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -429,6 +429,12 @@
         <Component class="javax.swing.JButton" name="okParamButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x434;&#x43a;&#x43b;&#x44e;&#x447;&#x438;&#x442;&#x44c;&#x441;&#x44f;"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[120, 43]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[120, 43]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="okParamButtonActionPerformed"/>
@@ -944,7 +950,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="taskTableMouseClicked"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="Object[] column = {&quot;&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;&quot;, &quot;&#x414;&#x430;&#x442;&#x430;/&#x432;&#x440;&#x435;&#x43c;&#x44f;&quot;, &quot;&#x417;&#x430;&#x432;&#x435;&#x440;&#x448;&#x451;&#x43d;&#x43d;&#x43e;&#x441;&#x442;&#x44c;&quot;};&#xa;        DefaultTableModelNotEdit model = new DefaultTableModelNotEdit();&#xa;        model.setColumnIdentifiers(column);&#xa;        taskTable.setModel(model);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="Object[] column = {&quot;Id&quot;, &quot;&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;&quot;, &quot;&#x414;&#x430;&#x442;&#x430;/&#x432;&#x440;&#x435;&#x43c;&#x44f;&quot;, &quot;&#x417;&#x430;&#x432;&#x435;&#x440;&#x448;&#x451;&#x43d;&#x43d;&#x43e;&#x441;&#x442;&#x44c;&quot;};&#xa;        DefaultTableModelNotEdit model = new DefaultTableModelNotEdit();&#xa;        model.setColumnIdentifiers(column);&#xa;        taskTable.setModel(model);&#xa;taskTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);"/>
                 <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="taskTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);"/>
               </AuxValues>
             </Component>

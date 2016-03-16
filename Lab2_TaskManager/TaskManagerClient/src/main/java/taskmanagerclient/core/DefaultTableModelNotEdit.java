@@ -33,7 +33,7 @@ public class DefaultTableModelNotEdit extends DefaultTableModel{
     }
     
     boolean[] canEdit = new boolean [] {
-        false, false, false
+        false, false, false, false
     };
     
     @Override

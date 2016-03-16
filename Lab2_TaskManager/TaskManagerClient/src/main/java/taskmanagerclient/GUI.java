@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import taskmanagerclient.core.ConnectionClass;
 import taskmanagerclient.core.DefaultTableModelNotEdit;
@@ -36,7 +35,7 @@ public class GUI extends javax.swing.JFrame {
     private final TableCellRenderer renderer;
     /** Объект для работы со звуком */
     private Sound sound = new Sound();
-    private String pathSound="bell.wav";
+    private String pathSound="signal/bell.wav";
     public GUI() {
         initComponents();
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+4"));
@@ -49,7 +48,8 @@ public class GUI extends javax.swing.JFrame {
                     int row, int column) {
                 Component cell = super.getTableCellRendererComponent(table,
                         value, hasFocus, hasFocus, row, column);
-                Task cellValue = (Task) table.getValueAt(row, 0);
+                long idTask = (long) table.getValueAt(row, 0);
+                Task cellValue = connection.getTask(idTask);
                 if (cellValue.isHighPriority()) {
                     cell.setForeground(Color.RED);
                 } else {
@@ -395,7 +395,7 @@ public class GUI extends javax.swing.JFrame {
         );
 
         enterParamDialog.setTitle("Соединение с сервером");
-        enterParamDialog.setMinimumSize(new java.awt.Dimension(283, 183));
+        enterParamDialog.setMinimumSize(new java.awt.Dimension(320, 220));
         enterParamDialog.setModal(true);
         enterParamDialog.setResizable(false);
         enterParamDialog.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -405,6 +405,8 @@ public class GUI extends javax.swing.JFrame {
         });
 
         okParamButton.setText("Подключиться");
+        okParamButton.setMaximumSize(new java.awt.Dimension(120, 43));
+        okParamButton.setMinimumSize(new java.awt.Dimension(120, 43));
         okParamButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okParamButtonActionPerformed(evt);
@@ -450,9 +452,9 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(enterParamDialogLayout.createSequentialGroup()
-                .addGap(93, 93, 93)
-                .addComponent(okParamButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(86, 86, 86)
+                .addComponent(okParamButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         enterParamDialogLayout.setVerticalGroup(
             enterParamDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -727,10 +729,11 @@ public class GUI extends javax.swing.JFrame {
 
             taskTable.setColumnSelectionAllowed(true);
             taskTable.getTableHeader().setReorderingAllowed(false);
-            Object[] column = {"Название", "Дата/время", "Завершённость"};
+            Object[] column = {"Id", "Название", "Дата/время", "Завершённость"};
             DefaultTableModelNotEdit model = new DefaultTableModelNotEdit();
             model.setColumnIdentifiers(column);
             taskTable.setModel(model);
+            taskTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
             taskTable.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     taskTableMouseClicked(evt);
@@ -911,8 +914,9 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        Task t = (Task) taskTable.getModel().getValueAt(
+        Long idTask = (long) taskTable.getModel().getValueAt(
                 taskTable.getSelectedRow(), 0);
+        Task t = connection.getTask(idTask);
         if (t.isFinished()) {
             //Завершённые задачи нельзя изменять
             viewButtonActionPerformed(evt);
@@ -954,8 +958,9 @@ public class GUI extends javax.swing.JFrame {
         //Заполняем данные о задаче
         taskDialog.setTitle("Просмотреть задачу");
         taskDialog.setVisible(true);
-        Task t = (Task) taskTable.getModel().getValueAt(
+        Long idTask = (long) taskTable.getModel().getValueAt(
                 taskTable.getSelectedRow(), 0);
+        Task t = connection.getTask(idTask);
         nameTextField.setText(t.getName());
         descriptionTextArea.setText(t.getDescription());
         contactsTextArea.setText(t.getContacts());
@@ -1072,11 +1077,11 @@ public class GUI extends javax.swing.JFrame {
         //Сохраняем данные о порте и адресе и имени пользователя
         port = portTextField.getText();
         address = addressTextField.getText();
-        nameUser = nameTextField.getText();
+        nameUser = userTextField.getText();
         enterParamDialog.setVisible(false);
         portTextField.setText("");
         addressTextField.setText("");
-        nameTextField.setText("");
+        userTextField.setText("");
     }//GEN-LAST:event_okParamButtonActionPerformed
 
     private void enterParamDialogWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_enterParamDialogWindowClosing
@@ -1388,7 +1393,9 @@ public class GUI extends javax.swing.JFrame {
         EventQueue.invokeLater( new Runnable(){
            @Override
            public void run(){
-               DefaultTableModel model = (DefaultTableModelNotEdit) taskTable.getModel();
+               Object[] column = {"Id", "Название", "Дата/время", "Завершённость"};
+               DefaultTableModelNotEdit model = new DefaultTableModelNotEdit();
+               model.setColumnIdentifiers(column);
                model.setRowCount(0);
                for (Task task : tasks) {
                    if (task.isFinished()) {
@@ -1399,6 +1406,7 @@ public class GUI extends javax.swing.JFrame {
                            task.getDate().getTime(), "Не завершена"});
                    }
                }
+               taskTable.setModel(model);
                for (int i = 0; i < taskTable.getColumnCount(); i++) {
                    taskTable.getColumnModel().getColumn(i).setCellRenderer(renderer);
                }
