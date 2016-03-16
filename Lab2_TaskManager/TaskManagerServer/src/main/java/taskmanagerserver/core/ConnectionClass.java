@@ -55,6 +55,7 @@ public class ConnectionClass implements Listener {
                                         User user = new User(userName);
                                         manager.addUser(user);
                                         connectUser = user;
+                                        gui.addUserToComboBox(user);
                                     }
                                 }
 
