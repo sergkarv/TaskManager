@@ -839,9 +839,9 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(changeSoundAlertButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(openCompleteTaskDialogButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap())
+                    .addGap(16, 16, 16))
             );
 
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1215,8 +1215,15 @@ public class GUI extends javax.swing.JFrame {
         Task t = (Task) completedTasksList.getSelectedValue();
         t.setFinished(true);
         t.setWorkOnTask(false);
+        
         //Оповещаем сервер об изменении
         //connection.setAlertTask(t);
+        completedTasksList.remove(completedTasksList.getSelectedIndex());
+        if( ((DefaultListModel<Task>)completedTasksList.getModel()).getSize() == 0){
+            completedTasksDialog.setVisible(false);
+            openCompleteTaskDialogButton.setEnabled(false);
+        }
+        
         connection.setTask(t);
     }//GEN-LAST:event_finishButtonActionPerformed
 

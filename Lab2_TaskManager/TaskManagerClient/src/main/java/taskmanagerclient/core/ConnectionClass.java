@@ -56,21 +56,22 @@ public class ConnectionClass {
                                 JOptionPane.showMessageDialog(ConnectionClass.this.gui,
                                         "Операция была завершена некорректно.",
                                         "Ошибка", JOptionPane.ERROR_MESSAGE);
-                                gui.setEnabled(true);
+                                //gui.setEnabled(true);
                                 break;
                             }
 
                             case ALL_TASKS_AND_ALERT : {
                                 //получаем все данные при первом обращении
+                                //получаем все данные при появлении активных задач
                                 Collection<Task> tasks =
                                         (Collection<Task>) receivedCommand.getValue();
                                 List<Long> alertList = (List<Long>) receivedCommand
                                         .getAlert();
-                                gui.setEnabled(true);
+                                //gui.setEnabled(true);
                                 ConnectionClass.this.allUserTasks = tasks;
                                 ConnectionClass.this.alertTasks  = alertList;
-                                gui.fillTable(tasks);
-                                gui.alert(alertList, true, true);
+                                ConnectionClass.this.gui.fillTable(tasks);
+                                ConnectionClass.this.gui.alert(alertList, true, true);
                                 break;
                             }
                             case ALL_TASKS_AND_ALERT_SILENT : {
@@ -78,11 +79,11 @@ public class ConnectionClass {
                                         receivedCommand.getValue();
                                 List<Long> alertList = (List<Long>) receivedCommand
                                         .getAlert();
-                                gui.setEnabled(true);
+                                //gui.setEnabled(true);
                                 ConnectionClass.this.allUserTasks = tasks;
                                 ConnectionClass.this.alertTasks = alertList;
-                                gui.fillTable(tasks);
-                                gui.alert(alertList, false, false);
+                                ConnectionClass.this.gui.fillTable(tasks);
+                                ConnectionClass.this.gui.alert(alertList, false, false);
                                 break;
                             }
 //                            //                            
@@ -104,7 +105,7 @@ public class ConnectionClass {
                         }
                         break;
                     } catch (IOException | ClassNotFoundException ex) {
-                        JOptionPane.showMessageDialog(gui,
+                        JOptionPane.showMessageDialog(ConnectionClass.this.gui,
                                 "Ошибка при получении команды от сервера",
                                 "Ошибка", JOptionPane.ERROR_MESSAGE);
                         continue;
@@ -142,7 +143,7 @@ public class ConnectionClass {
                 out.writeObject(data);
                 out.flush();
             } catch (IOException ioe) {
-                JOptionPane.showMessageDialog(gui,
+                JOptionPane.showMessageDialog(ConnectionClass.this.gui,
                         "Ошибка при передаче команды клиенту",
                         "Ошибка",
                         JOptionPane.ERROR_MESSAGE);
