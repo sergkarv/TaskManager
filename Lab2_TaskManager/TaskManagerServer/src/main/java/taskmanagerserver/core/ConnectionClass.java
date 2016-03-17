@@ -3,10 +3,10 @@ package taskmanagerserver.core;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -22,7 +22,7 @@ public class ConnectionClass implements Listener {
     private ObjectOutputStream out;
     private Thread receiveThread;
     private GUI gui;
-    private static List<Long> alertTasks = new ArrayList<>();
+    private List<Long> alertTasks = new ArrayList<>();
     private User connectUser;
     private TaskManager manager;
     
@@ -47,19 +47,19 @@ public class ConnectionClass implements Listener {
                                 synchronized (ConnectionClass.this.manager) {
                                     String userName = (String) receivedCommand.getValue();
                                     boolean flag
-                                            = manager.containsUser(userName);
+                                            = ConnectionClass.this.manager.containsUser(userName);
                                     if (flag) {
-                                        User user = manager.searchUser(userName);
+                                        User user = ConnectionClass.this.manager.searchUser(userName);
                                         connectUser = user;
                                     } else {
                                         User user = new User(userName);
-                                        manager.addUser(user);
-                                        connectUser = user;
-                                        gui.addUserToComboBox(user);
+                                        ConnectionClass.this.manager.addUser(user);
+                                        connectUser = user;                                        
+                                        gui.addUserToComboBox(user);                                        
                                     }
                                 }
 
-                                ConnectionClass.this.gui.update();
+                                ConnectionClass.this.gui.update();                            
                                 //sendTaskAndAlertTask();
                                 break;
                             }
@@ -67,7 +67,7 @@ public class ConnectionClass implements Listener {
                                 synchronized (ConnectionClass.this.manager) {
                                     Task task = (Task) receivedCommand.getValue();
                                     task.setUser(connectUser);
-                                    manager.addTask(task);
+                                    ConnectionClass.this.manager.addTask(task);
                                 }
                                 ConnectionClass.this.gui.update();
                                 break;
@@ -78,7 +78,7 @@ public class ConnectionClass implements Listener {
                                 synchronized (ConnectionClass.this.manager) {
                                     synchronized (alertTasks) {
                                         alertTasks.remove(idTask);
-                                        manager.removeTask(idTask);
+                                        ConnectionClass.this.manager.removeTask(idTask);
                                     }
                                 }
                                 ConnectionClass.this.gui.update();
@@ -98,13 +98,13 @@ public class ConnectionClass implements Listener {
                                         }
                                     }
                                     synchronized (ConnectionClass.this.manager) {
-                                        manager.setTask(task.getId(), task.getName(),
+                                        ConnectionClass.this.manager.
+                                                setTask(task.getId(), task.getName(),
                                                 task.getDescription(), task.getContacts(),
                                                 task.getDate(), task.isFinished(),
                                                 task.isHighPriority(), task.getSoundFileName(),
                                                 task.getWorkOnTask(), connectUser);
                                     }
-
                                     ConnectionClass.this.gui.update();
                                 }
                                 break;
@@ -131,11 +131,9 @@ public class ConnectionClass implements Listener {
     //отправляем пользователю нужные задания упакованные в объект класс DataPackage
     public void sendData(DataPackage data) {
         if (data != null) {
-            try {
-
-                out.flush();
+            try {                
                 out.writeObject(data);
-                out.flush();
+                //out.flush();
             } catch (IOException ioe) {
                 JOptionPane.showMessageDialog(gui,
                         "Ошибка при передаче команды клиенту",
@@ -148,14 +146,14 @@ public class ConnectionClass implements Listener {
     //используется в gui после update, add, remove, new connect to client 
     public void sendTaskAndAlertTask(){
         Collection<Task> tasks= null;
-        synchronized (this.manager) {
+        synchronized (manager) {
             tasks = manager.getCollectionTasksForUser(connectUser.getId());
             //manager.getCompletedTasks();
         }
         
         //если задача удалена на сервере, но была в работе
         //найти не существующий id в alertTasks и удалить
-        synchronized (this.alertTasks){
+        synchronized (alertTasks){
             ArrayList<Long> removeIdList = new ArrayList<>();
             boolean flag = false;
             for(long id : alertTasks){
@@ -190,15 +188,18 @@ public class ConnectionClass implements Listener {
     //оповещаем пользователя о наступивших задачах
     public void sendAlertTasks(List<Task> tasks) {
        //ArrayList<Task> list = new ArrayList<>();
-        synchronized (this.alertTasks) {
+        synchronized (alertTasks) {
             for (Task task : tasks) {
                 if (task.getUser() == connectUser) {
                     //list.add(task);
                     alertTasks.add(task.getId());//только здесь добавляется
                 }
             }
+            if(alertTasks.isEmpty()){
+                return;
+            }
             Collection<Task> tasksUser = null;
-            synchronized(this.manager){
+            synchronized(manager){
                 tasksUser = manager.getCollectionTasksForUser(connectUser.getId());
             }
             DataPackage data = new DataPackage(Command.ALL_TASKS_AND_ALERT, tasksUser, alertTasks);
@@ -213,7 +214,7 @@ public class ConnectionClass implements Listener {
 
     @Override
     public void update(Object value) {
-        List<Task> tasks = (List<Task>)value;//!!! Warning
+        List<Task> tasks = (List<Task>)value;
         sendAlertTasks(tasks);
     }
 

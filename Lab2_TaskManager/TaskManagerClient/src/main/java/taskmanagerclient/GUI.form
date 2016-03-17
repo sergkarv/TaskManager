@@ -480,7 +480,6 @@
       </Properties>
       <Events>
         <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="completedTasksDialogWindowOpened"/>
-        <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="completedTasksDialogWindowClosing"/>
       </Events>
 
       <Layout>

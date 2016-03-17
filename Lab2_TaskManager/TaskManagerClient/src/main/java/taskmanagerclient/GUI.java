@@ -484,9 +484,6 @@ public class GUI extends javax.swing.JFrame {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 completedTasksDialogWindowOpened(evt);
             }
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                completedTasksDialogWindowClosing(evt);
-            }
         });
 
         completedTasksListPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -1246,10 +1243,6 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_deleteButton1ActionPerformed
 
-    private void completedTasksDialogWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_completedTasksDialogWindowClosing
-        //ничего
-    }//GEN-LAST:event_completedTasksDialogWindowClosing
-
     private void changeSoundAlertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeSoundAlertButtonActionPerformed
         deleteButton.setEnabled(false);
         viewButton.setEnabled(false);
@@ -1440,11 +1433,13 @@ public class GUI extends javax.swing.JFrame {
                    sound.start();
                }
 
-               //Перезаполняем таблицу задач на оповещение
                ((DefaultListModel<Task>) completedTasksList.getModel()).clear();
-               for (Task t : connection.getAllUserTasks()) {
-                   ((DefaultListModel<Task>) completedTasksList.getModel())
-                           .addElement(t);
+               for(long id : alertTasksId){
+                   for (Task t : connection.getAllUserTasks()) {
+                       if(t.getId() == id)
+                       ((DefaultListModel<Task>) completedTasksList.getModel())
+                               .addElement(t);
+                   }
                }
                //И заполняем данными окно при необходимости
                if (completedTasksList.getSelectedIndex() == -1) {

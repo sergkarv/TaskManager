@@ -11,8 +11,6 @@ package taskmanagerserver.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import task.Task;
 
 public class ConcreteAlertSystem implements AlertSystem, Runnable {
@@ -68,7 +66,10 @@ public class ConcreteAlertSystem implements AlertSystem, Runnable {
     /** Проверяет список заданий, оповещает слушателя при необходимости */
     @Override
     public void check() {
-        List<Task> tasks =  manager.getCompletedTasks();
+        List<Task> tasks = null;
+        synchronized(manager){
+            tasks = manager.getCompletedTasks();
+        }
         if (tasks != null) {
             notifyListener(tasks);
         }
@@ -86,7 +87,7 @@ public class ConcreteAlertSystem implements AlertSystem, Runnable {
                 check();
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(ConcreteAlertSystem.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 }
