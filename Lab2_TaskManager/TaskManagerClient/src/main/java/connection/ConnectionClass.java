@@ -1,4 +1,4 @@
-package taskmanagerclient.core;
+package connection;
 
 import task.Task;
 import java.io.IOException;

@@ -4,7 +4,7 @@
  * @author Головин, Карасев
  * @version 1.0
  */
-package taskmanagerclient.core;
+package sound;
 
 import java.io.File;
 import java.io.IOException;

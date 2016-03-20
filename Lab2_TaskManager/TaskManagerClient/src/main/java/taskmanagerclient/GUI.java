@@ -18,9 +18,9 @@ import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import taskmanagerclient.core.ConnectionClass;
-import taskmanagerclient.core.DefaultTableModelNotEdit;
-import taskmanagerclient.core.Sound;
+import connection.ConnectionClass;
+import sound.Sound;
+import tableModel.DefaultTableModelNotEdit;
 import task.Task;
 
 public class GUI extends javax.swing.JFrame {
