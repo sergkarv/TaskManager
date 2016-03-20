@@ -1,10 +1,13 @@
 package taskmanagerserver;
 
+import tableModel.DefaultTableModelNotEdit;
+import taskManager.ConcreteTaskManager;
+import taskManager.TaskManager;
+import connection.ConnectionClass;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,27 +15,24 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import task.Task;
-import taskmanagerserver.core.*;
 import user.User;
 
 public class GUI extends javax.swing.JFrame {
 
     /* Поток, обрабатывающий подключения к серверу */
-    private ServerSocket serverSocket;
+    //private ServerSocket serverSocket;
     /* Динамический массив подключений; Для каждого соединения с клиентом
        свой объект ConnectionClass*/
     private List<ConnectionClass> connections;
     /* Объект для работы со списком задач */
-    private TaskManager manager;
+    private final TaskManager manager;
     /* Система оповещения */
-    private AlertSystem alertSystem;
+    //private final AlertSystem alertSystem;
     /* Рендерер для таблицы, окрашивает в красный высокоприоритетные задачи */
     private DefaultTableCellRenderer renderer;
 
@@ -40,48 +40,48 @@ public class GUI extends javax.swing.JFrame {
         initComponents();
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+4"));
         //Создаём серверный поток
-        Thread serverSocketThread = new Thread() {
-            @Override
-            public void run() {
-                //Пытаемся поднять сервер
-                boolean flag = true;
-                while (flag) {
-                    try {
-                        int port = Integer.parseInt(JOptionPane.
-                                showInputDialog("Введите номер порта"));
-                        serverSocket = new ServerSocket(port);
-                        flag = false;
-                    } catch (IOException e) {
-                        JOptionPane.showMessageDialog(GUI.this,
-                                "Ошибка при старте сервера.", "Ошибка",
-                                JOptionPane.ERROR_MESSAGE);
-                        System.exit(-1);
-                    } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(GUI.this,
-                                "Введены некорректные данные.", "Ошибка",
-                                JOptionPane.ERROR_MESSAGE);
-                        System.exit(-1);
-                    }
-                }
-                GUI.this.setVisible(true);
-                connections = new ArrayList<>();
-
-                //Ожидаем подключения
-                while (true) {
-                    try {
-                        ConnectionClass connection = new ConnectionClass(
-                                serverSocket.accept(), GUI.this, 
-                                ConcreteTaskManager.getInstance());
-                        connections.add(connection);
-                        alertSystem.addListener(connection);
-                    } catch (IOException ioe) {
-                        JOptionPane.showMessageDialog(GUI.this,
-                                "Не удалось установить соединение с клиентом.",
-                                "Ошибка", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-        };
+//        Thread serverSocketThread = new Thread() {
+//            @Override
+//            public void run() {
+//                //Пытаемся поднять сервер
+////                boolean flag = true;
+////                while (flag) {
+////                    try {
+////                        int port = Integer.parseInt(JOptionPane.
+////                                showInputDialog("Введите номер порта"));
+////                        serverSocket = new ServerSocket(port);
+////                        flag = false;
+////                    } catch (IOException e) {
+////                        JOptionPane.showMessageDialog(GUI.this,
+////                                "Ошибка при старте сервера.", "Ошибка",
+////                                JOptionPane.ERROR_MESSAGE);
+////                        System.exit(-1);
+////                    } catch (NumberFormatException e) {
+////                        JOptionPane.showMessageDialog(GUI.this,
+////                                "Введены некорректные данные.", "Ошибка",
+////                                JOptionPane.ERROR_MESSAGE);
+////                        System.exit(-1);
+////                    }
+////                }
+////                GUI.this.setVisible(true);
+////                GUI.this.connections = new ArrayList<>();
+//
+//                //Ожидаем подключения
+////                while (true) {
+////                    try {
+////                        ConnectionClass connection = new ConnectionClass(
+////                                serverSocket.accept(), GUI.this, 
+////                                ConcreteTaskManager.getInstance());
+////                        GUI.this.connections.add(connection);
+////                        GUI.this.alertSystem.addListener(connection);
+////                    } catch (IOException ioe) {
+////                        JOptionPane.showMessageDialog(GUI.this,
+////                                "Не удалось установить соединение с клиентом.",
+////                                "Ошибка", JOptionPane.ERROR_MESSAGE);
+////                    }
+////                }
+//            }
+//        };
         manager = ConcreteTaskManager.getInstance();
         ArrayList<User> list = new ArrayList<>();
         list.add(new User("All users"));
@@ -91,18 +91,18 @@ public class GUI extends javax.swing.JFrame {
         usersComboBox.setModel(comboBoxModel);
         usersComboBox.setSelectedIndex(0);
         /*Инициализация и запуск системы оповещения*/
-        alertSystem = ConcreteAlertSystem.getInstance();
-        Thread alertThread = new Thread((Runnable) alertSystem);
-        alertThread.setDaemon(true);
-        serverSocketThread.setDaemon(true);
-        alertThread.start();
-        serverSocketThread.start();
+//        alertSystem = ConcreteAlertSystem.getInstance();
+//        Thread alertThread = new Thread((Runnable) alertSystem);
+//        alertThread.setDaemon(true);
+//        serverSocketThread.setDaemon(true);
+//        alertThread.start();
+//        serverSocketThread.start();
         //Заполняем таблицу задачами
         User nameUser = (User) usersComboBox.getSelectedItem();
-        fillTableSelectedUser(nameUser.getName());
+        GUI.this.fillTableSelectedUser(nameUser.getName());
         taskTable.setAutoCreateRowSorter(true);
         //Ставим по центру
-        this.setLocationRelativeTo(null);
+        GUI.this.setLocationRelativeTo(null);
     }
  
     //Вызывается при изменении задач
@@ -112,9 +112,8 @@ public class GUI extends javax.swing.JFrame {
            @Override
            public void run(){
                User user = (User) usersComboBox.getSelectedItem();
-               //String nameUser = (String) usersComboBox.getSelectedItem();
                fillTableSelectedUser(user.getName());
-               notifyConnections();
+               //notifyConnections();
            }
         });        
     }
@@ -123,7 +122,6 @@ public class GUI extends javax.swing.JFrame {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                //usersComboBox.addItem(user);
                 ((DefaultComboBoxModel<User>)usersComboBox.getModel()).addElement(user);
             }
         });
@@ -500,8 +498,8 @@ public class GUI extends javax.swing.JFrame {
         taskTable.setSelectionBackground(new java.awt.Color(0, 204, 204));
         taskTable.getTableHeader().setReorderingAllowed(false);
         taskTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                taskTableMouseClicked(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                taskTableMousePressed(evt);
             }
         });
         jScrollPane4.setViewportView(taskTable);
@@ -621,6 +619,7 @@ public class GUI extends javax.swing.JFrame {
         descriptionTextArea.setText("");
         contactsTextArea.setText("");
         Calendar currentTime = Calendar.getInstance();
+        currentTime.setTimeZone(TimeZone.getTimeZone("GMT+4"));
         dateChooser.setCalendar(currentTime);
         hourSpinField.setValue(currentTime.get(Calendar.HOUR_OF_DAY));
         minuteSpinField.setValue(currentTime.get(Calendar.MINUTE));
@@ -857,54 +856,86 @@ public class GUI extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_formWindowClosing
 
-    private void taskTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taskTableMouseClicked
-        //Блокируем кнопки, если не выбрана задача
-        viewButton.setEnabled(taskTable.getSelectedRow() != -1);
-        editButton.setEnabled(taskTable.getSelectedRow() != -1);
-        deleteButton.setEnabled(taskTable.getSelectedRow() != -1);
-    }//GEN-LAST:event_taskTableMouseClicked
-
     private void usersComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersComboBoxActionPerformed
         User user = (User) usersComboBox.getSelectedItem();
         //String nameUser = (String) usersComboBox.getSelectedItem();
         fillTableSelectedUser(user.getName());
     }//GEN-LAST:event_usersComboBoxActionPerformed
 
+    private void taskTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taskTableMousePressed
+        //Блокируем кнопки, если не выбрана задача
+        viewButton.setEnabled(taskTable.getSelectedRow() != -1);
+        editButton.setEnabled(taskTable.getSelectedRow() != -1);
+        deleteButton.setEnabled(taskTable.getSelectedRow() != -1);
+    }//GEN-LAST:event_taskTableMousePressed
+    
+    private void notifyConnections() {
+        for (ConnectionClass c : connections) {
+            c.sendTaskAndAlertTask();
+        }
+    }
+
+    public void disconnect(ConnectionClass aThis) {
+        connections.remove(aThis);
+    }
+
+    private boolean checkDataNewTask(Calendar calendar) {
+        return calendar.after(GregorianCalendar.getInstance());
+
+    }
+
+    private boolean checkNameSpace(String value) {
+        if (value.equals("")) {
+            return false;
+        }
+        char[] array = value.toCharArray();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != ' ') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setConnections(List<ConnectionClass> list) {
+        this.connections = list;
+    }
+    
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new GUI().setVisible(false);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                new GUI().setVisible(false);
+//            }
+//        });
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JPanel buttonsPanel;
@@ -946,29 +977,5 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton viewButton;
     // End of variables declaration//GEN-END:variables
 
-    private void notifyConnections() {
-        for (ConnectionClass c : connections) {
-            c.sendTaskAndAlertTask();
-        }
-    }
-
-    public void disconnect(ConnectionClass aThis) {
-        connections.remove(aThis);
-    }
     
-    private boolean checkDataNewTask(Calendar calendar){
-        return calendar.after(GregorianCalendar.getInstance());
-        
-    }
-    
-    private boolean checkNameSpace(String value){
-        if(value.equals("")) return false;
-        char[] array=value.toCharArray();
-        for(int i=0; i< array.length; i++){
-            if(array[i]!= ' '){
-                return true;
-            }
-        }
-        return false;
-    }
 }

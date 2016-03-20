@@ -6,7 +6,7 @@
  * @author Карасёв С.В.
  * @version 1.0
  */
-package taskmanagerserver.core;
+package taskManager;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import task.Task;
 import user.User;
 
@@ -34,7 +35,7 @@ public class ConcreteTaskManager implements TaskManager {
 
     /** При создании класса пробует загрузить журнал задач из файла */
     private ConcreteTaskManager() {
-        tasks= new HashMap<>();
+        tasks = new HashMap<>();
         users = new ArrayList<>();
         try {
             loadTasks();
@@ -85,17 +86,16 @@ public class ConcreteTaskManager implements TaskManager {
     
     @Override
     public void setTask(long id, String name, String description, String contacts,
-            Calendar date, boolean finished, boolean highPriority, String soundPath,
+            Calendar date, boolean finished, boolean highPriority, 
             boolean workOnTask, User user) {
         tasks.get(id).setName(name);
         tasks.get(id).setDescription(description);
         tasks.get(id).setContacts(contacts);
         tasks.get(id).setDate(date);
-        tasks.get(id).setFinished(finished);
-        tasks.get(id).setHighPriority(highPriority);
-        tasks.get(id).setSoundFileName(soundPath);
-        tasks.get(id).setWorkOnTask(workOnTask);
+        tasks.get(id).setHighPriority(highPriority);        
         tasks.get(id).setUser(user);
+        tasks.get(id).setFinished(finished);
+        tasks.get(id).setWorkOnTask(workOnTask);
     }
 
     /**

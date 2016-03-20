@@ -1,4 +1,4 @@
-package taskmanagerserver.core;
+package tableModel;
 
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;

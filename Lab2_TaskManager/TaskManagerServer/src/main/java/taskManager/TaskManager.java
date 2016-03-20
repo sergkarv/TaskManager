@@ -1,4 +1,4 @@
-package taskmanagerserver.core;
+package taskManager;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -9,7 +9,7 @@ import user.User;
 
 /**
  * Интерфейс класса для работы с журналом задач
- * @author Карасев
+ * @author Карасев С.В.
  * @version 1.0
  */
 public interface TaskManager {
@@ -17,7 +17,7 @@ public interface TaskManager {
     public void saveTasks() throws IOException;
     public void loadTasks() throws IOException, ClassNotFoundException;
     public void setTask(long id, String name, String description, String contacts,
-            Calendar date, boolean finished, boolean highPriority, String soundPath,
+            Calendar date, boolean finished, boolean highPriority,
             boolean workOnTask, User user);
     
     public void addTask(Task task);

@@ -1,7 +1,7 @@
 /**
  * Интерфейс слушателя.
  */
-package taskmanagerserver.core;
+package connection;
 
 public interface Listener {
     /**

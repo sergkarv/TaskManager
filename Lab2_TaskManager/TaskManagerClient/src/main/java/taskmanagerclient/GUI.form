@@ -564,9 +564,11 @@
                       <StringArray count="0"/>
                     </Property>
                     <Property name="selectionMode" type="int" value="0"/>
+                    <Property name="focusCycleRoot" type="boolean" value="true"/>
+                    <Property name="visibleRowCount" type="int" value="100"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="completedTasksListMouseClicked"/>
+                    <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="completedTasksListMousePressed"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -946,7 +948,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="taskTableMouseClicked"/>
+                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="taskTableMousePressed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="Object[] column = {&quot;Id&quot;, &quot;&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;&quot;, &quot;&#x414;&#x430;&#x442;&#x430;/&#x432;&#x440;&#x435;&#x43c;&#x44f;&quot;, &quot;&#x417;&#x430;&#x432;&#x435;&#x440;&#x448;&#x451;&#x43d;&#x43d;&#x43e;&#x441;&#x442;&#x44c;&quot;};&#xa;        DefaultTableModelNotEdit model = new DefaultTableModelNotEdit();&#xa;        model.setColumnIdentifiers(column);&#xa;        taskTable.setModel(model);&#xa;taskTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);"/>

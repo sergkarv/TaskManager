@@ -39,10 +39,6 @@ public class Task implements Serializable {
      */
     private boolean highPriority;
     /**
-     * Путь к звуковому файлу оповещения о задаче
-     */
-    private String soundFileName;
-    /**
      * Дата создании задачи 
      */
     private Calendar dateCreatedTask;
@@ -61,7 +57,6 @@ public class Task implements Serializable {
         date = null;
         finished = false;
         highPriority = false;
-        soundFileName = null;
         dateCreatedTask = Calendar.getInstance();
         workOnTask = false;
         id = dateCreatedTask.getTimeInMillis();
@@ -87,7 +82,6 @@ public class Task implements Serializable {
         this.date = date;
         this.finished = finished;
         this.highPriority = highPriority;
-        this.soundFileName = sound;
         dateCreatedTask = Calendar.getInstance();
         workOnTask = false;
         id = dateCreatedTask.getTimeInMillis();
@@ -207,21 +201,6 @@ public class Task implements Serializable {
      */
     public boolean isHighPriority() {
         return highPriority;
-    }
-
-    /** Задать путь к звуковому файлу оповещения
-     * @param value Путь к звуковому файлу
-     */
-    public void setSoundFileName(String value) {
-        soundFileName = value;
-    }
-    
-    /**
-     * Получить путь к звуковому файлу оповещения
-     * @return Путь к звуковому файлу
-     */
-    public String getSoundFileName() {
-        return soundFileName;
     }
 
     @Override
