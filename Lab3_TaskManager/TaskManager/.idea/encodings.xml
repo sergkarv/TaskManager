@@ -2,10 +2,8 @@
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/src/main/java/taskManager/controller/MainController.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/taskManager/controller/MainController.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/taskManager/dao" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/taskManager/domain" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/taskManager/model/User.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/taskManager/postgreSql" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/test/java/taskManager" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/web" charset="UTF-8" />
