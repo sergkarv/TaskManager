@@ -1,16 +1,27 @@
 package taskManager.postgreSql;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import taskManager.dao.DaoFactory;
 import taskManager.dao.GenericDao;
 import taskManager.dao.PersistException;
 import taskManager.domain.Task;
 import taskManager.domain.User;
+
+import javax.sql.DataSource;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
+@Component
 public class PostgreSqlDaoFactory implements DaoFactory<Connection> {
     //jdbc:postgresql://localhost:5432/db
     private String user = "root";//Логин пользователя
@@ -21,10 +32,15 @@ public class PostgreSqlDaoFactory implements DaoFactory<Connection> {
     //org.apache.derby.jdbc.ClientDriver
     private Map<Class, DaoCreator> creators;
 
+    //@Qualifier("dataSource")
+    @Autowired
+    private DataSource dataSource;
+
     public Connection getContext() throws PersistException {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            //connection = DriverManager.getConnection(url, user, password);
+            connection = dataSource.getConnection();
 
         } catch (SQLException e) {
             throw new PersistException(e);
@@ -53,11 +69,12 @@ public class PostgreSqlDaoFactory implements DaoFactory<Connection> {
     }
 
     public PostgreSqlDaoFactory() {
-        try {
-            Class.forName(driver);//Регистрируем драйвер
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Class.forName(driver);//Регистрируем драйвер
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+        //надеемся на то, что драйвер подхватится в getConnection
 
         creators = new HashMap<Class, DaoCreator>();
         creators.put(User.class, new DaoCreator<Connection>() {

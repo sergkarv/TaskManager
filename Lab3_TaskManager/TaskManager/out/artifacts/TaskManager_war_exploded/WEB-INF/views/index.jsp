@@ -1,3 +1,4 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: Администратор
@@ -8,17 +9,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Main page</title>
+    <title>Index Page</title>
 </head>
 <body>
-    <a href="/addTask">Add Task</a><br/>
-    <a href="/addUser">Add User</a><br/>
-    <a href="searchTask.jsp">Search of Tasks on condition</a><br/>
-    <a href="viewTask.jsp">View Tasks</a><br/>
-    <a href="viewUser.jsp">View Users</a><br/>
-    <a href="viewTaskAndUser.jsp">View Tasks and Users</a><br/>
-    <a href="updateTask.jsp">Update or Remove Task</a><br/>
-    <a href="/removeTask">Remove Task</a><br/>
-    <a href="/removeUser">Remove User</a><br/>
+<spring:form method="post"  modelAttribute="userJSP" action="check-user">
+
+    Name: <spring:input path="name"/> (path="" - указывает путь, используемый в modelAttribute=''. в нашем случае User.name)  <br/>
+    Password: <spring:input path="password"/>   <br/>
+    <spring:button>Next Page</spring:button>
+
+</spring:form>
 </body>
 </html>
