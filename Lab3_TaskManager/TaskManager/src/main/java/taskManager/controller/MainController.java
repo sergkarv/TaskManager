@@ -1,10 +1,8 @@
 package taskManager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import taskManager.dao.*;
 import taskManager.domain.Task;
 import taskManager.domain.User;
-import taskManager.postgreSql.PostgreSqlDaoFactory;
 import taskManager.postgreSql.PostgreSqlTaskDao;
 import taskManager.postgreSql.PostgreSqlUserDao;
 
@@ -69,7 +66,7 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView();
 
         //имя представления, куда нужно будет перейти
-        modelAndView.setViewName("addTask");
+        modelAndView.setViewName("addOrUpdateTask");
         modelAndView.addObject("taskJSP", new Task());
 //        try {
 //            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(connection, Task.class);
@@ -130,7 +127,7 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView();
 
         //имя представления, куда нужно будет перейти
-        modelAndView.setViewName("addTask");
+        modelAndView.setViewName("addOrUpdateTask");
 
         //записываем в атрибут userJSP (используется на странице *.jsp объект user
         modelAndView.addObject("userJSP", user);
@@ -143,7 +140,7 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView();
 
         //имя представления, куда нужно будет перейти
-        modelAndView.setViewName("addTask");
+        modelAndView.setViewName("addOrUpdateTask");
 
         //записываем в атрибут userJSP (используется на странице *.jsp объект user
         modelAndView.addObject("userJSP", user);
@@ -261,6 +258,140 @@ public class MainController {
 
         return "redirect:/userslist";
     }
+
+    @RequestMapping(value = "/taskslist", method = RequestMethod.GET)
+    public ModelAndView tasksList() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        //имя представления, куда нужно будет перейти
+        modelAndView.setViewName("taskslist");
+        List<User> listUser = null;
+        List<Task> listTask = null;
+        try {
+            PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(connection, User.class);
+            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(connection, Task.class);
+            listUser = userDao.getAll();
+            listTask = taskDao.getAll();
+            modelAndView.addObject("userListJSP", listUser);
+            modelAndView.addObject("taskListJSP", listTask);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+
+        return modelAndView; //после уйдем на представление, указанное чуть выше, если оно будет найдено.
+    }
+
+    @RequestMapping(value = "/edit-task-{id}", method = RequestMethod.GET)
+    public ModelAndView editTask(@PathVariable Integer id) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("addOrUpdateTask");
+        Task editTask = null;
+        try {
+            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(connection, Task.class);
+            PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(connection, User.class);
+            editTask = taskDao.getByPK(id);
+            List<User> listUser = userDao.getAll();
+            List<Task> listTask = taskDao.getAll();
+            modelAndView.addObject("taskJSP", editTask);
+            modelAndView.addObject("tasklistJSP", listTask);
+            modelAndView.addObject("userlistJSP", listUser);
+            modelAndView.addObject("edit", true);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+
+        return modelAndView;
+    }
+
+    /**
+     * This method will be called on form submission, handling POST request for
+     * updating user in database. It also validates the user input
+     */
+    @RequestMapping(value = { "/edit-task-{id}" }, method = RequestMethod.POST)
+    public String updateUser(@ModelAttribute("taskJSP") Task task, @PathVariable Integer id, ModelMap model) {
+
+        try {
+            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(connection, Task.class);
+            Task editTask = taskDao.getByPK(id);
+
+            editTask.setName(task.getName());
+            //add  param
+
+            taskDao.update(editTask);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("success", "User " + task.getName() + " updated successfully");
+        return "registrationsuccess";
+    }
+
+
+    /**
+     * This method will delete an user by it's SSOID value.
+     */
+    @RequestMapping(value = { "/delete-task-{id}" }, method = RequestMethod.GET)
+    public String deleteTask(@PathVariable Integer id) {
+
+        try {
+            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(connection, Task.class);
+            taskDao.delete(taskDao.getByPK(id));
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/taskslist";
+    }
+
+    @RequestMapping(value = "/newtask", method = RequestMethod.GET)
+    public ModelAndView addTask() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("addOrUpdateTask");
+        Task task = new Task();
+        modelAndView.addObject("taskJSP", task);
+
+        PostgreSqlUserDao userDao = null;
+        try {
+            userDao = (PostgreSqlUserDao) factory.getDao(connection, User.class);
+            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(connection, Task.class);
+            List<User> listUser = userDao.getAll();
+            List<Task> listTask = taskDao.getAll();
+            modelAndView.addObject("tasklistJSP", listTask);
+            modelAndView.addObject("userlistJSP", listUser);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+
+        modelAndView.addObject("edit", false);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/newtask", method = RequestMethod.POST)
+    public String saveTask(@ModelAttribute("taskJSP") Task task, ModelMap model) {
+
+
+//        try {
+//            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(connection, Task.class);
+//            taskDao.create(task);
+//        } catch (PersistException e) {
+//            e.printStackTrace();
+//        } catch (NullPointParameterException e) {
+//            e.printStackTrace();
+//        } catch (EmptyParamException e) {
+//            e.printStackTrace();
+//        }
+        System.out.println(task.getName());
+        System.out.println(task.getContacts());
+        System.out.println(task.getDescription());
+        System.out.println(task.getDate());
+        System.out.println(task.getParentId());
+        System.out.println(task.getUserId());
+
+        model.addAttribute("success", "Task " + task.getName() + " added successfully");
+        //return "success";
+        return "addOrUpdateTaskSuccess";
+    }
+
 
 
 }

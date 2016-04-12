@@ -12,7 +12,7 @@
 </head>
 <body>
     <a href="/userslist">View Users</a><br/>
-    <a href="/addTask">Add Task</a><br/>
+    <a href="/taskslist">View Tasks</a><br/>
     <a href="/addUser">Add User</a><br/>
     <a href="/removeTask">Remove Task</a><br/>
     <a href="/removeUser">Remove User</a><br/>
