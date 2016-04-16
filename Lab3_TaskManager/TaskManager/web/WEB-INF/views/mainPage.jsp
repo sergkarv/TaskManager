@@ -9,12 +9,30 @@
 <html>
 <head>
     <title>Main page</title>
+    <link href="static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="static/css/app.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-    <a href="/userslist">View Users</a><br/>
-    <a href="/taskslist">View Tasks</a><br/>
-    <a href="/addUser">Add User</a><br/>
-    <a href="/removeTask">Remove Task</a><br/>
-    <a href="/removeUser">Remove User</a><br/>
+
+    <div class="generic-container">
+        <div class="well lead">Main page</div>
+
+        <div class="well">
+            <a href="/userslist">View Users</a><br/>
+        </div>
+        <div class="well">
+            <a href="/taskslist">View Tasks</a><br/>
+        </div>
+        <div class="well">
+            <a href="/addUser">Add User</a><br/>
+        </div>
+        <div class="well">
+            <a href="/removeTask">Remove Task</a><br/>
+        </div>
+        <div class="well">
+            <a href="/removeUser">Remove User</a><br/>
+        </div>
+
+    </div>
 </body>
 </html>

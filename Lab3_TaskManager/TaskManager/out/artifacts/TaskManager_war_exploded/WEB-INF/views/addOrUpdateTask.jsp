@@ -1,3 +1,7 @@
+<%@ page import="java.util.Enumeration" %>
+<%@ page import="java.sql.Date" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.TimeZone" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -13,8 +17,9 @@
 
 <body>
 
+
 <div class="generic-container">
-    <div class="well lead">Add Task Form</div>
+    <div class="well lead">Task Form</div>
     <form:form method="POST" modelAttribute="taskJSP" class="form-horizontal">
 
         <form:input type="hidden" path="id" id="id"/>
@@ -59,7 +64,7 @@
             <div class="form-group col-md-12">
                 <label class="col-md-3 control-lable" for="date">Date</label>
                 <div class="col-md-7">
-                    <form:input type="localtime" path="date" id="date" class="form-control input-sm" />
+                    <input name="time" type="datetime-local" path="date" id="date" class="form-control" />
                     <div class="has-error">
                         <form:errors path="date" class="help-inline"/>
                     </div>
@@ -71,7 +76,7 @@
             <div class="form-group col-md-12">
                 <label class="col-md-3 control-lable" for="highPriority">High Priority</label>
                 <div class="col-md-7">
-                    <form:input type="checkbox" path="highPriority" id="highPriority" class="form-control input-sm" />
+                    <input name="highpriority" type="checkbox" path="highPriority" id="highPriority" class="form-control input-sm" />
                     <div class="has-error">
                         <form:errors path="highPriority" class="help-inline"/>
                     </div>
@@ -81,13 +86,16 @@
 
         <div class="row">
             <div class="form-group col-md-12">
-                <label class="col-md-3 control-lable" >Date</label>
+                <label class="col-md-3 control-lable">User</label>
                 <div class="col-md-7">
-                    <select name="parent" class="selectpicker">
+                    <select name="parent" class="form-control">
+                        <option>null</option>
                         <c:forEach var="name" items="${tasklistJSP}">
                             <c:choose>
-                                <c:when test="${taskJSP.parentId not null and taskJSP.parentId eq name.id}">
-                                    <option selected>${name.name} (${name.id})</option>
+                                <c:when test="${taskJSP.parentId ne null}">
+                                    <c:if test="${taskJSP.parentId eq name.id}">
+                                        <option selected>${name.name} (${name.id})</option>
+                                    </c:if>
                                 </c:when>
                                 <c:otherwise>
                                     <option>${name.name} (${name.id})</option>
@@ -101,13 +109,15 @@
 
         <div class="row">
             <div class="form-group col-md-12">
-                <label class="col-md-3 control-lable" >Date</label>
+                <label class="col-md-3 control-lable">User</label>
                 <div class="col-md-7">
-                    <select name="user" class="selectpicker">
+                    <select name="user" class="form-control" >
                         <c:forEach var="name" items="${userlistJSP}">
                             <c:choose>
-                                <c:when test="${taskJSP.userId not null and taskJSP.userId eq name.id}">
-                                    <option selected>${name.name} (${name.id})</option>
+                                <c:when test="${taskJSP.userId ne null}">
+                                    <c:if test="${taskJSP.userId eq name.id}}">
+                                        <option  selected>${name.name} (${name.id})</option>
+                                    </c:if>
                                 </c:when>
                                 <c:otherwise>
                                     <option>${name.name} (${name.id})</option>
@@ -132,6 +142,69 @@
             </div>
         </div>
     </form:form>
-</div>
+    </div>
+
 </body>
+
+<%!
+    Calendar strToCalendar(String s){
+        String date = s.substring(0 , s.indexOf('T'));
+        String time = s.substring(s.indexOf('T')+1, s.length());
+
+        int hour = Integer.valueOf(time.substring(0, time.indexOf(':')));
+        int minute = Integer.valueOf( time.substring(time.indexOf(':')+1, time.length()  ));
+        int year = Integer.valueOf(date.substring(0, date.indexOf('-')));
+        int month = Integer.valueOf( date.substring( date.indexOf('-')+1, date.lastIndexOf('-') ) );
+        int day = Integer.valueOf( date.substring( date.lastIndexOf('-')+1, date.length()  ) );
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, hour, minute);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.setTimeZone(TimeZone.getTimeZone("UTF+4"));
+        return calendar;
+    }
+%>
+
+<%
+    // Get the value of the request parameter
+    String value = request.getParameter("time");
+    if(value == null) return;
+    Calendar calendar = strToCalendar(value);
+
+    boolean highFlag = false;
+    value = request.getParameter("highpriority");
+    if(value == null) return;
+    if(value.equals("on")){
+        highFlag = true;
+    }
+
+    value = request.getParameter("parent");
+    String idParentString = null;
+    Integer idParent = null;
+    if(value != null){
+        if(!value.equals("null")){
+            idParentString = value.substring( value.indexOf('(')+1, value.length() );
+            idParent = Integer.valueOf(idParentString);
+        }
+    }
+
+    value = request.getParameter("user");
+    if(value == null) return;
+    String idUserString = null;
+    Integer idUser = null;
+    idUserString = value.substring( value.indexOf('(')+1, value.length() );
+    idUser = Integer.valueOf(idParentString);
+
+    {
+%>
+        <c:set var="${taskJSP.date}" value="<%= calendar%>"/>
+        <c:set var="${taskJSP.highPriority}" value="<%= highFlag%>"/>
+        <c:set var="${taskJSP.parentId}" value="<%= idParent%>"/>
+        <c:set var="${taskJSP.userId}" value="<%= idUser%>"/>
+<%
+    }
+%>
+
+
+
 </html>

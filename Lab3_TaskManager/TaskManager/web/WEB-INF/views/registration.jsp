@@ -18,7 +18,6 @@
 <div class="generic-container">
     <div class="well lead">User Registration Form</div>
     <form:form method="POST" modelAttribute="userJSP" class="form-horizontal">
-
         <form:input type="hidden" path="id" id="id"/>
 
         <div class="row">

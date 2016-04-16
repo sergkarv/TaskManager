@@ -6,7 +6,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Users List</title>
+    <title>Tasks List</title>
     <link href="static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
     <link href="static/css/app.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -14,8 +14,8 @@
 <body>
 <div >
     <div >
-        <!-- Default panel contents -->
-        <div ><span >List of Users </span></div>
+
+        <div class="panel-heading"><span class="lead">List of Users </span></div>
         <table class="table table-hover">
             <thead>
             <tr>

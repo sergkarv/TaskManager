@@ -174,13 +174,13 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("registration");
         User user = new User();
-        modelAndView.addObject("user", user);
+        modelAndView.addObject("userJSP", user);
         modelAndView.addObject("edit", false);
         return modelAndView;
     }
 
     @RequestMapping(value = "/newuser", method = RequestMethod.POST)
-    public String saveUser(@ModelAttribute("user") User user, ModelMap model) {
+    public String saveUser(@ModelAttribute("userJSP") User user, ModelMap model) {
 
 
         try {
@@ -369,7 +369,10 @@ public class MainController {
     @RequestMapping(value = "/newtask", method = RequestMethod.POST)
     public String saveTask(@ModelAttribute("taskJSP") Task task, ModelMap model) {
 
-
+        System.out.println(task.isHighPriority());
+        System.out.println(task.getParentId());
+        System.out.println(task.getUserId());
+        System.out.println(task.getDate());
 //        try {
 //            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(connection, Task.class);
 //            taskDao.create(task);
@@ -380,16 +383,11 @@ public class MainController {
 //        } catch (EmptyParamException e) {
 //            e.printStackTrace();
 //        }
-        System.out.println(task.getName());
-        System.out.println(task.getContacts());
-        System.out.println(task.getDescription());
-        System.out.println(task.getDate());
-        System.out.println(task.getParentId());
-        System.out.println(task.getUserId());
 
-        model.addAttribute("success", "Task " + task.getName() + " added successfully");
+
+        //model.addAttribute("success", "Task " + task.getName() + " added successfully");
         //return "success";
-        return "addOrUpdateTaskSuccess";
+        return "addOrUpdateTask";
     }
 
 
