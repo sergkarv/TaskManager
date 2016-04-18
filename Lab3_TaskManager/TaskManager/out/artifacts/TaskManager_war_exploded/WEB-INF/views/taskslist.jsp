@@ -15,7 +15,7 @@
 <div >
     <div >
 
-        <div class="panel-heading"><span class="lead">List of Users </span></div>
+        <div class="well lead">List of Tasks</div>
         <table class="table table-hover">
             <thead>
             <tr>
@@ -69,6 +69,9 @@
 
     <div class="well">
         <a href="/newtask">Add New Task</a>
+    </div>
+    <div class="well">
+        <a href="/check-user">Go to Main page</a>
     </div>
 </div>
 </body>

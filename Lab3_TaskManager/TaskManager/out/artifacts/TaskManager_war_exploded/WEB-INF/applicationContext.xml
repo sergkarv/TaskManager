@@ -13,7 +13,7 @@
         http://www.springframework.org/schema/jdbc
         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd ">
 
-    <context:component-scan base-package="taskManager" />
+
 
     <context:property-placeholder location="classpath:util.properties" />
 
@@ -25,6 +25,8 @@
         <property name="username" value="${jdbc.postgresql.username}" />
         <property name="password" value="${jdbc.postgresql.password}" />
     </bean>
+
+    <context:component-scan base-package="taskManager" />
 
 
     <!-- initialize Embedded DataSource. Встроенная база данных-->

@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Main page</title>
     <link href="static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
     <link href="static/css/app.css" rel="stylesheet" type="text/css"/>
@@ -24,13 +25,10 @@
             <a href="/taskslist">View Tasks</a><br/>
         </div>
         <div class="well">
-            <a href="/addUser">Add User</a><br/>
+            <a href="/newuser">Add User</a><br/>
         </div>
         <div class="well">
-            <a href="/removeTask">Remove Task</a><br/>
-        </div>
-        <div class="well">
-            <a href="/removeUser">Remove User</a><br/>
+            <a href="/newtask">Add Task</a><br/>
         </div>
 
     </div>

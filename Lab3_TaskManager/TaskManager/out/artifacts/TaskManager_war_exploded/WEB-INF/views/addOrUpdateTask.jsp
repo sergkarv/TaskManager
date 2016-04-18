@@ -12,7 +12,6 @@
     <title>Add Task Form</title>
     <link href="static/css/bootstrap.css" rel="stylesheet"/>
     <link href="static/css/app.css" rel="stylesheet"/>
-    <link href="static/css/bootstrap-select.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -76,7 +75,17 @@
             <div class="form-group col-md-12">
                 <label class="col-md-3 control-lable" for="highPriority">High Priority</label>
                 <div class="col-md-7">
-                    <input name="highpriority" type="checkbox" path="highPriority" id="highPriority" class="form-control input-sm" />
+                    <c:choose>
+                        <c:when test="${edit}">
+                            <c:if test="${taskJSP.highPriority}">
+                                <input name="highpriority" type="checkbox" checked path="highPriority" id="highPriority" class="form-control input-sm" />
+                            </c:if>
+                        </c:when>
+                        <c:otherwise>
+                            <input name="highpriority" type="checkbox" path="highPriority" id="highPriority" class="form-control input-sm" />
+                        </c:otherwise>
+                    </c:choose>
+
                     <div class="has-error">
                         <form:errors path="highPriority" class="help-inline"/>
                     </div>
@@ -86,7 +95,7 @@
 
         <div class="row">
             <div class="form-group col-md-12">
-                <label class="col-md-3 control-lable">User</label>
+                <label class="col-md-3 control-lable">Parent</label>
                 <div class="col-md-7">
                     <select name="parent" class="form-control">
                         <option>null</option>
@@ -145,66 +154,5 @@
     </div>
 
 </body>
-
-<%!
-    Calendar strToCalendar(String s){
-        String date = s.substring(0 , s.indexOf('T'));
-        String time = s.substring(s.indexOf('T')+1, s.length());
-
-        int hour = Integer.valueOf(time.substring(0, time.indexOf(':')));
-        int minute = Integer.valueOf( time.substring(time.indexOf(':')+1, time.length()  ));
-        int year = Integer.valueOf(date.substring(0, date.indexOf('-')));
-        int month = Integer.valueOf( date.substring( date.indexOf('-')+1, date.lastIndexOf('-') ) );
-        int day = Integer.valueOf( date.substring( date.lastIndexOf('-')+1, date.length()  ) );
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, hour, minute);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.setTimeZone(TimeZone.getTimeZone("UTF+4"));
-        return calendar;
-    }
-%>
-
-<%
-    // Get the value of the request parameter
-    String value = request.getParameter("time");
-    if(value == null) return;
-    Calendar calendar = strToCalendar(value);
-
-    boolean highFlag = false;
-    value = request.getParameter("highpriority");
-    if(value == null) return;
-    if(value.equals("on")){
-        highFlag = true;
-    }
-
-    value = request.getParameter("parent");
-    String idParentString = null;
-    Integer idParent = null;
-    if(value != null){
-        if(!value.equals("null")){
-            idParentString = value.substring( value.indexOf('(')+1, value.length() );
-            idParent = Integer.valueOf(idParentString);
-        }
-    }
-
-    value = request.getParameter("user");
-    if(value == null) return;
-    String idUserString = null;
-    Integer idUser = null;
-    idUserString = value.substring( value.indexOf('(')+1, value.length() );
-    idUser = Integer.valueOf(idParentString);
-
-    {
-%>
-        <c:set var="${taskJSP.date}" value="<%= calendar%>"/>
-        <c:set var="${taskJSP.highPriority}" value="<%= highFlag%>"/>
-        <c:set var="${taskJSP.parentId}" value="<%= idParent%>"/>
-        <c:set var="${taskJSP.userId}" value="<%= idUser%>"/>
-<%
-    }
-%>
-
-
 
 </html>

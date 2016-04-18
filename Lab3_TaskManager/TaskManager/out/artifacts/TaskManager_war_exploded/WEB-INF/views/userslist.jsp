@@ -40,6 +40,9 @@
 	 	<div class="well">
 	 		<a href="/newuser">Add New User</a>
 	 	</div>
+        <div class="well">
+            <a href="/check-user">Go to Main page</a>
+        </div>
    	</div>
 </body>
 </html>

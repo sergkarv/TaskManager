@@ -1,23 +1,54 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Администратор
-  Date: 31.03.16
-  Time: 12:44
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Index Page</title>
+    <link href="static/css/bootstrap.css" rel="stylesheet"/>
+    <link href="static/css/app.css" rel="stylesheet"/>
 </head>
 <body>
-<spring:form method="post"  modelAttribute="userJSP" action="check-user">
 
-    Name: <spring:input path="name"/> (path="" - указывает путь, используемый в modelAttribute=''. в нашем случае User.name)  <br/>
-    Password: <spring:input path="password"/>   <br/>
-    <spring:button>Next Page</spring:button>
+<div class="generic-container">
 
-</spring:form>
+        <div class="well lead">Index Page</div>
+
+        <spring:form method="post"  modelAttribute="userJSP" action="check-user" class="form-horizontal">
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label class="col-md-3 control-lable" for="Name">Name</label>
+                    <div class="col-md-7">
+                        <form:input type="text" path="name" id="Name" class="form-control input-sm"/>
+                        <div class="has-error">
+                            <form:errors path="name" class="help-inline"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label class="col-md-3 control-lable" for="password">Password</label>
+                    <div class="col-md-7">
+                        <form:input type="password" path="password" id="password" class="form-control input-sm" />
+                        <div class="has-error">
+                            <form:errors path="password" class="help-inline"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-actions floatRight">
+                    <input type="submit" value="Sign in" class="btn btn-primary btn-sm"/>
+                </div>
+            </div>
+
+        </spring:form>
+
+</div>
 </body>
 </html>

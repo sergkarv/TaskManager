@@ -70,19 +70,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="mainPage.jsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/mainPage.jsp">
+      <file leaf-file-name="userslist.jsp" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/userslist.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="4" selection-start="984" selection-end="984" vertical-scroll-proportion="-15.192307" vertical-offset="200" max-vertical-offset="748">
+            <state line="20" column="24" selection-start="689" selection-end="689" vertical-scroll-proportion="1.5" vertical-offset="379" max-vertical-offset="901">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="userslist.jsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/userslist.jsp">
+      <file leaf-file-name="taskslist.jsp" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/taskslist.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="70" selection-start="281" selection-end="421" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="850">
+            <state line="17" column="44" selection-start="513" selection-end="513" vertical-scroll-proportion="-7.1923075" vertical-offset="102" max-vertical-offset="1428">
               <folding />
             </state>
           </provider>
@@ -91,8 +91,10 @@
       <file leaf-file-name="MainController.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/controller/MainController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="374" column="41" selection-start="14211" selection-end="14211" vertical-scroll-proportion="0.0" vertical-offset="5699" max-vertical-offset="6562">
-              <folding />
+            <state line="57" column="56" selection-start="1913" selection-end="1913" vertical-scroll-proportion="0.0" vertical-offset="616" max-vertical-offset="1156">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -100,17 +102,48 @@
       <file leaf-file-name="addOrUpdateTask.jsp" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/addOrUpdateTask.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="204" column="5" selection-start="8318" selection-end="8318" vertical-scroll-proportion="0.740458" vertical-offset="2886" max-vertical-offset="3672">
+            <state line="123" column="59" selection-start="5330" selection-end="5330" vertical-scroll-proportion="0.96606785" vertical-offset="1607" max-vertical-offset="2788">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/static/css/app.css">
+      <file leaf-file-name="Task.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/domain/Task.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="0" selection-start="206" selection-end="206" vertical-scroll-proportion="0.0" vertical-offset="126" max-vertical-offset="680">
+            <state line="14" column="13" selection-start="312" selection-end="312" vertical-scroll-proportion="0.0" vertical-offset="144" max-vertical-offset="969">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dispatcher-servlet.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/WEB-INF/dispatcher-servlet.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="0" selection-start="912" selection-end="912" vertical-scroll-proportion="-9.04" vertical-offset="29" max-vertical-offset="544">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserController.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/controller/UserController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="42" column="0" selection-start="1351" selection-end="1351" vertical-scroll-proportion="0.0" vertical-offset="2095" max-vertical-offset="2635">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TaskController.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/controller/TaskController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="80" column="50" selection-start="3071" selection-end="3071" vertical-scroll-proportion="0.0" vertical-offset="1024" max-vertical-offset="4216">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -118,8 +151,14 @@
       <file leaf-file-name="PostgreSqlDaoFactory.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/postgreSql/PostgreSqlDaoFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="13" selection-start="803" selection-end="803" vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="1683">
-              <folding />
+            <state line="19" column="13" selection-start="513" selection-end="513" vertical-scroll-proportion="0.0" vertical-offset="357" max-vertical-offset="1496">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2403#2599#0" expanded="true" />
+                <element signature="e#2588#2589#0" expanded="true" />
+                <element signature="e#2635#2831#0" expanded="true" />
+                <element signature="e#2820#2821#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -140,22 +179,24 @@
         <option value="$PROJECT_DIR$/web/WEB-INF/views/addTask.jsp" />
         <option value="$PROJECT_DIR$/web/WEB-INF/views/userlist.jsp" />
         <option value="$PROJECT_DIR$/web/WEB-INF/views/tasklist.jsp" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/views/index.jsp" />
         <option value="$PROJECT_DIR$/src/main/resources/util.properties" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/applicationContext.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/taskManager/postgreSql/PostgreSqlDaoFactory.java" />
         <option value="$PROJECT_DIR$/web/WEB-INF/web.xml" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/dispatcher-servlet.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/views/userslist.jsp" />
         <option value="$PROJECT_DIR$/web/WEB-INF/views/registrationsuccess.jsp" />
         <option value="dbtable:/dcf7bfee/40fdff2b-e786-4fa9-ab16-984842677731/db.tu.user" />
         <option value="$PROJECT_DIR$/web/WEB-INF/views/addOrUpdateTaskSuccess.jsp" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/views/taskslist.jsp" />
         <option value="$PROJECT_DIR$/web/WEB-INF/views/registration.jsp" />
+        <option value="$PROJECT_DIR$/web/WEB-INF/views/userslist.jsp" />
         <option value="$PROJECT_DIR$/web/WEB-INF/views/mainPage.jsp" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/views/addOrUpdateTask.jsp" />
+        <option value="$PROJECT_DIR$/web/WEB-INF/views/index.jsp" />
+        <option value="$PROJECT_DIR$/web/WEB-INF/views/taskslist.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/taskManager/postgreSql/PostgreSqlDaoFactory.java" />
+        <option value="$PROJECT_DIR$/web/WEB-INF/dispatcher-servlet.xml" />
+        <option value="$PROJECT_DIR$/web/WEB-INF/applicationContext.xml" />
         <option value="$PROJECT_DIR$/src/main/java/taskManager/controller/MainController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/taskManager/controller/UserController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/taskManager/controller/TaskController.java" />
+        <option value="$PROJECT_DIR$/web/WEB-INF/views/addOrUpdateTask.jsp" />
       </list>
     </option>
   </component>
@@ -167,10 +208,10 @@
     <option name="CUSTOM_FILTER" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-4" />
-    <option name="y" value="-4" />
-    <option name="width" value="1288" />
-    <option name="height" value="1002" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -277,10 +318,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -459,7 +496,7 @@
     <property name="options.searchVisible" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="C:/../MVC-Jdbc-example/3. Jdbc example" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.3514314" />
     <property name="recentsLimit" value="5" />
@@ -682,6 +719,12 @@
       <envs />
       <method />
     </configuration>
+    <configuration default="true" type="com.intellij.persistence.run.ConsoleRunConfigurationType" factoryName="Query Language Console">
+      <option name="VM_PARAMETERS" value="" />
+      <option name="USER_CFG_CLASS" />
+      <option name="CONTEXT_PROVIDER" />
+      <method />
+    </configuration>
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
       <module name="" />
       <option name="ACTIVITY_CLASS" value="" />
@@ -699,12 +742,6 @@
       <option name="NETWORK_LATENCY" value="none" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <method />
-    </configuration>
-    <configuration default="true" type="com.intellij.persistence.run.ConsoleRunConfigurationType" factoryName="Query Language Console">
-      <option name="VM_PARAMETERS" value="" />
-      <option name="USER_CFG_CLASS" />
-      <option name="CONTEXT_PROVIDER" />
       <method />
     </configuration>
     <configuration default="false" name="Tomcat" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.0.M4" ALTERNATIVE_JRE_ENABLED="false" ALTERNATIVE_JRE_PATH="">
@@ -809,11 +846,12 @@
       <workItem from="1460284279448" duration="38594000" />
       <workItem from="1460567327033" duration="11066000" />
       <workItem from="1460707179546" duration="10837000" />
+      <workItem from="1460995764826" duration="16680000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="86128000" />
+    <option name="totallyTimeSpent" value="102808000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -836,7 +874,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="-4" width="1288" height="1002" extended-state="0" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -861,8 +899,8 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2714055" sideWeight="0.49914822" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46415982" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27114803" sideWeight="0.49914822" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.67632025" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="JSF" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -893,24 +931,25 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/web/static/css/app.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="206" selection-end="206" vertical-scroll-proportion="0.0" vertical-offset="126" max-vertical-offset="680">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/postgreSql/PostgreSqlDaoFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="24" column="13" selection-start="803" selection-end="803" vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="1683">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2403#2599#0" expanded="true" />
+            <element signature="e#2588#2589#0" expanded="true" />
+            <element signature="e#2635#2831#0" expanded="true" />
+            <element signature="e#2820#2821#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/controller/MainController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="6" selection-start="928" selection-end="928" vertical-scroll-proportion="0.0" vertical-offset="459" max-vertical-offset="2686">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -924,7 +963,13 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/postgreSql/PostgreSqlDaoFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="50" selection-start="759" selection-end="780" vertical-scroll-proportion="0.0" vertical-offset="323" max-vertical-offset="1394">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2403#2599#0" expanded="true" />
+            <element signature="e#2588#2589#0" expanded="true" />
+            <element signature="e#2635#2831#0" expanded="true" />
+            <element signature="e#2820#2821#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -943,7 +988,9 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/controller/MainController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="6" selection-start="928" selection-end="928" vertical-scroll-proportion="0.0" vertical-offset="952" max-vertical-offset="2686">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -957,7 +1004,13 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/postgreSql/PostgreSqlDaoFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="50" selection-start="759" selection-end="780" vertical-scroll-proportion="0.0" vertical-offset="323" max-vertical-offset="1394">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2403#2599#0" expanded="true" />
+            <element signature="e#2588#2589#0" expanded="true" />
+            <element signature="e#2635#2831#0" expanded="true" />
+            <element signature="e#2820#2821#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1063,13 +1116,6 @@
         <state line="5" column="46" selection-start="104" selection-end="104" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/index.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="76" selection-start="76" selection-end="76" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="535">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/domain/User.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="7" column="13" selection-start="120" selection-end="120" vertical-scroll-proportion="0.22037037" vertical-offset="0" max-vertical-offset="561">
@@ -1077,30 +1123,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="20" selection-start="456" selection-end="456" vertical-scroll-proportion="0.0" vertical-offset="4" max-vertical-offset="612">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/applicationContext.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="4" selection-start="865" selection-end="865" vertical-scroll-proportion="0.34563106" vertical-offset="77" max-vertical-offset="646">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="33" column="0" selection-start="1115" selection-end="1115" vertical-scroll-proportion="0.3074074" vertical-offset="395" max-vertical-offset="1394">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/dispatcher-servlet.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="34" selection-start="880" selection-end="880" vertical-scroll-proportion="0.4621359" vertical-offset="0" max-vertical-offset="629">
           <folding />
         </state>
       </provider>
@@ -1119,79 +1144,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/registrationsuccess.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="7" selection-start="0" selection-end="564" vertical-scroll-proportion="0.69455254" vertical-offset="0" max-vertical-offset="514">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/addOrUpdateTaskSuccess.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="33" selection-start="535" selection-end="535" vertical-scroll-proportion="0.52918285" vertical-offset="0" max-vertical-offset="514">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/postgreSql/PostgreSqlDaoFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="13" selection-start="803" selection-end="803" vertical-scroll-proportion="0.0" vertical-offset="221" max-vertical-offset="1581">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/static/css/bootstrap.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5653" column="0" selection-start="122539" selection-end="122539" vertical-scroll-proportion="0.33206832" vertical-offset="95926" max-vertical-offset="111724">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/static/css/app.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="206" selection-end="206" vertical-scroll-proportion="0.0" vertical-offset="126" max-vertical-offset="680">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/mainPage.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="4" selection-start="984" selection-end="984" vertical-scroll-proportion="-15.192307" vertical-offset="200" max-vertical-offset="748">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/registration.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="48" selection-start="643" selection-end="643" vertical-scroll-proportion="0.0" vertical-offset="323" max-vertical-offset="1139">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/userslist.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="70" selection-start="281" selection-end="421" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="850">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/lang/String.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1957" column="18" selection-start="76623" selection-end="76623" vertical-scroll-proportion="0.3324905" vertical-offset="32411" max-vertical-offset="53363">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/taskslist.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="468" selection-end="468" vertical-scroll-proportion="-0.41045752" vertical-offset="586" max-vertical-offset="1377">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/sql/Date.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="73" column="11" selection-start="2089" selection-end="2089" vertical-scroll-proportion="-0.2960199" vertical-offset="1071" max-vertical-offset="4896">
           <folding />
         </state>
       </provider>
@@ -1203,23 +1158,145 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/registrationsuccess.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="7" selection-start="564" selection-end="564" vertical-scroll-proportion="0.66728973" vertical-offset="0" max-vertical-offset="535">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/static/css/app.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="0" selection-start="206" selection-end="206" vertical-scroll-proportion="0.33333334" vertical-offset="119" max-vertical-offset="680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/mainPage.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="76" selection-start="303" selection-end="303" vertical-scroll-proportion="-6.1923075" vertical-offset="9" max-vertical-offset="714">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/addOrUpdateTaskSuccess.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="33" selection-start="535" selection-end="535" vertical-scroll-proportion="0.52918285" vertical-offset="0" max-vertical-offset="514">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/taskslist.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="44" selection-start="513" selection-end="513" vertical-scroll-proportion="-7.1923075" vertical-offset="102" max-vertical-offset="1428">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/userslist.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="24" selection-start="689" selection-end="689" vertical-scroll-proportion="1.5" vertical-offset="379" max-vertical-offset="901">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/registration.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="53" selection-start="592" selection-end="592" vertical-scroll-proportion="0.3908046" vertical-offset="102" max-vertical-offset="1139">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/index.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="29" selection-start="534" selection-end="534" vertical-scroll-proportion="0.3813084" vertical-offset="51" max-vertical-offset="1020">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="20" selection-start="456" selection-end="456" vertical-scroll-proportion="0.15151516" vertical-offset="51" max-vertical-offset="612">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/dao/DaoFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="19" selection-start="285" selection-end="285" vertical-scroll-proportion="0.3462963" vertical-offset="0" max-vertical-offset="540">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/dispatcher-servlet.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="0" selection-start="912" selection-end="912" vertical-scroll-proportion="-9.04" vertical-offset="29" max-vertical-offset="544">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/postgreSql/PostgreSqlDaoFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="13" selection-start="513" selection-end="513" vertical-scroll-proportion="0.0" vertical-offset="595" max-vertical-offset="1496">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2403#2599#0" expanded="true" />
+            <element signature="e#2588#2589#0" expanded="true" />
+            <element signature="e#2635#2831#0" expanded="true" />
+            <element signature="e#2820#2821#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/applicationContext.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="0" selection-start="1372" selection-end="1372" vertical-scroll-proportion="0.5708738" vertical-offset="165" max-vertical-offset="680">
+          <folding>
+            <element signature="e#1115#1147#0" expanded="false" />
+            <element signature="e#1186#1210#0" expanded="false" />
+            <element signature="e#1254#1283#0" expanded="false" />
+            <element signature="e#1327#1356#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/controller/MainController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="374" column="41" selection-start="14211" selection-end="14211" vertical-scroll-proportion="0.0" vertical-offset="5699" max-vertical-offset="6562">
-          <folding />
+        <state line="57" column="56" selection-start="1913" selection-end="1913" vertical-scroll-proportion="0.0" vertical-offset="616" max-vertical-offset="1156">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/controller/UserController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="0" selection-start="1351" selection-end="1351" vertical-scroll-proportion="0.0" vertical-offset="2095" max-vertical-offset="2635">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/controller/TaskController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="80" column="50" selection-start="3071" selection-end="3071" vertical-scroll-proportion="0.0" vertical-offset="1024" max-vertical-offset="4216">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/taskManager/domain/Task.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="13" selection-start="312" selection-end="312" vertical-scroll-proportion="0.07272727" vertical-offset="144" max-vertical-offset="969">
+        <state line="14" column="13" selection-start="312" selection-end="312" vertical-scroll-proportion="0.0" vertical-offset="144" max-vertical-offset="969">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/WEB-INF/views/addOrUpdateTask.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="204" column="5" selection-start="8318" selection-end="8318" vertical-scroll-proportion="0.740458" vertical-offset="2886" max-vertical-offset="3672">
+        <state line="123" column="59" selection-start="5330" selection-end="5330" vertical-scroll-proportion="0.96606785" vertical-offset="1607" max-vertical-offset="2788">
           <folding />
         </state>
       </provider>
@@ -1235,7 +1312,6 @@
             <option name="proportions">
               <list>
                 <option value="0.3514314" />
-                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
@@ -1278,7 +1354,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>TaskManager</last-edited>
+          <last-edited>Web|TaskManager</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
