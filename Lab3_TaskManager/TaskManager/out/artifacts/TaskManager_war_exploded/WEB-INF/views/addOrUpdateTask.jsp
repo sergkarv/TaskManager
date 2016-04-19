@@ -63,7 +63,14 @@
             <div class="form-group col-md-12">
                 <label class="col-md-3 control-lable" for="date">Date</label>
                 <div class="col-md-7">
-                    <input name="time" type="datetime-local" path="date" id="date" class="form-control" />
+                    <c:choose>
+                        <c:when test="${edit}">
+                            <input name="time" type="datetime-local" value="${timeTaskJSP}" path="date" id="date"  class="form-control" />
+                        </c:when>
+                        <c:otherwise>
+                            <input name="time" type="datetime-local" path="date" id="date"  class="form-control" />
+                        </c:otherwise>
+                    </c:choose>
                     <div class="has-error">
                         <form:errors path="date" class="help-inline"/>
                     </div>
@@ -101,10 +108,8 @@
                         <option>null</option>
                         <c:forEach var="name" items="${tasklistJSP}">
                             <c:choose>
-                                <c:when test="${taskJSP.parentId ne null}">
-                                    <c:if test="${taskJSP.parentId eq name.id}">
-                                        <option selected>${name.name} (${name.id})</option>
-                                    </c:if>
+                                <c:when test="${taskJSP.parentId ne null and taskJSP.parentId eq name.id}">
+                                    <option selected>${name.name} (${name.id})</option>
                                 </c:when>
                                 <c:otherwise>
                                     <option>${name.name} (${name.id})</option>
@@ -123,10 +128,8 @@
                     <select name="user" class="form-control" >
                         <c:forEach var="name" items="${userlistJSP}">
                             <c:choose>
-                                <c:when test="${taskJSP.userId ne null}">
-                                    <c:if test="${taskJSP.userId eq name.id}}">
-                                        <option  selected>${name.name} (${name.id})</option>
-                                    </c:if>
+                                <c:when test="${taskJSP.userId ne null and taskJSP.userId eq name.id}">
+                                    <option  selected>${name.name} (${name.id})</option>
                                 </c:when>
                                 <c:otherwise>
                                     <option>${name.name} (${name.id})</option>

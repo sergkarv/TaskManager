@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -79,6 +80,10 @@ public class TaskController {
             List<User> listUser = userDao.getAll();
             List<Task> listTask = taskDao.getAll();
             modelAndView.addObject("taskJSP", editTask);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(editTask.getDate());
+            System.out.println(calendarToStr(calendar));
+            modelAndView.addObject("timeTaskJSP", calendarToStr(calendar));
             modelAndView.addObject("tasklistJSP", listTask);
             modelAndView.addObject("userlistJSP", listUser);
             modelAndView.addObject("edit", true);
@@ -201,6 +206,33 @@ public class TaskController {
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.setTimeZone(TimeZone.getTimeZone("UTF+4"));
         return calendar;
+    }
+
+    private String calendarToStr(Calendar calendar){
+        String year;
+        String month;
+        String day;
+        String hour;
+        String minute;
+
+        year = String.valueOf(calendar.get(Calendar.YEAR));
+
+        month = (calendar.get(Calendar.MONTH) >9)?
+                calendar.get(Calendar.MONTH)+"" :
+                "0"+calendar.get(Calendar.MONTH) ;
+
+        day = (calendar.get(Calendar.DAY_OF_MONTH) >9)?
+                calendar.get(Calendar.DAY_OF_MONTH)+"" :
+                "0"+calendar.get(Calendar.DAY_OF_MONTH) ;
+        hour = (calendar.get(Calendar.HOUR_OF_DAY) >9)?
+                calendar.get(Calendar.HOUR_OF_DAY)+"" :
+                "0"+calendar.get(Calendar.HOUR_OF_DAY) ;
+
+        minute = (calendar.get(Calendar.MINUTE) >9)?
+                calendar.get(Calendar.MINUTE)+"" :
+                "0"+calendar.get(Calendar.MINUTE) ;
+
+        return year+"-"+month+"-"+day+"T"+hour+":"+minute;
     }
 
     private boolean setTaskAttribute(HttpServletRequest request, Task task){
