@@ -4,6 +4,9 @@ import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import taskManager.dao.DaoFactory;
 import taskManager.dao.EmptyParamException;
 import taskManager.dao.NullPointParameterException;
@@ -14,6 +17,7 @@ import taskManager.postgreSql.PostgreSqlDaoFactory;
 import taskManager.postgreSql.PostgreSqlTaskDao;
 import taskManager.postgreSql.PostgreSqlUserDao;
 
+import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,21 +27,29 @@ import java.util.List;
 /**
  * Created by Сергей on 24.03.16.
  */
+
 public class PostgreSqlDaoCrudTest {
 
     private static Connection connection;
     //private GenericDao dao;
 
-    private static final DaoFactory<Connection> factory = new PostgreSqlDaoFactory();
+
+    private static DaoFactory<Connection> factory = new PostgreSqlDaoFactory();
+
 
     public Connection context() {
         return connection;
     }
 
+
+
+
     @BeforeClass
     public static void setUpBeforeClass()throws PersistException, SQLException,
             NullPointParameterException, EmptyParamException {
+
         connection = factory.getContext();
+
         PostgreSqlUserDao userDaoTest1 = (PostgreSqlUserDao)factory.getDao(connection, User.class);
 
         User user = new User();

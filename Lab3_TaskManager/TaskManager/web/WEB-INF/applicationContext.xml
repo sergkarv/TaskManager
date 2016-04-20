@@ -26,6 +26,8 @@
         <property name="password" value="${jdbc.postgresql.password}" />
     </bean>
 
+
+
     <context:component-scan base-package="taskManager" />
 
 

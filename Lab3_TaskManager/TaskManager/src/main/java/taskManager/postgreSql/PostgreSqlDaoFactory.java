@@ -33,23 +33,22 @@ public class PostgreSqlDaoFactory implements DaoFactory<Connection> {
     public Connection getContext() throws PersistException {
         Connection connection = null;
         try {
-            //connection = DriverManager.getConnection(url, user, password);
-            connection = dataSource.getConnection();
+            if(dataSource == null){
+                try {
+                    Class.forName("org.postgresql.Driver");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                connection = DriverManager.getConnection(url, user, password);
+            }
+            else{
+                connection = dataSource.getConnection();
+            }
 
         } catch (SQLException e) {
             throw new PersistException(e);
         }
-        Connection c = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/db",
-                            "root", "root");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-        }
+
         return  connection;
     }
 
