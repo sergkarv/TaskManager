@@ -1,2 +1,5 @@
 /Lab2_TaskManager/TaskManagerServer/target/
 /Lab2_TaskManager/TaskManagerClient/target/
+.idea
+target
+/Lab3_TaskManager/TaskManager/TaskManager.iml
