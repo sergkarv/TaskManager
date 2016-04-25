@@ -26,9 +26,9 @@ public class PostgreSqlTaskDao extends AbstractJDBCDao<Task, Integer> {
 
     @Override
     public String getCreateQuery() {
-        return "INSERT INTO tu.Task (name, description, contacts, date, "
+        return "INSERT INTO tu.Task (id, name, description, contacts, date, "
                 + "highPriority, parentId, userId) \n" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?);";
+                "VALUES (nextval('"+last_insert_table()+"'), ?, ?, ?, ?, ?, ?, ?)";
     }
 
     @Override

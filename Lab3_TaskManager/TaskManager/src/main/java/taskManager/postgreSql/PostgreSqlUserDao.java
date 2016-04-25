@@ -26,8 +26,8 @@ public class PostgreSqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     @Override
     public String getCreateQuery() {
-        return "INSERT INTO tu.User (name, password) \n" +
-                "VALUES (?, ?);";
+        return "INSERT INTO tu.User (id, name, password) \n" +
+                "VALUES (nextval('"+last_insert_table()+"'), ?, ?);";
     }
 
     @Override
