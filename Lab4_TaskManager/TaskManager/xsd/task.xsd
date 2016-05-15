@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="taskManager"
+xmlns="taskManager"
+elementFormDefault="qualified">
+	<xs:element name="tasks">
+
+		<xs:complexType>
+            <xs:sequence>
+                <xs:element name="task" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+
+                            <xs:element name="id" >
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:integer">
+                                        <xs:minInclusive value="1"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+
+                            <xs:element name="name" type="xs:string"/>
+
+                            <xs:element name="description" type="xs:string" minOccurs="0"/>
+
+                            <xs:element name="contacts" type="xs:string" minOccurs="0"/>
+
+                            <xs:element name="date" type="xs:dateTime"/>
+
+                            <xs:element name="highPriority" type="xs:boolean"/>
+
+                            <xs:element name="parentId" minOccurs="0">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:integer">
+                                        <xs:minInclusive value="0"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+
+                            <xs:element name="userId">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:integer">
+                                        <xs:minInclusive value="1"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+
+            <xs:attribute name="size" type="xs:integer"/>
+		</xs:complexType>
+
+	</xs:element>
+</xs:schema>
