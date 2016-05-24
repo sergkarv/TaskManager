@@ -39,7 +39,7 @@ public class ImportController {
      public ModelAndView importXmlGet() {
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("import/import");
+        modelAndView.setViewName("import");
         return modelAndView;
     }
 
@@ -54,7 +54,7 @@ public class ImportController {
         MultipartFile file = uploadedFile.getFile();
         fileValidator.validate(uploadedFile, result);
         if (result.hasErrors()) {
-            modelAndView.setViewName("import/import");
+            modelAndView.setViewName("import");
             return modelAndView;
         }
 
@@ -88,7 +88,7 @@ public class ImportController {
                 modelAndView.setViewName("import");//and transmit error messege
             }
             else{
-                modelAndView.setViewName("import/importSuccess");
+                modelAndView.setViewName("importSuccess");
                 model.addAttribute("success", "Import from XML File successfully");
             }
 

@@ -41,7 +41,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
 
         //имя представления, куда нужно будет перейти
-        modelAndView.setViewName("list/userslist");
+        modelAndView.setViewName("userslist");
         List<User> list = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
@@ -57,20 +57,18 @@ public class UserController {
     /**
      * This method will provide the medium to add a new user.
      */
-    @RequestMapping(value = "/newuser" , method = RequestMethod.GET)
+    @RequestMapping(value = {"/newuser"} , method = RequestMethod.GET)
     public ModelAndView newUser() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("editOrCreate/registration");
+        modelAndView.setViewName("registration");
         User user = new User();
         modelAndView.addObject("userJSP", user);
         modelAndView.addObject("edit", false);
         return modelAndView;
     }
 
-    @RequestMapping(value = "/newuser", method = RequestMethod.POST)
+    @RequestMapping(value = {"/newuser"}, method = RequestMethod.POST)
     public String saveUser(@ModelAttribute("userJSP") User user, ModelMap model) {
-
-
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             userDao.persist(user, false);
@@ -83,7 +81,7 @@ public class UserController {
         }
 
         model.addAttribute("success", "User " + user.getName() + " registered successfully");
-        return "success/registrationsuccess";
+        return "registrationsuccess";
     }
 
     /**
@@ -92,7 +90,7 @@ public class UserController {
     @RequestMapping(value = { "/edit-user-{id}" }, method = RequestMethod.GET)
     public ModelAndView editUser(@PathVariable Integer id) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("editOrCreate/registration");
+        modelAndView.setViewName("registration");
         User editUser = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
@@ -126,7 +124,7 @@ public class UserController {
         }
 
         model.addAttribute("success", "User " + user.getName() + " updated successfully");
-        return "success/registrationsuccess";
+        return "registrationsuccess";
     }
 
     /**

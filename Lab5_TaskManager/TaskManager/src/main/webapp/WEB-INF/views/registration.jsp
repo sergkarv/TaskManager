@@ -1,5 +1,6 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
 <html>
@@ -16,7 +17,7 @@
 
 <div class="generic-container">
     <div class="well lead">User Registration Form</div>
-    <form:form method="POST" modelAttribute="userJSP" class="form-horizontal">
+    <spring:form method="POST" modelAttribute="userJSP" class="form-horizontal" >
         <form:input type="hidden" path="id" id="id"/>
 
         <div class="row">
@@ -55,7 +56,7 @@
                 </c:choose>
             </div>
         </div>
-    </form:form>
+    </spring:form>
 </div>
 </body>
 </html>

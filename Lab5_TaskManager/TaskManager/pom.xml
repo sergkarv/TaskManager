@@ -25,9 +25,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <compilerArgument>-Xlint:all</compilerArgument>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
             <plugin>
@@ -62,6 +59,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
                     <webXml>${basedir}/target/web.xml</webXml>
                 </configuration>
             </plugin>
@@ -145,25 +143,11 @@
             <version>1.1.0.Final</version>
         </dependency>
 
-        <!-- Spring REST jackson JSON Processing API -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.7.3</version>
-        </dependency>
-
         <!--Hibernate ORM-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
-        </dependency>
-
-        <!--Spring Data-->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>1.9.0.RELEASE</version>
         </dependency>
 
         <!-- Servlet+JSP+JSTL -->

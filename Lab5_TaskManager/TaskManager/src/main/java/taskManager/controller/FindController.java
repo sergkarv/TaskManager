@@ -43,7 +43,7 @@ public class FindController {
     public ModelAndView searchGet() {
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("search/search");
+        modelAndView.setViewName("search");
         return modelAndView;
     }
 
@@ -51,7 +51,7 @@ public class FindController {
     public ModelAndView findTaskGet() {
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("search/findEqualsTask");
+        modelAndView.setViewName("findEqualsTask");
 
         List<User> listUser = null;
         List<Task> listTask = null;
@@ -73,7 +73,7 @@ public class FindController {
     public ModelAndView findUserGet() {
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("search/findEqualsUser");
+        modelAndView.setViewName("findEqualsUser");
         return modelAndView;
     }
 
@@ -108,11 +108,11 @@ public class FindController {
             Collections.sort(listTask);
             model.addAttribute("taskListJSP", listTask);
             model.addAttribute("userListJSP", listUser);
-            result = "list/taskslist";
+            result = "taskslist";
 
         } catch (PersistException e) {
             //e.printStackTrace();
-            result = "error/findError";
+            result = "findError";
             model.addAttribute("error", e.getMessage());
         }
 
@@ -140,10 +140,10 @@ public class FindController {
             listUser = userDao.getByParameters(id, name, pass);
             Collections.sort(listUser);
             model.addAttribute("userListJSP",listUser);
-            result = "list/userslist";
+            result = "userslist";
         } catch (PersistException e) {
             //e.printStackTrace();
-            result = "error/findError";
+            result = "findError";
             model.addAttribute("error", e.getMessage());
         }
 

@@ -58,7 +58,7 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView();
 
         //имя представления, куда нужно будет перейти
-        modelAndView.setViewName("main/mainPage");
+        modelAndView.setViewName("mainPage");
 
         //записываем в атрибут userJSP (используется на странице *.jsp объект user
         modelAndView.addObject("userJSP", user);
@@ -75,10 +75,10 @@ public class MainController {
             user.setName("ty nfjklsd 4");
             user.setPassword("45456");
             user.setId(1001);
-            SQLQuery query = userDao.getSession().createSQLQuery("insert into tu.user values(:id, :name, :pass)");
-            query.setParameter("id", user.getId());
-            query.setParameter("name", user.getName());
-            query.setParameter("pass", user.getPassword());
+            SQLQuery query = userDao.getSession().createSQLQuery("insert into tu.user values(?, ?, ?)");
+            query.setInteger(1, user.getId());
+            query.setParameter(2, user.getName());
+            query.setParameter(3, user.getPassword());
             session.getTransaction().begin();
             int result = query.executeUpdate();
             session.getTransaction().commit();

@@ -82,7 +82,7 @@ public class PostgreSqlUserDao extends AbstractJDBCDao<User, Integer> {
         List<User> list=null;
         String sql = getSelectQuery();
         StringBuffer s = new StringBuffer(sql);
-        s.append(" WHERE id = ? and name = ? and password = ?");
+        s.append(" WHERE id = :1 and name = :2 and password = :3");
         LinkedList listParam = new LinkedList();
         if(id != null)  listParam.add(id);
         if(name != null)  listParam.add(name);
@@ -107,7 +107,7 @@ public class PostgreSqlUserDao extends AbstractJDBCDao<User, Integer> {
             for(int i = 0; i< listParam.size(); i++){
                 Object object = listParam.get(i);
                 if(object instanceof Integer){
-                    query.setParameter(1, id);
+                    query.setParameter("1", (Integer)object);
                 }else{
                     query.setParameter(i+1, (String)object);
                 }

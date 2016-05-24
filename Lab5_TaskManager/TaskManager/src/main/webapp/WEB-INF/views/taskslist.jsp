@@ -38,12 +38,12 @@
                     <td>${task.date}</td>
                     <td>${task.highPriority}</td>
                     <td>
-                            <c:if test="${task.parentId eq null}">
+                            <c:if test="${task.parent eq null}">
                                 <c:out value="null"/>
                             </c:if>
-                            <c:if test="${task.parentId ne null}">
+                            <c:if test="${task.parent ne null}">
                                 <c:forEach items="${taskListJSP}" var="parentTask">
-                                    <c:if test="${parentTask.id eq task.parentId}">
+                                    <c:if test="${parentTask.id eq task.parent.id}">
                                         ${parentTask.name}
                                     </c:if>
                                 </c:forEach>
@@ -52,7 +52,7 @@
 
                     <td>
                         <c:forEach items="${userListJSP}" var="userForTask">
-                           <c:if test="${task.userId eq userForTask.id}">
+                           <c:if test="${task.user.id eq userForTask.id}">
                                ${userForTask.name}
                            </c:if>
                         </c:forEach>

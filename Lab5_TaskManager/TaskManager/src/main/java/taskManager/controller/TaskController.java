@@ -1,7 +1,6 @@
 package taskManager.controller;
 
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import taskManager.dao.DaoFactory;
 import taskManager.dao.EmptyParamException;
 import taskManager.dao.NullPointParameterException;
 import taskManager.dao.PersistException;
@@ -20,14 +18,11 @@ import taskManager.utils.Utils;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.sql.Connection;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
-import java.util.GregorianCalendar;
+
 import java.util.List;
-import java.util.TimeZone;
+
 
 /**
  * Created by Сергей on 18.04.16.
@@ -53,7 +48,7 @@ public class TaskController {
         ModelAndView modelAndView = new ModelAndView();
 
         //имя представления, куда нужно будет перейти
-        modelAndView.setViewName("list/taskslist");
+        modelAndView.setViewName("taskslist");
         List<User> listUser = null;
         List<Task> listTask = null;
         try {
@@ -73,7 +68,7 @@ public class TaskController {
     @RequestMapping(value = "/edit-task-{id}", method = RequestMethod.GET)
     public ModelAndView editTask(@PathVariable Integer id, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("editOrCreate/addOrUpdateTask");
+        modelAndView.setViewName("addOrUpdateTask");
         Task editTask = null;
 
 
@@ -103,11 +98,11 @@ public class TaskController {
      * updating user in database. It also validates the user input
      */
     @RequestMapping(value = { "/edit-task-{id}" }, method = RequestMethod.POST)
-    public String updateTask(@ModelAttribute("taskJSP") Task task, @PathVariable Integer id, ModelMap model,
-                             HttpServletRequest request) {
-
+    public String updateTask(@ModelAttribute("taskJSP") Task task, @PathVariable Integer id, ModelMap model) {
+    //,HttpServletRequest request
+        HttpServletRequest request = null;
         boolean setStatus = setTaskAttribute(request, task);
-        if(!setStatus) return "editOrCreate/addOrUpdateTask";
+        if(!setStatus) return "addOrUpdateTask";
 
         try {
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
@@ -127,7 +122,7 @@ public class TaskController {
         }
 
         model.addAttribute("success", "Task " + task.getName() + " updated successfully");
-        return "success/addOrUpdateTaskSuccess";
+        return "addOrUpdateTaskSuccess";
     }
 
 
@@ -150,7 +145,7 @@ public class TaskController {
     @RequestMapping(value = "/newtask", method = RequestMethod.GET)
     public ModelAndView addTask() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("editOrCreate/addOrUpdateTask");
+        modelAndView.setViewName("addOrUpdateTask");
         Task task = new Task();
         modelAndView.addObject("taskJSP", task);
 
@@ -173,11 +168,10 @@ public class TaskController {
     @RequestMapping(value = "/newtask", method = RequestMethod.POST)
     public String saveTask(@ModelAttribute("taskJSP") Task task, ModelMap model,
                            HttpServletRequest request) {
-
         //т.к в taskJSP записывается только простые поля, то приходится
         //вручную обрабатывать сложные теги
         boolean setStatus = setTaskAttribute(request, task);
-        if(!setStatus) return "editOrCreate/addOrUpdateTask";
+        if(!setStatus) return "addOrUpdateTask";
 
         try {
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
@@ -191,7 +185,7 @@ public class TaskController {
         }
 
         model.addAttribute("success", "Task " + task.getName() + " added successfully");
-        return "success/addOrUpdateTaskSuccess";
+        return "addOrUpdateTaskSuccess";
     }
 
     private boolean setTaskAttribute(HttpServletRequest request, Task task){

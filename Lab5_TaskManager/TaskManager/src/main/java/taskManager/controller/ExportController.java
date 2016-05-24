@@ -58,7 +58,7 @@ public class ExportController {
     public ModelAndView exportXmlGet() {
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("export/export");
+        modelAndView.setViewName("export");
         return modelAndView;
     }
 
@@ -66,7 +66,7 @@ public class ExportController {
     public ModelAndView exportTaskMenuGet() {
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("export/exportTaskMenu");
+        modelAndView.setViewName("exportTaskMenu");
         return modelAndView;
     }
 
@@ -74,7 +74,7 @@ public class ExportController {
     public ModelAndView exportUserMenuGet() {
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("export/exportUserMenu");
+        modelAndView.setViewName("exportUserMenu");
         return modelAndView;
     }
 
@@ -82,7 +82,7 @@ public class ExportController {
     public ModelAndView exportUserEqualsGet() {
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("export/exportEqualsUser");
+        modelAndView.setViewName("exportEqualsUser");
         return modelAndView;
     }
 
@@ -90,7 +90,7 @@ public class ExportController {
     public ModelAndView exportTaskEqualsGet() {
         ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("export/exportEqualsTask");
+        modelAndView.setViewName("exportEqualsTask");
 
         List<User> listUser = null;
         List<Task> listTask = null;
@@ -153,16 +153,16 @@ public class ExportController {
             if(flagCreate){
                 model.addAttribute("nameXML", fileName);
                 model.addAttribute("downloadInfo",fileName + " is ready for downloading");
-                result = "download/download";
+                result = "download";
             }
             else{
                 model.addAttribute("error", "Error! Error creating User XML file!");
-                result = "error/exportError";
+                result = "exportError";
             }
 
         } catch (PersistException e) {
             //e.printStackTrace();
-            result = "error/exportError";
+            result = "exportError";
             model.addAttribute("error", e.getMessage());
         }
 
@@ -208,16 +208,16 @@ public class ExportController {
             if(flagCreate){
                 model.addAttribute("nameXML", fileName);
                 model.addAttribute("downloadInfo",fileName + " is ready for downloading");
-                result = "download/download";
+                result = "download";
             }
             else{
                 model.addAttribute("error", "Error! Error creating User XML file!");
-                result = "error/exportError";
+                result = "exportError";
             }
 
         } catch (PersistException e) {
             //e.printStackTrace();
-            result = "error/exportError";
+            result = "exportError";
             model.addAttribute("error", e.getMessage());
         }
 
@@ -258,11 +258,11 @@ public class ExportController {
         if(flagCreate){
             modelAndView.addObject("nameXML", fileName);
             modelAndView.addObject("downloadInfo",fileName + " is ready for downloading");
-            modelAndView.setViewName("download/download");
+            modelAndView.setViewName("download");
         }
         else{
             modelAndView.addObject("error", "Error! Error creating User XML file!");
-            modelAndView.setViewName("error/exportError");
+            modelAndView.setViewName("exportError");
         }
 
         return modelAndView;
@@ -302,7 +302,7 @@ public class ExportController {
         if(flagCreate){
             modelAndView.addObject("nameXML", fileName);
             modelAndView.addObject("downloadInfo",fileName + " is ready for downloading");
-            modelAndView.setViewName("download/download");
+            modelAndView.setViewName("download");
         }
         else{
             modelAndView.addObject("error", "Error! Error creating Task XML file!");
