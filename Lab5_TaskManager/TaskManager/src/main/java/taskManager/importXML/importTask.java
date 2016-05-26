@@ -9,6 +9,7 @@ import org.jdom2.input.SAXBuilder;
 import taskManager.dao.GenericDao;
 import taskManager.dao.PersistException;
 import taskManager.domain.Task;
+import taskManager.domain.Taskweb;
 import taskManager.domain.User;
 import taskManager.postgreSql.PostgreSqlDaoFactory;
 import taskManager.utils.Utils;
@@ -27,10 +28,10 @@ public class importTask {
 
     private static PostgreSqlDaoFactory factory = new PostgreSqlDaoFactory();
 
-    public static ArrayList<Task> parserToListObjects(String path){
+    public static ArrayList<Taskweb> parserToListObjects(String path){
         //FileReader fr = null;
         int size=0;
-        ArrayList<Task> listUser = new ArrayList<>();
+        ArrayList<Taskweb> listTask = new ArrayList<>();
 
         try(FileReader fr = new FileReader(path)) {
             SAXBuilder parser = new SAXBuilder();
@@ -46,10 +47,10 @@ public class importTask {
             List<Element> listElement=rootElement.getChildren();
 
             for(Element element : listElement){
-                listUser.add(parserElement(element));
+                listTask.add(parserElement(element));
             }
 
-            return listUser;
+            return listTask;
 
         } catch (JDOMException ex) {
             System.out.println(ex.getMessage());
@@ -61,9 +62,9 @@ public class importTask {
 
     }
 
-    private static Task parserElement(Element element){
+    private static Taskweb parserElement(Element element){
         if(element.getName().equals("task")){
-            Task task = new Task();
+            Taskweb task = new Taskweb();
 
             Element idElement = element.getChild("id", Namespace.getNamespace("taskManager"));
             Integer id_task = Integer.valueOf(idElement.getValue());
@@ -83,23 +84,25 @@ public class importTask {
 
             Element parentElement = element.getChild("parentId", Namespace.getNamespace("taskManager"));
             int parentId = Integer.valueOf(parentElement.getValue());
-            try {
-                GenericDao<Task, Integer> dao = factory.getDao(factory.getContext(), Task.class);
-                Task parentTask = dao.getByPK(parentId);
-                task.setParent(parentTask);
-            } catch (PersistException e) {
-                e.printStackTrace();
-            }
+            task.setParentId(parentId);
+//            try {
+//                GenericDao<Task, Integer> dao = factory.getDao(factory.getContext(), Task.class);
+//                Task parentTask = dao.getByPK(parentId);
+//                task.setParentId(parentTask);
+//            } catch (PersistException e) {
+//                e.printStackTrace();
+//            }
 
             Element userElement = element.getChild("userId", Namespace.getNamespace("taskManager"));
             int userId = Integer.valueOf(userElement.getValue());
-            try {
-                GenericDao<User, Integer> dao = factory.getDao(factory.getContext(), User.class);
-                User user = dao.getByPK(userId);
-                task.setUser(user);
-            } catch (PersistException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                GenericDao<User, Integer> dao = factory.getDao(factory.getContext(), User.class);
+//                User user = dao.getByPK(userId);
+//                task.setUser(user);
+//            } catch (PersistException e) {
+//                e.printStackTrace();
+//            }
+            task.setUserId(userId);
 
             Element dateElement = element.getChild("date", Namespace.getNamespace("taskManager"));
             task.setDate(Utils.strToCalendar(dateElement.getValue(), true).getTime() );

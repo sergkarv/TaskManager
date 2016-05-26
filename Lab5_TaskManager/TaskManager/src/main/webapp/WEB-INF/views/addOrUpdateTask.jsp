@@ -1,7 +1,3 @@
-<%@ page import="java.util.Enumeration" %>
-<%@ page import="java.sql.Date" %>
-<%@ page import="java.util.Calendar" %>
-<%@ page import="java.util.TimeZone" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -111,7 +107,7 @@
                         <option>null</option>
                         <c:forEach var="name" items="${tasklistJSP}">
                             <c:choose>
-                                <c:when test="${taskJSP.parent ne null and taskJSP.parent.id eq name.id}">
+                                <c:when test="${taskJSP.parentId ne null and taskJSP.parentId eq name.id}">
                                     <option selected>${name.name} (${name.id})</option>
                                 </c:when>
                                 <c:otherwise>
@@ -131,7 +127,7 @@
                     <select name="user" class="form-control" >
                         <c:forEach var="name" items="${userlistJSP}">
                             <c:choose>
-                                <c:when test="${taskJSP.user ne null and taskJSP.user.id eq name.id}">
+                                <c:when test="${taskJSP.userId ne null and taskJSP.userId eq name.id}">
                                     <option  selected>${name.name} (${name.id})</option>
                                 </c:when>
                                 <c:otherwise>

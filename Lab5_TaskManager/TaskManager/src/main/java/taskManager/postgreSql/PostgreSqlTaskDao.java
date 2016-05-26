@@ -4,14 +4,13 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
-import taskManager.dao.AbstractJDBCDao;
-import taskManager.dao.EmptyParamException;
-import taskManager.dao.NullPointParameterException;
-import taskManager.dao.PersistException;
+import taskManager.dao.*;
 import taskManager.domain.Task;
+import taskManager.domain.User;
 
 import javax.persistence.EntityManager;
 import java.sql.*;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -100,50 +99,43 @@ public class PostgreSqlTaskDao extends AbstractJDBCDao<Task, Integer> {
         return task;
     }
 
-    public List<Task> getByParameters(Integer id, String name, String contacts,
-                                      Integer parentId, Integer userId) throws PersistException {
+    public List<Task> getByParameters( Integer id, String name, String contacts,
+                                      Task parent, User user) throws PersistException {
         List<Task> list=null;
+        //String sql = "select id, name, description, contacts, date, highpriority, parentId, userId from tu.task";
         String sql = getSelectQuery();
         StringBuffer s = new StringBuffer(sql);
-        s.append(" WHERE id = ? and name = ? and contacts = ? and parentId = ? and userId = ?");
-        LinkedList listParam = new LinkedList();
-        if(id != null)  listParam.add(id);
-        if(name != null)  listParam.add(name);
-        if(contacts != null)  listParam.add(contacts);
-        if(parentId != null)  listParam.add(parentId);
-        if(userId != null)  listParam.add(userId);
-
-        if(id == null){
-            int index = s.lastIndexOf("id");
-            s.delete(index, index+11);
+        if(id!= null || name!=null||contacts!=null||parent!=null||user!=null) s.append(" WHERE");
+        //s.append(" WHERE id = :idTask and name = :nameTask and contacts = :contactsTask
+        // and parentId = :parentTask and userId = :userTask");
+        HashMap<String, Object> mapParam = new HashMap<>();
+        if(id != null)  {
+            mapParam.put("idTask", id);
+            s.append(" id = :idTask");
         }
-        if(name == null){
-            int index = s.lastIndexOf("name");
-            s.delete(index, index+13);
+        if(name != null)  {
+            mapParam.put("nameTask", name);
+            s.append((id != null)? " and name = :nameTask": " name = :nameTask");
         }
-        if(contacts == null){
-            int index = s.lastIndexOf("contacts");
-            s.delete(index, index+17);
+        if(contacts != null)  {
+            mapParam.put("contactsTask", contacts);
+            s.append((id != null || name!=null)? " and contacts = :contactsTask": " contacts = :contactsTask");
         }
-        if(parentId == null){
-            int index = s.lastIndexOf("parentId");
-            s.delete(index, index+17);
+        if(parent != null)  {
+            mapParam.put("parentTask", parent);
+            s.append((id != null || name!=null || contacts!=null)? " and parent = :parentTask": " parent = :parentTask");
         }
-        if(userId == null){
-            int index = s.lastIndexOf("userId");
-            s.delete(index-4, index+10);
+        if(user != null)  {
+            mapParam.put("userTask", user);
+            s.append((id != null || name!=null || contacts!=null || parent!=null)? " and user = :userTask":
+                    " user = :userTask");
         }
 
         sql = s.toString();
         Query query = session.createQuery(sql);
 
-        for (int i = 0; i < listParam.size(); i++) {
-            Object object = listParam.get(i);
-            if (object instanceof Integer) {
-                query.setParameter(i + 1, ((Integer) object).intValue());
-            } else {
-                query.setParameter(i + 1, (String) object);
-            }
+        for(String key : mapParam.keySet()){
+            query.setParameter(key, mapParam.get(key));
         }
 
         list = query.list();

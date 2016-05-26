@@ -133,9 +133,21 @@ public class ExportController {
 
         List<Task> listTask = null;
         try {
-            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
+            if(id == null && name == null && contacts == null && idParent == null && idUser == null)
+                throw new PersistException("Empty fields! Don't enter all empty fields. ");
 
-            listTask = taskDao.getByParameters(id, name, contacts, idParent, idUser);
+            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
+            PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+            Task parent = null;
+            User user = null;
+            if(idParent != null){
+                parent = taskDao.getByPK(idParent);
+            }
+            if(idUser != null){
+                user = userDao.getByPK(idUser);
+            }
+
+            listTask = taskDao.getByParameters(id, name, contacts, parent, user);
             Collections.sort(listTask);
 
             File dir = new File(rootPath + File.separator + "saveFiles");
@@ -189,6 +201,9 @@ public class ExportController {
         List<User> listUser = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+
+            if(id == null && name == null && pass == null)
+                throw new PersistException("Empty fields! Don't enter all empty fields. ");
 
             listUser = userDao.getByParameters(id, name, pass);
             Collections.sort(listUser);
@@ -423,7 +438,7 @@ public class ExportController {
             case "parent":
                 String idParentString = null;
                 if(value != null){
-                    if(!value.equals("null")){
+                    if(!value.equals("null")&&!value.equals("")){
                         idParentString = value.substring( value.indexOf('(')+1, value.length()-1 );
                         object = Integer.valueOf(idParentString);
                     }

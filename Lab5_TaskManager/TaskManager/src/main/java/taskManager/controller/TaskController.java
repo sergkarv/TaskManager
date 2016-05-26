@@ -12,6 +12,7 @@ import taskManager.dao.EmptyParamException;
 import taskManager.dao.NullPointParameterException;
 import taskManager.dao.PersistException;
 import taskManager.domain.Task;
+import taskManager.domain.Taskweb;
 import taskManager.domain.User;
 import taskManager.postgreSql.*;
 import taskManager.utils.Utils;
@@ -70,15 +71,16 @@ public class TaskController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("addOrUpdateTask");
         Task editTask = null;
-
+        Taskweb editTaskWeb = null;
 
         try {
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             editTask = taskDao.getByPK(id);
+            editTaskWeb = Utils.taskConvert(editTask);
             List<User> listUser = userDao.getAll();
             List<Task> listTask = taskDao.getAll();
-            modelAndView.addObject("taskJSP", editTask);
+            modelAndView.addObject("taskJSP", editTaskWeb);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(editTask.getDate());
             System.out.println(Utils.calendarToStr(calendar, false));
@@ -98,9 +100,15 @@ public class TaskController {
      * updating user in database. It also validates the user input
      */
     @RequestMapping(value = { "/edit-task-{id}" }, method = RequestMethod.POST)
-    public String updateTask(@ModelAttribute("taskJSP") Task task, @PathVariable Integer id, ModelMap model) {
-    //,HttpServletRequest request
-        HttpServletRequest request = null;
+    public String updateTask(@ModelAttribute("taskJSP") Taskweb taskWeb,
+                             @PathVariable Integer id, ModelMap model,
+                             HttpServletRequest request) {
+        Task task = null;
+        try {
+            task = Utils.taskConvert(taskWeb, factory.getDao(session, Task.class), factory.getDao(session, User.class));
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
         boolean setStatus = setTaskAttribute(request, task);
         if(!setStatus) return "addOrUpdateTask";
 
@@ -146,8 +154,8 @@ public class TaskController {
     public ModelAndView addTask() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("addOrUpdateTask");
-        Task task = new Task();
-        modelAndView.addObject("taskJSP", task);
+        Taskweb taskWeb = new Taskweb();
+        modelAndView.addObject("taskJSP", taskWeb);
 
         PostgreSqlUserDao userDao = null;
         try {
@@ -166,10 +174,16 @@ public class TaskController {
     }
 
     @RequestMapping(value = "/newtask", method = RequestMethod.POST)
-    public String saveTask(@ModelAttribute("taskJSP") Task task, ModelMap model,
+    public String saveTask(@ModelAttribute("taskJSP") Taskweb taskWeb, ModelMap model,
                            HttpServletRequest request) {
         //т.к в taskJSP записывается только простые поля, то приходится
         //вручную обрабатывать сложные теги
+        Task task = null;
+        try {
+            task = Utils.taskConvert(taskWeb, factory.getDao(session, Task.class), factory.getDao(session, User.class));
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
         boolean setStatus = setTaskAttribute(request, task);
         if(!setStatus) return "addOrUpdateTask";
 
@@ -195,7 +209,10 @@ public class TaskController {
 
         boolean highFlag = false;
         value = request.getParameter("highpriority");
-        if(value == null) return false;
+        if(value == null) {
+            highFlag = false;
+        }
+        else
         if(value.equals("on")){
             highFlag = true;
         }
@@ -220,7 +237,9 @@ public class TaskController {
         task.setDate(calendar.getTime());
         task.setHighPriority(highFlag);
         try {
-            Task parent = (Task) factory.getDao(session, Task.class).getByPK(idParent);
+            Task parent = (idParent != null)?
+                    (Task) factory.getDao(session, Task.class).getByPK(idParent):
+                    null;
             task.setParent(parent);
             User user = (User) factory.getDao(session, User.class).getByPK(idUser);
             task.setUser(user);

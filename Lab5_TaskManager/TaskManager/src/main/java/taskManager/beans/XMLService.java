@@ -14,6 +14,7 @@ import taskManager.dao.EmptyParamException;
 import taskManager.dao.NullPointParameterException;
 import taskManager.dao.PersistException;
 import taskManager.domain.Task;
+import taskManager.domain.Taskweb;
 import taskManager.domain.User;
 import taskManager.exportXML.exportTask;
 import taskManager.exportXML.exportUser;
@@ -24,6 +25,7 @@ import taskManager.importXML.importUser;
 import taskManager.postgreSql.PostgreSqlDaoFactory;
 import taskManager.postgreSql.PostgreSqlTaskDao;
 import taskManager.postgreSql.PostgreSqlUserDao;
+import taskManager.utils.Utils;
 
 import javax.annotation.PostConstruct;
 import javax.xml.XMLConstants;
@@ -94,7 +96,9 @@ public class XMLService {
                         userDao.update(user);
                     }catch (PersistException e){
                         try {
-                            userDao.persist(user, true);//new id used
+                            //use self Id; if user.tasks reference to task.user
+                            userDao.persist(user, true);
+                            //if userDao.persist(user, false) create new id to user
                         } catch (EmptyParamException e1) {
                             e1.printStackTrace();
                         } catch (NullPointParameterException e1) {
@@ -108,20 +112,25 @@ public class XMLService {
             }
         }
         else if(c.equals(Task.class)){//if id task is wrong, it is user error, not my folt
-            ArrayList<Task> listTask = readXmlTask(path);
-            if(listTask == null){
+            ArrayList<Taskweb> listTaskWeb = readXmlTask(path);
+            if(listTaskWeb == null){
                 fileValidator.genereteError(errors,"Error read XML File! Please select other file");
                 return false;
             }
 
             try {
                 PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
-                for(Task task : listTask){
+                PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+                Task task = null;
+                for(Taskweb taskweb : listTaskWeb){
                     try{
+                        task = Utils.taskConvert(taskweb, taskDao, userDao);
                         taskDao.update(task);
                     }catch (PersistException e){
                         try {
+                            //use self Id; if task.parent reference to task.id
                             taskDao.persist(task, true);
+                            //if taskDao.persist(task, false) create new id to task
                         } catch (EmptyParamException e1) {
                             e1.printStackTrace();
                         } catch (NullPointParameterException e1) {
@@ -183,8 +192,8 @@ public class XMLService {
         return list;
     }
 
-    public ArrayList<Task> readXmlTask(String path){
-        ArrayList<Task> list = importTask.parserToListObjects(path);
+    public ArrayList<Taskweb> readXmlTask(String path){
+        ArrayList<Taskweb> list = importTask.parserToListObjects(path);
         if(list == null) return null;
         Collections.sort(list);
         return list;

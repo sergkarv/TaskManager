@@ -82,36 +82,30 @@ public class PostgreSqlUserDao extends AbstractJDBCDao<User, Integer> {
         List<User> list=null;
         String sql = getSelectQuery();
         StringBuffer s = new StringBuffer(sql);
-        s.append(" WHERE id = :1 and name = :2 and password = :3");
-        LinkedList listParam = new LinkedList();
-        if(id != null)  listParam.add(id);
-        if(name != null)  listParam.add(name);
-        if(pass != null)  listParam.add(pass);
+        if(id!= null || name!=null||pass!=null) s.append(" WHERE");
+        //s.append(" WHERE id = :idUser and name = :nameUser and password = :passUser");
+        HashMap<String, Object> mapParam = new HashMap<>();
+        if(id != null)  {
+            mapParam.put("idUser", id);
+            s.append(" id = :idUser");
+        }
+        if(name != null){
+            mapParam.put("nameUser", name);
+            s.append((id != null)? " and name = :nameUser": " name = :nameUser");
+        }
+        if(pass != null)  {
+            mapParam.put("passUser", pass);
+            s.append((name != null || id != null)? " and password = :passUser": " password = :passUser");
+        }
 
-        if(id == null){
-            int index = s.lastIndexOf("id");
-            s.delete(index, index+11);
-        }
-        if(name == null){
-            int index = s.lastIndexOf("name");
-            s.delete(index, index+13);
-        }
-        if(pass == null){
-            int index = s.lastIndexOf("password");
-            s.delete(index-4, index+12);
-        }
+
 
         sql = s.toString();
         Query query  = session.createQuery(sql);
 
-            for(int i = 0; i< listParam.size(); i++){
-                Object object = listParam.get(i);
-                if(object instanceof Integer){
-                    query.setParameter("1", (Integer)object);
-                }else{
-                    query.setParameter(i+1, (String)object);
-                }
-            }
+        for(String key : mapParam.keySet()){
+            query.setParameter(key, mapParam.get(key));
+        }
 
         list = query.list();
 

@@ -19,7 +19,6 @@
     <div class="well lead">User Registration Form</div>
     <spring:form method="POST" modelAttribute="userJSP" class="form-horizontal" >
         <form:input type="hidden" path="id" id="id"/>
-
         <div class="row">
             <div class="form-group col-md-12">
                 <label class="col-md-3 control-lable" for="Name">Name</label>

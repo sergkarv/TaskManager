@@ -49,6 +49,7 @@
                 <label class="col-md-3 control-lable">Parent</label>
                 <div class="col-md-7">
                     <select name="parent" class="form-control">
+                        <option></option>
                         <option>null</option>
                         <c:forEach var="name" items="${taskListJSP}">
                             <option>${name.name} (${name.id})</option>
@@ -63,6 +64,7 @@
                 <label class="col-md-3 control-lable">User</label>
                 <div class="col-md-7">
                     <select name="user" class="form-control" >
+                        <option></option>
                         <c:forEach  var="name" items="${userListJSP}" varStatus="i">
                             <c:choose>
                                 <c:when test="${i.count eq 0}">

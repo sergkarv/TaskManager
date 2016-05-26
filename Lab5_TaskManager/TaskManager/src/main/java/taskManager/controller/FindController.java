@@ -101,10 +101,22 @@ public class FindController {
         List<Task> listTask = null;
         List<User> listUser = null;
         try {
+            if(id == null && name == null && contacts == null && idParent == null && idUser == null)
+                throw new PersistException("Empty fields! Don't enter all empty fields. ");
+
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             listUser = userDao.getAll();
-            listTask = taskDao.getByParameters(id, name, contacts, idParent, idUser);
+            Task parent = null;
+            User user = null;
+
+            if(idParent != null){
+                parent = taskDao.getByPK(idParent);
+            }
+            if(idUser != null){
+                user = userDao.getByPK(idUser);
+            }
+            listTask = taskDao.getByParameters(id, name, contacts, parent, user);
             Collections.sort(listTask);
             model.addAttribute("taskListJSP", listTask);
             model.addAttribute("userListJSP", listUser);
@@ -136,6 +148,9 @@ public class FindController {
         List<User> listUser = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+
+            if(id == null && name == null && pass == null)
+                throw new PersistException("Empty fields! Don't enter all empty fields. ");
 
             listUser = userDao.getByParameters(id, name, pass);
             Collections.sort(listUser);
@@ -183,7 +198,7 @@ public class FindController {
             case "parent":
                 String idParentString = null;
                 if(value != null){
-                    if(!value.equals("null")){
+                    if(!value.equals("null")&&!value.equals("")){
                         idParentString = value.substring( value.indexOf('(')+1, value.length()-1 );
                         object = Integer.valueOf(idParentString);
                     }

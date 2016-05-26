@@ -16,8 +16,10 @@ import taskManager.dao.EmptyParamException;
 import taskManager.dao.NullPointParameterException;
 import taskManager.dao.PersistException;
 import taskManager.domain.User;
+import taskManager.domain.Userweb;
 import taskManager.postgreSql.PostgreSqlDaoFactory;
 import taskManager.postgreSql.PostgreSqlUserDao;
+import taskManager.utils.Utils;
 
 
 @Controller
@@ -61,16 +63,18 @@ public class UserController {
     public ModelAndView newUser() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("registration");
-        User user = new User();
+        Userweb user = new Userweb();
         modelAndView.addObject("userJSP", user);
         modelAndView.addObject("edit", false);
         return modelAndView;
     }
 
     @RequestMapping(value = {"/newuser"}, method = RequestMethod.POST)
-    public String saveUser(@ModelAttribute("userJSP") User user, ModelMap model) {
+    public String saveUser(@ModelAttribute("userJSP") Userweb userweb, ModelMap model) {
+        User user = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+            user = Utils.userConvert(userweb);
             userDao.persist(user, false);
         } catch (PersistException e) {
             e.printStackTrace();
@@ -92,14 +96,16 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("registration");
         User editUser = null;
+        Userweb editUserWeb = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             editUser = userDao.getByPK(id);
+            editUserWeb = Utils.userConvert(editUser);
         } catch (PersistException e) {
             e.printStackTrace();
         }
 
-        modelAndView.addObject("userJSP", editUser);
+        modelAndView.addObject("userJSP", editUserWeb);
         modelAndView.addObject("edit", true);
         return modelAndView;
     }
@@ -109,7 +115,7 @@ public class UserController {
      * updating user in database. It also validates the user input
      */
     @RequestMapping(value = { "/edit-user-{id}" }, method = RequestMethod.POST)
-    public String updateUser(@ModelAttribute("userJSP") User user, @PathVariable Integer id, ModelMap model) {
+    public String updateUser(@ModelAttribute("userJSP") Userweb user, @PathVariable Integer id, ModelMap model) {
 
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
