@@ -8,10 +8,9 @@ import taskManager.dao.*;
 import taskManager.domain.Task;
 import taskManager.domain.User;
 
-import javax.persistence.EntityManager;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 @Transactional
@@ -28,6 +27,7 @@ public class PostgreSqlTaskDao extends AbstractJDBCDao<Task, Integer> {
 
     @Override
     public Task getByPK(Integer key) throws PersistException {
+        session.flush();
         Task task = (Task)session.get(Task.class, key);
         if(task == null) throw new PersistException("Task with ID does not exist!");
         return task;
@@ -35,6 +35,7 @@ public class PostgreSqlTaskDao extends AbstractJDBCDao<Task, Integer> {
 
     @Override
     public void update(Task object) throws PersistException {
+        session.flush();
         Task task = (Task)session.get(Task.class, object.getId());
         if(task == null) throw new PersistException("Task does not exist!");
         task.setName(object.getName());
@@ -51,6 +52,7 @@ public class PostgreSqlTaskDao extends AbstractJDBCDao<Task, Integer> {
 
     @Override
     public void delete(Integer key) throws PersistException {
+        session.flush();
         Task task = (Task)session.get(Task.class, key);
         if(task == null) throw new PersistException("Task with ID does not exist!");
         session.getTransaction().begin();
@@ -66,7 +68,9 @@ public class PostgreSqlTaskDao extends AbstractJDBCDao<Task, Integer> {
     }
 
     @Override
-    public Task persist(Task object, boolean useSelfId) throws PersistException, EmptyParamException, NullPointParameterException {
+    public Task persist(Task object, boolean useSelfId) throws PersistException,
+            EmptyParamException, NullPointParameterException {
+        session.flush();
         if(object == null){
             throw new NullPointParameterException("Object is null!");
         }
@@ -100,14 +104,20 @@ public class PostgreSqlTaskDao extends AbstractJDBCDao<Task, Integer> {
     }
 
     public List<Task> getByParameters( Integer id, String name, String contacts,
-                                      Task parent, User user) throws PersistException {
+                                      Task parent, User user, boolean parentNull) throws PersistException {
+        session.flush();
         List<Task> list=null;
-        //String sql = "select id, name, description, contacts, date, highpriority, parentId, userId from tu.task";
-        String sql = getSelectQuery();
+        List<Integer> listId = null;
+        String sql = null;
+        if(parentNull){
+            sql = "select id from tu.task";
+        }
+        else{
+            sql = getSelectQuery();
+        }
         StringBuffer s = new StringBuffer(sql);
-        if(id!= null || name!=null||contacts!=null||parent!=null||user!=null) s.append(" WHERE");
-        //s.append(" WHERE id = :idTask and name = :nameTask and contacts = :contactsTask
-        // and parentId = :parentTask and userId = :userTask");
+        if(id!= null || name!=null||contacts!=null||parent!=null||user!=null|| parentNull) s.append(" WHERE");
+
         HashMap<String, Object> mapParam = new HashMap<>();
         if(id != null)  {
             mapParam.put("idTask", id);
@@ -125,25 +135,48 @@ public class PostgreSqlTaskDao extends AbstractJDBCDao<Task, Integer> {
             mapParam.put("parentTask", parent);
             s.append((id != null || name!=null || contacts!=null)? " and parent = :parentTask": " parent = :parentTask");
         }
+        else{
+            if(parentNull){
+                s.append((id != null || name!=null || contacts!=null)? " and parentid is NULL": " parentid is NULL");
+            }
+        }
         if(user != null)  {
-            mapParam.put("userTask", user);
-            s.append((id != null || name!=null || contacts!=null || parent!=null)? " and user = :userTask":
-                    " user = :userTask");
+            if(parentNull){
+                mapParam.put("userTask", user.getId());
+                s.append(" and userid = :userTask");
+            }
+            else{
+                mapParam.put("userTask", user);
+                s.append((id != null || name!=null || contacts!=null || parent!=null)? " and user = :userTask":
+                        " user = :userTask");
+            }
         }
 
         sql = s.toString();
-        Query query = session.createQuery(sql);
+        Query query = parentNull? session.createSQLQuery(sql) : session.createQuery(sql);
 
         for(String key : mapParam.keySet()){
             query.setParameter(key, mapParam.get(key));
         }
-
-        list = query.list();
-
-        if (list == null || list.size() == 0) {
-            throw new PersistException("Record with Parameters not found.");
+        if(parentNull){
+            listId = query.list();
+            if (listId == null || listId.size() == 0) {
+                throw new PersistException("Record with Parameters not found.");
+            }
+            List<Task> listTask = new ArrayList<>();
+            for(Integer idTask : listId){
+                Task task = getByPK(idTask);
+                listTask.add(task);
+            }
+            return listTask;
+        }
+        else{
+            list = query.list();
+            if (list == null || list.size() == 0) {
+                throw new PersistException("Record with Parameters not found.");
+            }
+            return list;
         }
 
-        return list;
     }
 }

@@ -20,7 +20,9 @@ public class PostgreSqlUserDao extends AbstractJDBCDao<User, Integer> {
     }
 
     @Override
-    public User persist(User object, boolean useSelfId) throws PersistException, EmptyParamException, NullPointParameterException {
+    public User persist(User object, boolean useSelfId) throws PersistException,
+            EmptyParamException, NullPointParameterException {
+        session.flush();
         if(object == null){
             throw new NullPointParameterException("Object is null!");
         }
@@ -53,6 +55,7 @@ public class PostgreSqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     @Override
     public User getByPK(Integer key) throws PersistException {
+        session.flush();
         User user = (User)session.get(User.class, key);
         if(user == null) throw new PersistException("User with ID does not exist!");
         return user;
@@ -60,6 +63,7 @@ public class PostgreSqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     @Override
     public void update(User object) throws PersistException {
+        session.flush();
         User user = (User)session.get(User.class, object.getId());
         if(user == null) throw new PersistException("User is not exist!");
         user.setName(object.getName());
@@ -71,6 +75,7 @@ public class PostgreSqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     @Override
     public void delete(Integer key) throws PersistException {
+        session.flush();
         User user = (User)session.get(User.class, key);
         if(user == null) throw new PersistException("User is not exist!");
         session.getTransaction().begin();
@@ -79,6 +84,7 @@ public class PostgreSqlUserDao extends AbstractJDBCDao<User, Integer> {
     }
 
     public List<User> getByParameters(Integer id, String name, String pass) throws PersistException {
+        session.flush();
         List<User> list=null;
         String sql = getSelectQuery();
         StringBuffer s = new StringBuffer(sql);

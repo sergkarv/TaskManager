@@ -1,21 +1,18 @@
 package taskManager.exportXML;
 
-import org.jdom2.Comment;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import taskManager.domain.Task;
-import taskManager.domain.User;
-import taskManager.utils.Utils;
 
+import taskManager.utils.Utils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**

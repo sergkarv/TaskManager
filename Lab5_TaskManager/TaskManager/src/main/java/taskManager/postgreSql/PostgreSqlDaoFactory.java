@@ -1,7 +1,6 @@
 package taskManager.postgreSql;
 
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import taskManager.dao.DaoFactory;
@@ -11,9 +10,6 @@ import taskManager.domain.Task;
 import taskManager.domain.User;
 import taskManager.utils.HibernateUtil;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 

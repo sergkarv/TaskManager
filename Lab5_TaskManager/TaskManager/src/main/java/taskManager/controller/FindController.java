@@ -15,10 +15,9 @@ import taskManager.postgreSql.PostgreSqlUserDao;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+
 
 /**
  * Created by Сергей on 22.05.16.
@@ -100,8 +99,13 @@ public class FindController {
 
         List<Task> listTask = null;
         List<User> listUser = null;
+        boolean flag = false;
+        String value = request.getParameter("parent");
+        if(value!= null){
+            if(value.equals("null")) flag = true;
+        }
         try {
-            if(id == null && name == null && contacts == null && idParent == null && idUser == null)
+            if(id == null && name == null && contacts == null && idParent == null && idUser == null && !flag)
                 throw new PersistException("Empty fields! Don't enter all empty fields. ");
 
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
@@ -116,7 +120,8 @@ public class FindController {
             if(idUser != null){
                 user = userDao.getByPK(idUser);
             }
-            listTask = taskDao.getByParameters(id, name, contacts, parent, user);
+
+            listTask = taskDao.getByParameters(id, name, contacts, parent, user, flag);
             Collections.sort(listTask);
             model.addAttribute("taskListJSP", listTask);
             model.addAttribute("userListJSP", listUser);

@@ -5,13 +5,11 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import taskManager.domain.Task;
-import taskManager.domain.User;
 
+import taskManager.domain.User;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
 
 /**

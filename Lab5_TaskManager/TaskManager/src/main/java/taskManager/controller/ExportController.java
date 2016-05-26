@@ -6,18 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import taskManager.beans.XMLService;
-import taskManager.dao.DaoFactory;
 import taskManager.dao.PersistException;
 import taskManager.domain.Task;
 import taskManager.domain.User;
-import taskManager.exportXML.exportTask;
-import taskManager.exportXML.exportUser;
-import taskManager.importXML.ImportXml;
 import taskManager.postgreSql.PostgreSqlDaoFactory;
 import taskManager.postgreSql.PostgreSqlTaskDao;
 import taskManager.postgreSql.PostgreSqlUserDao;
@@ -27,7 +22,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.sql.Connection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -132,8 +126,13 @@ public class ExportController {
         idUser = (Integer) getParam("user", request);
 
         List<Task> listTask = null;
+        boolean flag = false;
+        String valueParent = request.getParameter("parent");
+        if(valueParent!= null){
+            if(valueParent.equals("null")) flag = true;
+        }
         try {
-            if(id == null && name == null && contacts == null && idParent == null && idUser == null)
+            if(id == null && name == null && contacts == null && idParent == null && idUser == null && !flag)
                 throw new PersistException("Empty fields! Don't enter all empty fields. ");
 
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
@@ -147,7 +146,7 @@ public class ExportController {
                 user = userDao.getByPK(idUser);
             }
 
-            listTask = taskDao.getByParameters(id, name, contacts, parent, user);
+            listTask = taskDao.getByParameters(id, name, contacts, parent, user, flag);
             Collections.sort(listTask);
 
             File dir = new File(rootPath + File.separator + "saveFiles");

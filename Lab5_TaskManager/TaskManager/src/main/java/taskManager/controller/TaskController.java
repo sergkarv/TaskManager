@@ -53,6 +53,7 @@ public class TaskController {
         List<User> listUser = null;
         List<Task> listTask = null;
         try {
+            session.flush();
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
             listUser = userDao.getAll();

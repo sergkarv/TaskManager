@@ -1,15 +1,12 @@
 package taskManager.beans;
 
 import org.hibernate.Session;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
-import taskManager.dao.DaoFactory;
+
 import taskManager.dao.EmptyParamException;
 import taskManager.dao.NullPointParameterException;
 import taskManager.dao.PersistException;
@@ -18,7 +15,6 @@ import taskManager.domain.Taskweb;
 import taskManager.domain.User;
 import taskManager.exportXML.exportTask;
 import taskManager.exportXML.exportUser;
-import taskManager.importXML.ImportXml;
 import taskManager.importXML.XmlValidator;
 import taskManager.importXML.importTask;
 import taskManager.importXML.importUser;
@@ -34,7 +30,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
-import java.sql.Connection;
+
 import java.util.*;
 
 @Component

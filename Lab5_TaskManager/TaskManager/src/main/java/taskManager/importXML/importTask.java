@@ -1,24 +1,17 @@
 package taskManager.importXML;
 
-import org.hibernate.Session;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
-import taskManager.dao.GenericDao;
-import taskManager.dao.PersistException;
-import taskManager.domain.Task;
 import taskManager.domain.Taskweb;
-import taskManager.domain.User;
 import taskManager.postgreSql.PostgreSqlDaoFactory;
 import taskManager.utils.Utils;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
