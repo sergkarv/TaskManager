@@ -26,7 +26,7 @@ public class User implements  Comparable<User> {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Task> tasks = new HashSet<>();
 
     public User(){

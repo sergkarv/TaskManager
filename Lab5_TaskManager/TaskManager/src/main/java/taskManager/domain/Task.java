@@ -39,11 +39,11 @@ public class Task implements  Comparable<Task> {
     @Column(name = "highPriority")
     private boolean highPriority;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne//(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne//(cascade = CascadeType.ALL)
     @JoinColumn(name = "parentId", referencedColumnName = "id")
     private Task parent;
 
