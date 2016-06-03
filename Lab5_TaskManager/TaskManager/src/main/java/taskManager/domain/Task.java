@@ -39,11 +39,11 @@ public class Task implements  Comparable<Task> {
     @Column(name = "highPriority")
     private boolean highPriority;
 
-    @ManyToOne//(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne//(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "parentId", referencedColumnName = "id")
     private Task parent;
 
@@ -137,15 +137,7 @@ public class Task implements  Comparable<Task> {
 
     @Override
     public int hashCode() {
-//        int result = id.hashCode();
-//        result = 31 * result + name.hashCode();
-//        result = 31 * result + (description != null ? description.hashCode() : 0);
-//        result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
-//        result = 31 * result + date.hashCode();
-//        result = 31 * result + (highPriority ? 1 : 0);
-//        result = 31 * result + user.hashCode();
-//        result = 31 * result + (parent != null ? parent.hashCode() : 0);
-        return id.intValue();//result;
+        return id.intValue();
     }
 
     @Override
