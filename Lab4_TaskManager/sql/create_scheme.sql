@@ -1,0 +1,19 @@
+CREATE SCHEMA tu AUTHORIZATION root;
+
+CREATE  TABLE IF NOT EXISTS tu.User (
+  id SERIAL NOT NULL  ,
+  name VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(50) NULL ,
+  PRIMARY KEY (id) );
+
+CREATE  TABLE IF NOT EXISTS tu.Task (
+  id SERIAL NOT NULL  ,
+  name VARCHAR(50) NULL ,
+  description VARCHAR(100) NULL ,
+  contacts VARCHAR(100) NULL , 
+  date DATE NULL ,
+  highPriority BOOLEAN NULL ,
+  parentId INT REFERENCES tu.Task(id) ON DELETE CASCADE,
+  userId  INT NOT NULL REFERENCES tu.User(id) ON DELETE CASCADE,
+  PRIMARY KEY (id) );
+
