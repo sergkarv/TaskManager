@@ -4,23 +4,23 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Унифицированный интерфейс управления персистентным состоянием объектов
- * @param <T> тип объекта персистенции
- * @param <PK> тип первичного ключа
+ * Unified interface to manage persistent state of objects
+ * @param <T> type of object persistence
+ * @param <PK> type of primary key
  */
 public interface GenericDao<T , PK extends Serializable> {
 
-    /** Создает новую запись, соответствующую объекту object */
+    /** Creates a new record appropriate to the item object */
     public T persist(T object, boolean useSelfId)  throws PersistException, NullPointParameterException, EmptyParamException;
-    /** Возвращает объект соответствующий записи с первичным ключом key или null */
+    /** Returns an object corresponding to a record with primary key "key" or null */
     public T getByPK(PK key) throws PersistException;
 
-    /** Сохраняет состояние объекта group в базе данных */
+    /** Saves the state of the object in the database */
     public void update(T object) throws PersistException;
 
-    /** Удаляет запись об объекте из базы данных */
+    /** Deletes the record object from the database */
     public void delete(PK key) throws PersistException;
 
-    /** Возвращает список объектов соответствующих всем записям в базе данных */
+    /** Returns a list of objects appropriate all records in the database */
     public List<T> getAll() throws PersistException;
 }

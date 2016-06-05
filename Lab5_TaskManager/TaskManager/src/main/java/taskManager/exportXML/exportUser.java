@@ -12,20 +12,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by Сергей on 04.05.16.
- */
 public class exportUser {
 
     public static boolean createXMLUserDocument(String path, List<User> list){
         boolean flag = false;
-        // Создаем документ
+        // Create document
         Document xmlDoc = new Document();
-        // Создаем корневой элемент
+        // Create root element
         Element root = new Element("users");
         root.setNamespace(Namespace.getNamespace("taskManager"));
         root.setAttribute("size", list.size()+"");
-        // Добавляем корневой элемент в документ
+        // Add root element to document
         xmlDoc.setRootElement(root);
 
         for(User user : list){
@@ -51,10 +48,8 @@ public class exportUser {
 
         }
         try {
-            // Получаем "красивый" формат для вывода XML
-            // с переводами на новую строку и отступами
             Format fmt = Format.getPrettyFormat();
-            // Выводим созданный XML в файл, используя подготовленный формат
+            // Output generated XML to file, using a prepared format
             XMLOutputter serializer = new XMLOutputter(fmt);
             //serializer.output(xmlDoc, System.out);
             serializer.output(xmlDoc, new FileOutputStream(new File(path)));

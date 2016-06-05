@@ -20,9 +20,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-/**
- * Created by Сергей on 27.04.16.
- */
 @Controller
 @Scope(value = "request")
 public class ImportController {

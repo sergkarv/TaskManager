@@ -2,9 +2,6 @@ package taskManager.domain;
 
 import java.util.Date;
 
-/**
- * Created by Сергей on 25.05.16.
- */
 public class Taskweb implements Comparable<Taskweb> {
     private Integer id ;
     private String name;

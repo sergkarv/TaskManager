@@ -12,9 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-/**
- * Created by Сергей on 14.05.16.
- */
 public class Utils {
 
     //template date in xml file's

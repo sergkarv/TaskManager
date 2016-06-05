@@ -8,10 +8,6 @@ import javax.validation.constraints.Size;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Created by Сергей on 21.03.16.
- */
-
 @Entity
 @Table(name = "task", schema = "tu")
 public class Task implements  Comparable<Task> {

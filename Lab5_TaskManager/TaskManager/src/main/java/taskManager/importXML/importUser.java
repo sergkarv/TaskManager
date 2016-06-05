@@ -15,13 +15,11 @@ import java.util.List;
 public class importUser {
 
     public static ArrayList<User> parserToListObjects(String path){
-        //FileReader fr = null;
         int size=0;
         ArrayList<User> listUser = new ArrayList<>();
 
         try(FileReader fr = new FileReader(path)) {
             SAXBuilder parser = new SAXBuilder();
-            //fr = new FileReader(path);
             Document doc = parser.build(fr);
 
             Element rootElement=doc.getRootElement();//users

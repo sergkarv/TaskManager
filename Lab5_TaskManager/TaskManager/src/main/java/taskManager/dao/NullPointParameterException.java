@@ -1,8 +1,5 @@
 package taskManager.dao;
 
-/**
- * Created by Администратор on 25.03.16.
- */
 public class NullPointParameterException extends Exception {
     public NullPointParameterException() {
         super("Null Point on neded parameter!");

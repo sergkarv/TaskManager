@@ -42,7 +42,7 @@ public class UserController {
     public ModelAndView usersList() {
         ModelAndView modelAndView = new ModelAndView();
 
-        //имя представления, куда нужно будет перейти
+        //name of the view where you want to go
         modelAndView.setViewName("userslist");
         List<User> list = null;
         try {
@@ -53,7 +53,7 @@ public class UserController {
             e.printStackTrace();
         }
 
-        return modelAndView; //после уйдем на представление, указанное чуть выше, если оно будет найдено.
+        return modelAndView;
     }
 
     /**
@@ -112,7 +112,7 @@ public class UserController {
 
     /**
      * This method will be called on form submission, handling POST request for
-     * updating user in database. It also validates the user input
+     * updating user in database.
      */
     @RequestMapping(value = { "/edit-user-{id}" }, method = RequestMethod.POST)
     public String updateUser(@ModelAttribute("userJSP") Userweb user, @PathVariable Integer id, ModelMap model) {

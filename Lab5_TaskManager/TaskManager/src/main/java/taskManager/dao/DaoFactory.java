@@ -1,16 +1,16 @@
 package taskManager.dao;
 
 
-/** Фабрика объектов для работы с базой данных */
+/** Factory object for working with database */
 public interface DaoFactory<Context> {
 
     public interface DaoCreator<Context> {
         public GenericDao create(Context context);
     }
 
-    /** Возвращает подключение к базе данных */
+    /** Returns a connection to the database */
     public Context getContext() throws PersistException;
 
-    /** Возвращает объект для управления персистентным состоянием объекта */
+    /** Returns an object for managing the persistent state of the object */
     public GenericDao getDao(Context manager, Class dtoClass) throws PersistException;
 }

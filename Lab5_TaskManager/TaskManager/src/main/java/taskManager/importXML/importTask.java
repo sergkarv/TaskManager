@@ -14,21 +14,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Created by Сергей on 02.05.16.
- */
 public class importTask {
 
-    private static PostgreSqlDaoFactory factory = new PostgreSqlDaoFactory();
+    //private static PostgreSqlDaoFactory factory = new PostgreSqlDaoFactory();
 
     public static ArrayList<Taskweb> parserToListObjects(String path){
-        //FileReader fr = null;
         int size=0;
         ArrayList<Taskweb> listTask = new ArrayList<>();
 
         try(FileReader fr = new FileReader(path)) {
             SAXBuilder parser = new SAXBuilder();
-            //fr = new FileReader(path);
             Document doc = parser.build(fr);
 
             Element rootElement=doc.getRootElement();//tasks

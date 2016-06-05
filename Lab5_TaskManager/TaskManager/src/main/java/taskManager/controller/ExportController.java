@@ -217,7 +217,6 @@ public class ExportController {
             String path = dir.getAbsolutePath() + File.separator + fileName;
 
             boolean flagCreate = service.save(path, listUser, User.class);
-            //boolean flagCreate = exportUser.createXMLUserDocument(path, listUser);
 
             if(flagCreate){
                 model.addAttribute("nameXML", fileName);
@@ -310,7 +309,6 @@ public class ExportController {
         //save file in other path
         String path = dir.getAbsolutePath() + File.separator + fileName;
 
-        //boolean flagCreate = exportTask.createXMLTaskDocument(path, list);
         boolean flagCreate = service.save(path, list, Task.class);
 
         if(flagCreate){
@@ -356,7 +354,6 @@ public class ExportController {
         OutputStream outStream = null;
         try {
             inputStream = new FileInputStream(saveFile);
-
 
             // get MIME type of the file
             String mimeType = null;

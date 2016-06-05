@@ -1,8 +1,5 @@
 package taskManager.domain;
 
-/**
- * Created by Сергей on 25.05.16.
- */
 public class Userweb implements Comparable<Userweb> {
     private Integer id ;
     private String name;
