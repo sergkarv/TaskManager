@@ -16,15 +16,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * Created by Сергей on 02.05.16.
- */
-public class importTask {
+public class ImportTask {
 
-    public static ArrayList<Task> parserToListObjects(String path){
+    public static List<Task> parserToListObjects(String path){
         //FileReader fr = null;
         int size=0;
-        ArrayList<Task> listUser = new ArrayList<>();
+        List<Task> listUser = new ArrayList<>();
 
         try(FileReader fr = new FileReader(path)) {
             SAXBuilder parser = new SAXBuilder();

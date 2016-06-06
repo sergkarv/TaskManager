@@ -25,9 +25,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
-/**
- * Created by Сергей on 18.04.16.
- */
 @Controller
 public class TaskController {
     @Autowired

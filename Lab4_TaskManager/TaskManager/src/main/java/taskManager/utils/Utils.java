@@ -5,9 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-/**
- * Created by Сергей on 14.05.16.
- */
 public class Utils {
 
     //template date in xml file's
@@ -23,10 +20,21 @@ public class Utils {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(template.toString());
         try {
-            calendar.setTime(dateFormat.parse(s));
+            java.util.Date date = dateFormat.parse(s);
+            calendar.setTime(date);
+            calendar.setTimeZone(TimeZone.getTimeZone("Etc/GMT+3"));
+            int hour = date.getHours();
+            int minute = date.getMinutes();
+            int seconds = date.getSeconds();
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            if(flagAndSecond){
+                calendar.set(Calendar.SECOND, seconds);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         return calendar;
     }
 

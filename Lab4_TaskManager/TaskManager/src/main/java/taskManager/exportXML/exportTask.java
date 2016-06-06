@@ -18,10 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Сергей on 04.05.16.
- */
-public class exportTask {
+public class ExportTask {
 
     public static boolean createXMLTaskDocument(String path, List<Task> list){
         boolean flag = false;

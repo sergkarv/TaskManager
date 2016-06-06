@@ -1,38 +1,28 @@
 package taskManager.beans;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import taskManager.dao.DaoFactory;
-import taskManager.dao.Identified;
 import taskManager.dao.PersistException;
 import taskManager.domain.Task;
 import taskManager.domain.User;
-import taskManager.exportXML.exportTask;
-import taskManager.exportXML.exportUser;
-import taskManager.importXML.ImportXml;
+import taskManager.exportXML.ExportTask;
+import taskManager.exportXML.ExportUser;
+import taskManager.importXML.ImportTask;
+import taskManager.importXML.ImportUser;
 import taskManager.importXML.XmlValidator;
-import taskManager.importXML.importTask;
-import taskManager.importXML.importUser;
 import taskManager.postgreSql.PostgreSqlTaskDao;
 import taskManager.postgreSql.PostgreSqlUserDao;
 
 import javax.annotation.PostConstruct;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.util.*;
 
@@ -40,8 +30,8 @@ import java.util.*;
 @Scope(value = "request")
 public class XMLService {
 
-    private final String pathXsdUser = "xsd/user.xsd";
-    private final String pathXsdTask = "xsd/task.xsd";
+    private static final String PATH_XSD_USER = "xsd/user.xsd";
+    private static final String PATH_XSD_TASK = "xsd/task.xsd";
     @Autowired
     private XmlValidator fileValidator;
 
@@ -63,10 +53,10 @@ public class XMLService {
         File xsdFile = null;
 
         if(c.equals(User.class)){
-            xsdFile = new File(pathXsdUser);
+            xsdFile = new File(PATH_XSD_USER);
         }
         else if(c.equals(Task.class)){
-            xsdFile = new File(pathXsdTask);
+            xsdFile = new File(PATH_XSD_TASK);
         }
 
         if(!xsdFile.exists()){
@@ -82,7 +72,7 @@ public class XMLService {
         }
 
         if(c.equals(User.class)){
-            ArrayList<User> listUser = readXmlUser(path);
+            List<User> listUser = readXmlUser(path);
             if(listUser == null){
                 fileValidator.genereteError(errors,"Error read XML File! Please select other file");
                 return false;
@@ -104,7 +94,7 @@ public class XMLService {
             }
         }
         else if(c.equals(Task.class)){//if id task is wrong, it is user error, not my folt
-            ArrayList<Task> listTask = readXmlTask(path);
+            List<Task> listTask = readXmlTask(path);
             if(listTask == null){
                 fileValidator.genereteError(errors,"Error read XML File! Please select other file");
                 return false;
@@ -141,14 +131,14 @@ public class XMLService {
             for(Object object : list){
                 listUser.add((User) object);
             }
-            flagCreate = exportUser.createXMLUserDocument(path, listUser);
+            flagCreate = ExportUser.createXMLUserDocument(path, listUser);
         }
         else if(c.equals(Task.class)){
             listTask = new ArrayList<>();
             for(Object object : list){
                 listTask.add((Task) object);
             }
-            flagCreate = exportTask.createXMLTaskDocument(path, listTask);
+            flagCreate = ExportTask.createXMLTaskDocument(path, listTask);
         }
 
         return flagCreate;
@@ -157,10 +147,6 @@ public class XMLService {
 
     public boolean validateXml(File xml, File xsd) {
         try {
-//            SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-//                    .newSchema(new StreamSource(xsd))
-//                    .newValidator()
-//                    .validate(new StreamSource(xml));
             Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
                     .newSchema(new StreamSource(xsd));
             Validator validator = schema.newValidator();
@@ -171,15 +157,15 @@ public class XMLService {
         return true;
     }
 
-    public ArrayList<User> readXmlUser(String path){
-        ArrayList<User> list = importUser.parserToListObjects(path);
+    public List<User> readXmlUser(String path){
+        List<User> list = ImportUser.parserToListObjects(path);
         if(list == null) return null;
         Collections.sort(list);
         return list;
     }
 
-    public ArrayList<Task> readXmlTask(String path){
-        ArrayList<Task> list = importTask.parserToListObjects(path);
+    public List<Task> readXmlTask(String path){
+        List<Task> list = ImportTask.parserToListObjects(path);
         if(list == null) return null;
         Collections.sort(list);
         return list;

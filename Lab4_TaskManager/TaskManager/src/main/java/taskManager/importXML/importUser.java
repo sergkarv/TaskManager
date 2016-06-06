@@ -14,12 +14,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class importUser {
+public class ImportUser {
 
-    public static ArrayList<User> parserToListObjects(String path){
+    public static List<User> parserToListObjects(String path){
         //FileReader fr = null;
         int size=0;
-        ArrayList<User> listUser = new ArrayList<>();
+        List<User> listUser = new ArrayList<>();
 
         try(FileReader fr = new FileReader(path)) {
             SAXBuilder parser = new SAXBuilder();

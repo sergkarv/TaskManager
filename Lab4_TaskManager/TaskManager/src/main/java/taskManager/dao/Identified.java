@@ -3,10 +3,10 @@ package taskManager.dao;
 import java.io.Serializable;
 
 /**
- * Интерфейс идентифицируемых объектов.
+ * Interface id of object
  */
 public interface Identified<PK extends Serializable> {
 
-    /** Возвращает идентификатор объекта */
+    /** Returns id of object */
     public PK getId();
 }

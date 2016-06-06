@@ -14,10 +14,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * Created by Сергей on 04.05.16.
- */
-public class exportUser {
+public class ExportUser {
 
     public static boolean createXMLUserDocument(String path, List<User> list){
         boolean flag = false;

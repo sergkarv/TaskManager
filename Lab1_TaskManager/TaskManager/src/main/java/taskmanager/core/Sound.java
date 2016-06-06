@@ -70,7 +70,7 @@ public class Sound {
 
 /**
  * Поток для воспроизведения звука
- * @author Головин, Карасёв
+ * @author Карасёв
  */
 class SoundT implements Runnable{
     SourceDataLine line;

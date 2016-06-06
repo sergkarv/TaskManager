@@ -6,21 +6,15 @@ import java.sql.ResultSet;
 import java.util.List;
 
 /**
- * Абстрактный класс предоставляющий базовую реализацию CRUD операций с использованием JDBC.
+ * Abstract class providing a basic implementation of the CRUD operations using JDBC.
  *
- * @param <T>  тип объекта персистенции
- * @param <PK> тип первичного ключа
+ * @param <T>  type of object persistence
+ * @param <PK> type of primary key
  */
 public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integer> implements GenericDao<T, PK> {
 
     protected Connection connection;
 
-    /**
-     * Возвращает sql запрос для получения всех записей.
-     * <p/>
-     * SELECT * FROM [Table]
-     */
-    
     public AbstractJDBCDao(Connection connection) {
         this.connection = connection;
     }
@@ -79,7 +73,7 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
     @Override
     public T persist(T object, boolean flagInsertWithId) throws PersistException {
         T persistInstance;
-        // Добавляем запись
+        // Add record
         String sql = (flagInsertWithId)? getCreateQueryForImport() : getCreateQuery();
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             prepareStatementForInsert(statement, object, flagInsertWithId);

@@ -28,9 +28,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
-/**
- * Created by Сергей on 18.04.16.
- */
 @Controller
 public class TaskController {
     @Autowired
@@ -51,7 +48,7 @@ public class TaskController {
     public ModelAndView tasksList() {
         ModelAndView modelAndView = new ModelAndView();
 
-        //имя представления, куда нужно будет перейти
+        //name of the view where you want to go
         modelAndView.setViewName("taskslist");
         List<User> listUser = null;
         List<Task> listTask = null;
@@ -66,7 +63,7 @@ public class TaskController {
             e.printStackTrace();
         }
 
-        return modelAndView; //после уйдем на представление, указанное чуть выше, если оно будет найдено.
+        return modelAndView;
     }
 
     @RequestMapping(value = "/edit-task-{id}", method = RequestMethod.GET)
@@ -99,7 +96,7 @@ public class TaskController {
 
     /**
      * This method will be called on form submission, handling POST request for
-     * updating user in database. It also validates the user input
+     * updating user in database.
      */
     @RequestMapping(value = { "/edit-task-{id}" }, method = RequestMethod.POST)
     public String updateTask(@ModelAttribute("taskJSP") Task task, @PathVariable Integer id, ModelMap model,
@@ -131,7 +128,7 @@ public class TaskController {
 
 
     /**
-     * This method will delete an user by it's SSOID value.
+     * This method will delete an task by it's id value.
      */
     @RequestMapping(value = { "/delete-task-{id}" }, method = RequestMethod.GET)
     public String deleteTask(@PathVariable Integer id) {
@@ -172,9 +169,7 @@ public class TaskController {
     @RequestMapping(value = "/newtask", method = RequestMethod.POST)
     public String saveTask(@ModelAttribute("taskJSP") Task task, ModelMap model,
                            HttpServletRequest request) {
-
-        //т.к в taskJSP записывается только простые поля, то приходится
-        //вручную обрабатывать сложные теги
+        //manual processing of hard tags
         boolean setStatus = setTaskAttribute(request, task);
         if(!setStatus) return "addOrUpdateTask";
 

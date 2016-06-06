@@ -5,18 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import taskManager.beans.XMLService;
 import taskManager.dao.DaoFactory;
 import taskManager.dao.PersistException;
 import taskManager.domain.Task;
 import taskManager.domain.User;
-import taskManager.exportXML.exportTask;
-import taskManager.exportXML.exportUser;
-import taskManager.importXML.ImportXml;
 import taskManager.postgreSql.PostgreSqlTaskDao;
 import taskManager.postgreSql.PostgreSqlUserDao;
 
@@ -147,7 +142,6 @@ public class ExportController {
             String path = dir.getAbsolutePath() + File.separator + fileName;
 
             boolean flagCreate = service.save(path, listTask, Task.class);
-            //boolean flagCreate = exportTask.createXMLTaskDocument(path, listTask);
 
             if(flagCreate){
                 model.addAttribute("nameXML", fileName);
@@ -202,7 +196,6 @@ public class ExportController {
             String path = dir.getAbsolutePath() + File.separator + fileName;
 
             boolean flagCreate = service.save(path, listUser, User.class);
-            //boolean flagCreate = exportUser.createXMLUserDocument(path, listUser);
 
             if(flagCreate){
                 model.addAttribute("nameXML", fileName);
@@ -251,7 +244,6 @@ public class ExportController {
         //save file in other path
         String path = dir.getAbsolutePath() + File.separator + fileName;
 
-        //boolean flagCreate = exportUser.createXMLUserDocument(path, list);
         boolean flagCreate = service.save(path, list, User.class);
 
         if(flagCreate){
@@ -295,7 +287,7 @@ public class ExportController {
         //save file in other path
         String path = dir.getAbsolutePath() + File.separator + fileName;
 
-        //boolean flagCreate = exportTask.createXMLTaskDocument(path, list);
+        //boolean flagCreate = ExportTask.createXMLTaskDocument(path, list);
         boolean flagCreate = service.save(path, list, Task.class);
 
         if(flagCreate){

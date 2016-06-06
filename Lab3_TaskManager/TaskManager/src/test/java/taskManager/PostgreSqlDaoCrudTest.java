@@ -23,11 +23,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * Created by Сергей on 24.03.16.
- */
-
 public class PostgreSqlDaoCrudTest {
 
     private static Connection connection;

@@ -33,8 +33,4 @@
 
     <context:component-scan base-package="taskManager" />
 
-
-    <!-- initialize Embedded DataSource. Встроенная база данных-->
-
-
 </beans>

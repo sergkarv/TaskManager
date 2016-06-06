@@ -28,7 +28,7 @@ import taskmanager.core.*;
 
 /**
  * Графический интерфейс программы
- * @author Головин, Карасев
+ * @author Карасев
  * @version 1.0
  */
 public class gui extends javax.swing.JFrame implements Listener {

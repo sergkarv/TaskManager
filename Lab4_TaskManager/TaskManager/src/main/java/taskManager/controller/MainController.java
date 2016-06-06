@@ -25,7 +25,6 @@ public class MainController {
 
     @PostConstruct
     public void postMainController() {
-        //получаем соединение, которое будем использовать в др. методах для запросов к БД
         try {
             connection = daoFactory.getContext();
         } catch (PersistException e) {
@@ -33,7 +32,7 @@ public class MainController {
         }
     }
 
-    /*Попадаем сюда на старте приложения  */
+    /*Get here at application start  */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView main() {
         ModelAndView modelAndView = new ModelAndView();
@@ -42,18 +41,13 @@ public class MainController {
         return modelAndView;
     }
 
-    /*как только на index.jsp подтвердится форма
-    <spring:form method="post"  modelAttribute="userJSP" action="check-user">,
-    то попадем вот сюда
-     */
     @RequestMapping(value = "/check-user")
     public ModelAndView checkUser(@ModelAttribute("userJSP") User user) {
         ModelAndView modelAndView = new ModelAndView();
 
-        //имя представления, куда нужно будет перейти
+        //name of the view where you want to go
         modelAndView.setViewName("mainPage");
 
-        //записываем в атрибут userJSP (используется на странице *.jsp объект user
         //modelAndView.addObject("userJSP", user);
         //modelAndView.addObject("taskJSP", new Task());
         return modelAndView;

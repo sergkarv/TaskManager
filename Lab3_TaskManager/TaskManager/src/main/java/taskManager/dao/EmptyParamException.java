@@ -1,8 +1,5 @@
 package taskManager.dao;
 
-/**
- * Created by Администратор on 25.03.16.
- */
 public class EmptyParamException extends Exception {
     public EmptyParamException() {
         super("Empty collection parameters!");

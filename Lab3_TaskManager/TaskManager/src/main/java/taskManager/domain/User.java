@@ -2,9 +2,6 @@ package taskManager.domain;
 
 import taskManager.dao.Identified;
 
-/**
- * Created by Сергей on 21.03.16.
- */
 public class User implements Identified<Integer> {
 
     private Integer id = null;

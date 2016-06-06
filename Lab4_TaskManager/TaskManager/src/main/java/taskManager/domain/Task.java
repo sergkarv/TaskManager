@@ -4,9 +4,6 @@ import taskManager.dao.Identified;
 
 import java.util.Date;
 
-/**
- * Created by Сергей on 21.03.16.
- */
 public class Task implements Identified<Integer>, Comparable<Task> {
     private Integer id = null;
     private String name;
