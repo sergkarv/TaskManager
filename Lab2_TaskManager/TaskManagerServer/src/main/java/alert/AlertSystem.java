@@ -7,7 +7,7 @@ import task.Task;
 
 /**
  * Интерфейс системы оповещения о выполненных заданиях. 
- * @author Головин, Карасев
+ * @author Карасев
  * @version 1.0
  */
 public interface AlertSystem 
