@@ -12,11 +12,12 @@ import taskManager.utils.Utils;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 
 public class ImportTask {
 
-    public static List<Taskweb> parserToListObjects(String path){
+    public static List<Taskweb> parserToListObjects(String path)throws ParseException{
         int size=0;
         List<Taskweb> listTask = null;
 
@@ -50,7 +51,7 @@ public class ImportTask {
 
     }
 
-    private static Taskweb parserElement(Element element){
+    private static Taskweb parserElement(Element element) throws ParseException{
         if(element.getName().equals("task")){
             Taskweb task = new Taskweb();
 

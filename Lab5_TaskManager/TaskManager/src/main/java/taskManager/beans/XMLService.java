@@ -29,6 +29,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
 
+import java.text.ParseException;
 import java.util.*;
 
 @Component
@@ -49,7 +50,7 @@ public class XMLService {
         session = factory.getContext();
     }
 
-    public boolean load(String path, Class c, BindingResult errors) throws PersistException {
+    public boolean load(String path, Class c, BindingResult errors) throws PersistException, ParseException {
         File xsdFile = null;
 
         if (c.equals(User.class)) {
@@ -160,7 +161,7 @@ public class XMLService {
         return list;
     }
 
-    public List<Taskweb> readXmlTask(String path) {
+    public List<Taskweb> readXmlTask(String path) throws ParseException{
         List<Taskweb> list = ImportTask.parserToListObjects(path);
         if (list == null) return null;
         Collections.sort(list);

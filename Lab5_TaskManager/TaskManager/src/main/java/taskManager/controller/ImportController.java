@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.ParseException;
 
 @Controller
 @Scope(value = "request")
@@ -87,7 +88,15 @@ public class ImportController {
                 modelAndView.addObject("success", "Import from XML File successfully");
             }
 
-        } catch (Exception e) {
+        }catch (ParseException e){
+            System.err.println(e);
+            e.printStackTrace();
+            modelAndView.setViewName("errorPage");
+            modelAndView.addObject("error", "Import Error! Not correct Date.");
+            modelAndView.addObject("URLPage","/import_xml");
+            modelAndView.addObject("namePage","Import XML Page");
+        }
+        catch (Exception e) {
             System.err.println(e);
             e.printStackTrace();
             modelAndView.setViewName("errorPage");
