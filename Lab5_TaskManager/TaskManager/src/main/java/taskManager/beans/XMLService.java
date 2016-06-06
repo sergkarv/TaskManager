@@ -7,17 +7,15 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 
-import taskManager.dao.EmptyParamException;
-import taskManager.dao.NullPointParameterException;
 import taskManager.dao.PersistException;
 import taskManager.domain.Task;
 import taskManager.domain.Taskweb;
 import taskManager.domain.User;
-import taskManager.exportXML.exportTask;
-import taskManager.exportXML.exportUser;
+import taskManager.exportXML.ExportTask;
+import taskManager.exportXML.ExportUser;
+import taskManager.importXML.ImportTask;
+import taskManager.importXML.ImportUser;
 import taskManager.importXML.XmlValidator;
-import taskManager.importXML.importTask;
-import taskManager.importXML.importUser;
 import taskManager.postgreSql.PostgreSqlDaoFactory;
 import taskManager.postgreSql.PostgreSqlTaskDao;
 import taskManager.postgreSql.PostgreSqlUserDao;
@@ -37,8 +35,8 @@ import java.util.*;
 @Scope(value = "request")
 public class XMLService {
 
-    private final String pathXsdUser = "xsd/user.xsd";
-    private final String pathXsdTask = "xsd/task.xsd";
+    private static final String PATH_XSD_USER = "xsd/user.xsd";
+    private static final String PATH_XSD_TASK = "xsd/task.xsd";
     @Autowired
     private XmlValidator fileValidator;
 
@@ -46,123 +44,97 @@ public class XMLService {
     private Session session;
 
     @PostConstruct
-    public void postXmlService() {
+    public void postXmlService() throws PersistException {
         factory = new PostgreSqlDaoFactory();
-        try {
-            session = factory.getContext();
-        } catch (PersistException e) {
-            e.printStackTrace();
-        }
+        session = factory.getContext();
     }
 
-    public boolean load(String path, Class c, BindingResult errors){
-
+    public boolean load(String path, Class c, BindingResult errors) throws PersistException {
         File xsdFile = null;
 
-        if(c.equals(User.class)){
-            xsdFile = new File(pathXsdUser);
-        }
-        else if(c.equals(Task.class)){
-            xsdFile = new File(pathXsdTask);
+        if (c.equals(User.class)) {
+            xsdFile = new File(PATH_XSD_USER);
+        } else if (c.equals(Task.class)) {
+            xsdFile = new File(PATH_XSD_TASK);
         }
 
-        if(!xsdFile.exists()){
-            fileValidator.genereteError(errors,"XSD File not found");
+        if (!xsdFile.exists()) {
+            fileValidator.genereteError(errors, "XSD File not found");
             return false;
         }
 
         boolean validFile = validateXml(new File(path), xsdFile);
 
-        if(!validFile){
-            fileValidator.genereteError(errors,"XML File not valid! Please select other file");
+        if (!validFile) {
+            fileValidator.genereteError(errors, "XML File not valid! Please select other file");
             return false;
         }
 
-        if(c.equals(User.class)){
-            ArrayList<User> listUser = readXmlUser(path);
-            if(listUser == null){
-                fileValidator.genereteError(errors,"Error read XML File! Please select other file");
+        if (c.equals(User.class)) {
+            List<User> listUser = readXmlUser(path);
+            if (listUser == null) {
+                fileValidator.genereteError(errors, "Error read XML File! Please select other file");
                 return false;
             }
 
-            try {
-                PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
-                for(User user : listUser){
-                    try{
-                        userDao.update(user);
-                    }catch (PersistException e){
-                        try {
-                            //use self Id; if user.tasks reference to task.user
-                            userDao.persist(user, true);
-                            //if userDao.persist(user, false) create new id to user
-                        } catch (EmptyParamException e1) {
-                            e1.printStackTrace();
-                        } catch (NullPointParameterException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
+
+            PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+            for (User user : listUser) {
+                try {
+                    userDao.update(user);
+                } catch (PersistException e) {
+                    //use self Id; if user.tasks reference to task.user
+                    userDao.persist(user, true);
+                    //if userDao.persist(user, false) create new id to user
                 }
-                return true;
-            } catch (PersistException e) {
-                e.printStackTrace();
             }
-        }
-        else if(c.equals(Task.class)){//if id task is wrong, it is user error, not my folt
-            ArrayList<Taskweb> listTaskWeb = readXmlTask(path);
-            if(listTaskWeb == null){
-                fileValidator.genereteError(errors,"Error read XML File! Please select other file");
+            return true;
+
+        } else if (c.equals(Task.class)) {//if id task is wrong, it is user error, not my folt
+            List<Taskweb> listTaskWeb = readXmlTask(path);
+            if (listTaskWeb == null) {
+                fileValidator.genereteError(errors, "Error read XML File! Please select other file");
                 return false;
             }
 
-            try {
-                PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
-                PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
-                Task task = null;
-                for(Taskweb taskweb : listTaskWeb){
-                    try{
-                        task = Utils.taskConvert(taskweb, taskDao, userDao);
-                        taskDao.update(task);
-                    }catch (PersistException e){
-                        try {
-                            //use self Id; if task.parent reference to task.id
-                            taskDao.persist(task, true);
-                            //if taskDao.persist(task, false) create new id to task
-                        } catch (EmptyParamException e1) {
-                            e1.printStackTrace();
-                        } catch (NullPointParameterException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                }
-                return true;
-            } catch (PersistException e) {
-                e.printStackTrace();
-            }
+            PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
+            PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+            Task task = null;
+            for (Taskweb taskweb : listTaskWeb) {
+                try {
+                    task = Utils.taskConvert(taskweb, taskDao, userDao);
+                    taskDao.update(task);
+                } catch (PersistException e) {
+                    //use self Id; if task.parent reference to task.id
+                    taskDao.persist(task, true);
+                    //if taskDao.persist(task, false) create new id to task
 
+                }
+            }
+            return true;
 
         }
-        fileValidator.genereteError(errors,"Something Error in XML File! Please select other file");
+        fileValidator.genereteError(errors, "Something Error in XML File! Please select other file");
         return false;
     }
 
-    public boolean save(String path, List list, Class c){
+    public boolean save(String path, List list, Class c) {
         List<Task> listTask = null;
         List<User> listUser = null;
         boolean flagCreate = false;
 
-        if(c.equals(User.class)){
+        if (c.equals(User.class)) {
             listUser = new ArrayList<>();
-            for(Object object : list){
+            for (Object object : list) {
                 listUser.add((User) object);
             }
-            flagCreate = exportUser.createXMLUserDocument(path, listUser);
-        }
-        else if(c.equals(Task.class)){
+            flagCreate = ExportUser.createXMLUserDocument(path, listUser);
+        } else if (c.equals(Task.class)) {
             listTask = new ArrayList<>();
-            for(Object object : list){
+            for (Object object : list) {
                 listTask.add((Task) object);
             }
-            flagCreate = exportTask.createXMLTaskDocument(path, listTask);
+            flagCreate = ExportTask.createXMLTaskDocument(path, listTask);
         }
 
         return flagCreate;
@@ -181,16 +153,16 @@ public class XMLService {
         return true;
     }
 
-    public ArrayList<User> readXmlUser(String path){
-        ArrayList<User> list = importUser.parserToListObjects(path);
-        if(list == null) return null;
+    public List<User> readXmlUser(String path) {
+        List<User> list = ImportUser.parserToListObjects(path);
+        if (list == null) return null;
         Collections.sort(list);
         return list;
     }
 
-    public ArrayList<Taskweb> readXmlTask(String path){
-        ArrayList<Taskweb> list = importTask.parserToListObjects(path);
-        if(list == null) return null;
+    public List<Taskweb> readXmlTask(String path) {
+        List<Taskweb> list = ImportTask.parserToListObjects(path);
+        if (list == null) return null;
         Collections.sort(list);
         return list;
     }

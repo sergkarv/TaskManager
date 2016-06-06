@@ -12,8 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-import taskManager.dao.EmptyParamException;
-import taskManager.dao.NullPointParameterException;
 import taskManager.dao.PersistException;
 import taskManager.domain.User;
 import taskManager.domain.Userweb;
@@ -29,11 +27,12 @@ public class UserController {
     private Session session;
 
     @PostConstruct
-    public void postUserController() {
+    public void postUserController(){
         factory = new PostgreSqlDaoFactory();
         try {
             session = factory.getContext();
         } catch (PersistException e) {
+            System.err.println(e);
             e.printStackTrace();
         }
     }
@@ -50,7 +49,10 @@ public class UserController {
             list = userDao.getAll();
             modelAndView.addObject("userListJSP", list);
         } catch (PersistException e) {
-            e.printStackTrace();
+            modelAndView.setViewName("errorPage");
+            modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject("URLPage","/check-user");
+            modelAndView.addObject("namePage","Main Page");
         }
 
         return modelAndView;
@@ -71,21 +73,29 @@ public class UserController {
 
     @RequestMapping(value = {"/newuser"}, method = RequestMethod.POST)
     public String saveUser(@ModelAttribute("userJSP") Userweb userweb, ModelMap model) {
+        String resultPage = null;
         User user = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             user = Utils.userConvert(userweb);
             userDao.persist(user, false);
+            resultPage = "registrationsuccess";
+            model.addAttribute("success", "User " + user.getName() + " registered successfully");
         } catch (PersistException e) {
+            resultPage = "errorPage";
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("URLPage","/check-user");
+            model.addAttribute("namePage","Main Page");
+        }catch (RuntimeException e){
+            System.err.println(e);
             e.printStackTrace();
-        } catch (NullPointParameterException e) {
-            e.printStackTrace();
-        } catch (EmptyParamException e) {
-            e.printStackTrace();
+            resultPage = "errorPage";
+            model.addAttribute("error", "System Error! A data-entry error!");
+            model.addAttribute("URLPage","/check-user");
+            model.addAttribute("namePage","Main Page");
         }
 
-        model.addAttribute("success", "User " + user.getName() + " registered successfully");
-        return "registrationsuccess";
+        return resultPage;
     }
 
     /**
@@ -101,12 +111,15 @@ public class UserController {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             editUser = userDao.getByPK(id);
             editUserWeb = Utils.userConvert(editUser);
+            modelAndView.addObject("userJSP", editUserWeb);
+            modelAndView.addObject("edit", true);
         } catch (PersistException e) {
-            e.printStackTrace();
+            modelAndView.setViewName("errorPage");
+            modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject("URLPage","/check-user");
+            modelAndView.addObject("namePage","Main Page");
         }
 
-        modelAndView.addObject("userJSP", editUserWeb);
-        modelAndView.addObject("edit", true);
         return modelAndView;
     }
 
@@ -116,7 +129,7 @@ public class UserController {
      */
     @RequestMapping(value = { "/edit-user-{id}" }, method = RequestMethod.POST)
     public String updateUser(@ModelAttribute("userJSP") Userweb user, @PathVariable Integer id, ModelMap model) {
-
+        String resultPage = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             User editUser = userDao.getByPK(id);
@@ -125,27 +138,37 @@ public class UserController {
             editUser.setPassword(user.getPassword());
 
             userDao.update(editUser);
+            model.addAttribute("success", "User " + user.getName() + " updated successfully");
+            resultPage = "registrationsuccess";
         } catch (PersistException e) {
-            e.printStackTrace();
+            resultPage = "errorPage";
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("URLPage","/check-user");
+            model.addAttribute("namePage","Main Page");
         }
 
-        model.addAttribute("success", "User " + user.getName() + " updated successfully");
-        return "registrationsuccess";
+        return resultPage;
     }
 
     /**
      * This method will delete an user by it's id value.
      */
     @RequestMapping(value = { "/delete-user-{id}" }, method = RequestMethod.GET)
-    public String deleteUser(@PathVariable Integer id) {
-
+    public Object deleteUser(@PathVariable Integer id) {
+        Object resultPage = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             userDao.delete(id);
+            resultPage = "redirect:/userslist";
         } catch (PersistException e) {
-            e.printStackTrace();
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("errorPage");
+            modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject("URLPage","/check-user");
+            modelAndView.addObject("namePage","Main Page");
+            resultPage = modelAndView;
         }
 
-        return "redirect:/userslist";
+        return resultPage;
     }
 }

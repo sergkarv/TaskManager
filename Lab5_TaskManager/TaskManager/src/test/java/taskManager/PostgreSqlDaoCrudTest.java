@@ -6,8 +6,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import taskManager.dao.DaoFactory;
-import taskManager.dao.EmptyParamException;
-import taskManager.dao.NullPointParameterException;
 import taskManager.dao.PersistException;
 import taskManager.domain.Task;
 import taskManager.domain.User;
@@ -26,8 +24,7 @@ public class PostgreSqlDaoCrudTest {
     private static DaoFactory<Session> factory = new PostgreSqlDaoFactory();
 
     @BeforeClass
-    public static void setUpBeforeClass()throws PersistException, SQLException,
-            NullPointParameterException, EmptyParamException {
+    public static void setUpBeforeClass()throws PersistException, SQLException{
 
         session = factory.getContext();
 

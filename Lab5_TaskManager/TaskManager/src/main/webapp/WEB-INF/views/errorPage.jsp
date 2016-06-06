@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Find Error Page</title>
+    <title>Error Page</title>
     <link href="<c:url value='/static/css/bootstrap.css'/>" rel="stylesheet" type="text/css"/>
     <link href="<c:url value='/static/css/app.css'/>" rel="stylesheet" type="text/css"/>
 </head>
@@ -15,7 +15,7 @@
     </div>
 
 	<span class="well floatRight">
-		Go to <a href="/search">Search Page</a>
+		Go to <a href="${URLPage}">${namePage}</a>
 	</span>
 </div>
 </body>

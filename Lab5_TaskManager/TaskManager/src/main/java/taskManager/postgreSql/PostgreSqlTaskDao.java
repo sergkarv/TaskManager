@@ -68,14 +68,13 @@ public class PostgreSqlTaskDao extends AbstractJDBCDao<Task, Integer> {
     }
 
     @Override
-    public Task persist(Task object, boolean useSelfId) throws PersistException,
-            EmptyParamException, NullPointParameterException {
+    public Task persist(Task object, boolean useSelfId) throws PersistException{
         session.flush();
         if(object == null){
-            throw new NullPointParameterException("Object is null!");
+            throw new NullPointerException("Object task is null!");
         }
         if(object.getName().equals(null)){
-            throw new EmptyParamException();
+            throw new IllegalArgumentException("Object task has null name!");
         }
 
         Task task = null;

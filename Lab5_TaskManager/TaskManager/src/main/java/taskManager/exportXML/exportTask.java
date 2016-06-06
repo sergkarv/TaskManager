@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
-public class exportTask {
+public class ExportTask {
 
     public static boolean createXMLTaskDocument(String path, List<Task> list){
         boolean flag = false;
@@ -86,6 +86,7 @@ public class exportTask {
         }
         catch (IOException e) {
             System.err.println(e);
+            e.printStackTrace();
             flag = false;
         }
 

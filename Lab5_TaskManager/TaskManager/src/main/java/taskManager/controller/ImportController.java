@@ -84,12 +84,16 @@ public class ImportController {
             }
             else{
                 modelAndView.setViewName("importSuccess");
-                model.addAttribute("success", "Import from XML File successfully");
+                modelAndView.addObject("success", "Import from XML File successfully");
             }
 
         } catch (Exception e) {
-
+            System.err.println(e);
             e.printStackTrace();
+            modelAndView.setViewName("errorPage");
+            modelAndView.addObject("error", "System Error!");
+            modelAndView.addObject("URLPage","/import_xml");
+            modelAndView.addObject("namePage","Import XML Page");
         }
 
         return modelAndView;

@@ -29,7 +29,7 @@ public abstract class AbstractJDBCDao<T , PK extends Integer> implements Generic
     public abstract String getSelectQuery();
 
     @Override
-    public T persist(T object, boolean useSelfId) throws PersistException, NullPointParameterException, EmptyParamException {
+    public T persist(T object, boolean useSelfId) throws PersistException{
         session.flush();
         session.getTransaction().begin();
         session.save(object);

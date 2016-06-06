@@ -11,7 +11,7 @@ import java.util.List;
 public interface GenericDao<T , PK extends Serializable> {
 
     /** Creates a new record appropriate to the item object */
-    public T persist(T object, boolean useSelfId)  throws PersistException, NullPointParameterException, EmptyParamException;
+    public T persist(T object, boolean useSelfId)  throws PersistException;
     /** Returns an object corresponding to a record with primary key "key" or null */
     public T getByPK(PK key) throws PersistException;
 

@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import taskManager.dao.EmptyParamException;
-import taskManager.dao.NullPointParameterException;
+
 import taskManager.dao.PersistException;
 import taskManager.domain.Task;
 import taskManager.domain.Taskweb;
@@ -20,6 +19,7 @@ import taskManager.utils.Utils;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
+import java.text.ParseException;
 import java.util.Calendar;
 
 import java.util.List;
@@ -31,11 +31,12 @@ public class TaskController {
     private Session session;
 
     @PostConstruct
-     public void postTaskController() {
+    public void postTaskController() {
         factory = new PostgreSqlDaoFactory();
         try {
             session = factory.getContext();
         } catch (PersistException e) {
+            System.err.println(e);
             e.printStackTrace();
         }
     }
@@ -57,7 +58,10 @@ public class TaskController {
             modelAndView.addObject("userListJSP", listUser);
             modelAndView.addObject("taskListJSP", listTask);
         } catch (PersistException e) {
-            e.printStackTrace();
+            modelAndView.setViewName("errorPage");
+            modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject("URLPage","/check-user");
+            modelAndView.addObject("namePage","Main Page");
         }
 
         return modelAndView;
@@ -86,7 +90,10 @@ public class TaskController {
             modelAndView.addObject("userlistJSP", listUser);
             modelAndView.addObject("edit", true);
         } catch (PersistException e) {
-            e.printStackTrace();
+            modelAndView.setViewName("errorPage");
+            modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject("URLPage","/check-user");
+            modelAndView.addObject("namePage","Main Page");
         }
 
         return modelAndView;
@@ -96,18 +103,30 @@ public class TaskController {
      * This method will be called on form submission, handling POST request for
      * updating task in database.
      */
-    @RequestMapping(value = { "/edit-task-{id}" }, method = RequestMethod.POST)
+    @RequestMapping(value = {"/edit-task-{id}"}, method = RequestMethod.POST)
     public String updateTask(@ModelAttribute("taskJSP") Taskweb taskWeb,
                              @PathVariable Integer id, ModelMap model,
                              HttpServletRequest request) {
         Task task = null;
+        String resultPage = null;
         try {
             task = Utils.taskConvert(taskWeb, factory.getDao(session, Task.class), factory.getDao(session, User.class));
+            boolean setStatus = setTaskAttribute(request, task);
+            if (!setStatus) return "addOrUpdateTask";
         } catch (PersistException e) {
-            e.printStackTrace();
+            resultPage = "errorPage";
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("URLPage","/check-user");
+            model.addAttribute("namePage","Main Page");
+            return resultPage;
+        }catch (ParseException e){
+            resultPage = "errorPage";
+            model.addAttribute("error", "Error! Incorrect input date!");
+            model.addAttribute("URLPage","/check-user");
+            model.addAttribute("namePage","Main Page");
+            return resultPage;
         }
-        boolean setStatus = setTaskAttribute(request, task);
-        if(!setStatus) return "addOrUpdateTask";
+
 
         try {
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
@@ -123,7 +142,11 @@ public class TaskController {
 
             taskDao.update(editTask);
         } catch (PersistException e) {
-            e.printStackTrace();
+            resultPage = "errorPage";
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("URLPage","/check-user");
+            model.addAttribute("namePage","Main Page");
+            return resultPage;
         }
 
         model.addAttribute("success", "Task " + task.getName() + " updated successfully");
@@ -134,17 +157,23 @@ public class TaskController {
     /**
      * This method will delete an task by it's id value.
      */
-    @RequestMapping(value = { "/delete-task-{id}" }, method = RequestMethod.GET)
-    public String deleteTask(@PathVariable Integer id) {
-
+    @RequestMapping(value = {"/delete-task-{id}"}, method = RequestMethod.GET)
+    public Object deleteTask(@PathVariable Integer id) {
+        Object resultPage = null;
         try {
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
             taskDao.delete(id);
+            resultPage = "redirect:/taskslist";
         } catch (PersistException e) {
-            e.printStackTrace();
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("errorPage");
+            modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject("URLPage","/check-user");
+            modelAndView.addObject("namePage","Main Page");
+            resultPage = modelAndView;
         }
 
-        return "redirect:/taskslist";
+        return resultPage;
     }
 
     @RequestMapping(value = "/newtask", method = RequestMethod.GET)
@@ -162,11 +191,14 @@ public class TaskController {
             List<Task> listTask = taskDao.getAll();
             modelAndView.addObject("tasklistJSP", listTask);
             modelAndView.addObject("userlistJSP", listUser);
+            modelAndView.addObject("edit", false);
         } catch (PersistException e) {
-            e.printStackTrace();
+            modelAndView.setViewName("errorPage");
+            modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject("URLPage","/check-user");
+            modelAndView.addObject("namePage","Main Page");
         }
 
-        modelAndView.addObject("edit", false);
         return modelAndView;
     }
 
@@ -175,73 +207,87 @@ public class TaskController {
                            HttpServletRequest request) {
         //manual processing of hard tags
         Task task = null;
+        String resultPage = null;
         try {
             task = Utils.taskConvert(taskWeb, factory.getDao(session, Task.class), factory.getDao(session, User.class));
+            boolean setStatus = setTaskAttribute(request, task);
+            if (!setStatus) throw new PersistException("System error!");//return "addOrUpdateTask";
         } catch (PersistException e) {
-            e.printStackTrace();
+            resultPage = "errorPage";
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("URLPage","/check-user");
+            model.addAttribute("namePage","Main Page");
+            return resultPage;
+        }catch (ParseException e){
+            resultPage = "errorPage";
+            model.addAttribute("error", "Error! Incorrect input date!");
+            model.addAttribute("URLPage","/check-user");
+            model.addAttribute("namePage","Main Page");
+            return resultPage;
         }
-        boolean setStatus = setTaskAttribute(request, task);
-        if(!setStatus) return "addOrUpdateTask";
+
 
         try {
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
             taskDao.persist(task, false);
         } catch (PersistException e) {
+            resultPage = "errorPage";
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("URLPage","/check-user");
+            model.addAttribute("namePage","Main Page");
+            return resultPage;
+        } catch (RuntimeException e) {
+            System.err.println(e);
             e.printStackTrace();
-        } catch (NullPointParameterException e) {
-            e.printStackTrace();
-        } catch (EmptyParamException e) {
-            e.printStackTrace();
+            resultPage = "errorPage";
+            model.addAttribute("error", "System Error! A data-entry error!");
+            model.addAttribute("URLPage","/check-user");
+            model.addAttribute("namePage","Main Page");
+            return resultPage;
         }
 
         model.addAttribute("success", "Task " + task.getName() + " added successfully");
         return "addOrUpdateTaskSuccess";
     }
 
-    private boolean setTaskAttribute(HttpServletRequest request, Task task){
+    private boolean setTaskAttribute(HttpServletRequest request, Task task) throws PersistException, ParseException {
         String value = request.getParameter("time");
-        if(value == null) return false;
+        if (value == null) return false;
         Calendar calendar = Utils.strToCalendar(value, false);
 
         boolean highFlag = false;
         value = request.getParameter("highpriority");
-        if(value == null) {
+        if (value == null) {
             highFlag = false;
-        }
-        else
-        if(value.equals("on")){
+        } else if (value.equals("on")) {
             highFlag = true;
         }
 
         value = request.getParameter("parent");
         String idParentString = null;
         Integer idParent = null;
-        if(value != null){
-            if(!value.equals("null")){
-                idParentString = value.substring( value.indexOf('(')+1, value.length()-1 );
+        if (value != null) {
+            if (!value.equals("null")) {
+                idParentString = value.substring(value.indexOf('(') + 1, value.length() - 1);
                 idParent = Integer.valueOf(idParentString);
             }
         }
 
         value = request.getParameter("user");
-        if(value == null) return false;
+        if (value == null) return false;
         String idUserString = null;
         Integer idUser = null;
-        idUserString = value.substring( value.indexOf('(')+1, value.length()-1 );
+        idUserString = value.substring(value.indexOf('(') + 1, value.length() - 1);
         idUser = Integer.valueOf(idUserString);
 
         task.setDate(calendar.getTime());
         task.setHighPriority(highFlag);
-        try {
-            Task parent = (idParent != null)?
-                    (Task) factory.getDao(session, Task.class).getByPK(idParent):
-                    null;
-            task.setParent(parent);
-            User user = (User) factory.getDao(session, User.class).getByPK(idUser);
-            task.setUser(user);
-        } catch (PersistException e) {
-            e.printStackTrace();
-        }
+        Task parent = (idParent != null) ?
+                (Task) factory.getDao(session, Task.class).getByPK(idParent) :
+                null;
+        task.setParent(parent);
+        User user = (User) factory.getDao(session, User.class).getByPK(idUser);
+        task.setUser(user);
 
         return true;
     }

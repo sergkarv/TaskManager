@@ -18,10 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 
-
-/**
- * Created by Сергей on 22.05.16.
- */
 @Controller
 public class FindController {
 
@@ -34,6 +30,7 @@ public class FindController {
         try {
             session = factory.getContext();
         } catch (PersistException e) {
+            System.err.println(e);
             e.printStackTrace();
         }
     }
@@ -41,7 +38,6 @@ public class FindController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ModelAndView searchGet() {
         ModelAndView modelAndView = new ModelAndView();
-
         modelAndView.setViewName("search");
         return modelAndView;
     }
@@ -49,9 +45,7 @@ public class FindController {
     @RequestMapping(value = "/search/find_task", method = RequestMethod.GET)
     public ModelAndView findTaskGet() {
         ModelAndView modelAndView = new ModelAndView();
-
         modelAndView.setViewName("findEqualsTask");
-
         List<User> listUser = null;
         List<Task> listTask = null;
         try {
@@ -61,8 +55,11 @@ public class FindController {
             listTask = taskDao.getAll();
             modelAndView.addObject("userListJSP", listUser);
             modelAndView.addObject("taskListJSP", listTask);
-        } catch (PersistException e) {
-            e.printStackTrace();
+        }  catch (PersistException e) {
+            modelAndView.setViewName("errorPage");
+            modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject("URLPage","/search");
+            modelAndView.addObject("namePage","Search Page");
         }
 
         return modelAndView;
@@ -71,14 +68,13 @@ public class FindController {
     @RequestMapping(value = "/search/find_user", method = RequestMethod.GET)
     public ModelAndView findUserGet() {
         ModelAndView modelAndView = new ModelAndView();
-
         modelAndView.setViewName("findEqualsUser");
         return modelAndView;
     }
 
     @RequestMapping(value = "/search/find_task", method = RequestMethod.POST)
     public String findTaskPost(HttpServletRequest request, ModelMap model) {
-        String result = null;
+        String resultPage = null;
 
         Integer id;
         String name;
@@ -125,20 +121,22 @@ public class FindController {
             Collections.sort(listTask);
             model.addAttribute("taskListJSP", listTask);
             model.addAttribute("userListJSP", listUser);
-            result = "taskslist";
+            resultPage = "taskslist";
+
 
         } catch (PersistException e) {
-            //e.printStackTrace();
-            result = "findError";
+            resultPage = "errorPage";
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("URLPage","/search");
+            model.addAttribute("namePage","Search Page");
         }
 
-        return result;
+        return resultPage;
     }
 
     @RequestMapping(value = "/search/find_user", method = RequestMethod.POST)
     public String findUserPost(HttpServletRequest request, ModelMap model) {
-        String result = null;
+        String resultPage = null;
         Integer id;
         String name;
         String pass;
@@ -160,14 +158,15 @@ public class FindController {
             listUser = userDao.getByParameters(id, name, pass);
             Collections.sort(listUser);
             model.addAttribute("userListJSP",listUser);
-            result = "userslist";
+            resultPage = "userslist";
         } catch (PersistException e) {
-            //e.printStackTrace();
-            result = "findError";
+            resultPage = "errorPage";
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("URLPage","/search");
+            model.addAttribute("namePage","Search Page");
         }
 
-        return result;
+        return resultPage;
     }
 
     private Object getParam(String param, HttpServletRequest request){

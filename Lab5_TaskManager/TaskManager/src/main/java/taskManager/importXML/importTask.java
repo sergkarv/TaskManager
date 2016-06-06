@@ -14,15 +14,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class importTask {
+public class ImportTask {
 
-    //private static PostgreSqlDaoFactory factory = new PostgreSqlDaoFactory();
-
-    public static ArrayList<Taskweb> parserToListObjects(String path){
+    public static List<Taskweb> parserToListObjects(String path){
         int size=0;
-        ArrayList<Taskweb> listTask = new ArrayList<>();
+        List<Taskweb> listTask = null;
 
         try(FileReader fr = new FileReader(path)) {
+            listTask = new ArrayList<>();
             SAXBuilder parser = new SAXBuilder();
             Document doc = parser.build(fr);
 
@@ -41,10 +40,11 @@ public class importTask {
             return listTask;
 
         } catch (JDOMException ex) {
-            System.out.println(ex.getMessage());
+            System.err.println(ex);
+            ex.printStackTrace();
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-
+            System.err.println(ex);
+            ex.printStackTrace();
         }
         return null;
 

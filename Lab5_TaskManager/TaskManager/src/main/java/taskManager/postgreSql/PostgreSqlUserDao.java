@@ -5,8 +5,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 import taskManager.dao.AbstractJDBCDao;
-import taskManager.dao.EmptyParamException;
-import taskManager.dao.NullPointParameterException;
 import taskManager.dao.PersistException;
 import taskManager.domain.User;
 import java.util.*;
@@ -20,14 +18,13 @@ public class PostgreSqlUserDao extends AbstractJDBCDao<User, Integer> {
     }
 
     @Override
-    public User persist(User object, boolean useSelfId) throws PersistException,
-            EmptyParamException, NullPointParameterException {
+    public User persist(User object, boolean useSelfId) throws PersistException{
         session.flush();
         if(object == null){
-            throw new NullPointParameterException("Object is null!");
+            throw new NullPointerException("Object is null!");
         }
-        if(object.getName().equals(null)){
-            throw new EmptyParamException();
+        if(object.getName().equals(null)||object.getName().equals("")){
+            throw new IllegalArgumentException("Object task has null name!");
         }
 
         User user = null;

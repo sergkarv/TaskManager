@@ -12,7 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class exportUser {
+public class ExportUser {
 
     public static boolean createXMLUserDocument(String path, List<User> list){
         boolean flag = false;
@@ -57,6 +57,7 @@ public class exportUser {
         }
         catch (IOException e) {
             System.err.println(e);
+            e.printStackTrace();
             flag = false;
         }
 

@@ -30,6 +30,7 @@ public class MainController {
         try {
             session = factory.getContext();
         } catch (PersistException e) {
+            System.err.println(e);
             e.printStackTrace();
         }
     }
