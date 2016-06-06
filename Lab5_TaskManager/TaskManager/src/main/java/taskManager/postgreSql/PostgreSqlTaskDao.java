@@ -73,7 +73,7 @@ public class PostgreSqlTaskDao extends AbstractJDBCDao<Task, Integer> {
         if(object == null){
             throw new NullPointerException("Object task is null!");
         }
-        if(object.getName().equals(null)){
+        if(object.getName().equals(null)||object.getName().equals("")){
             throw new IllegalArgumentException("Object task has null name!");
         }
 
