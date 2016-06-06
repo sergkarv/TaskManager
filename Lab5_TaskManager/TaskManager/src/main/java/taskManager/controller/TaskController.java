@@ -53,6 +53,7 @@ public class TaskController {
             session.flush();
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
+            session = factory.getContext();
             listUser = userDao.getAll();
             listTask = taskDao.getAll();
             modelAndView.addObject("userListJSP", listUser);

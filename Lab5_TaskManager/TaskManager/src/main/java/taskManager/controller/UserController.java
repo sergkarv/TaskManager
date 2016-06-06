@@ -45,7 +45,9 @@ public class UserController {
         modelAndView.setViewName("userslist");
         List<User> list = null;
         try {
+
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+            session = factory.getContext();
             list = userDao.getAll();
             modelAndView.addObject("userListJSP", list);
         } catch (PersistException e) {
@@ -84,8 +86,8 @@ public class UserController {
         } catch (PersistException e) {
             resultPage = "errorPage";
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("URLPage","/check-user");
-            model.addAttribute("namePage","Main Page");
+            model.addAttribute("URLPage", "/check-user");
+            model.addAttribute("namePage", "Main Page");
         }catch (RuntimeException e){
             System.err.println(e);
             e.printStackTrace();

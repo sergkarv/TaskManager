@@ -51,6 +51,7 @@ public class FindController {
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
+            session = factory.getContext();
             listUser = userDao.getAll();
             listTask = taskDao.getAll();
             modelAndView.addObject("userListJSP", listUser);
@@ -106,6 +107,7 @@ public class FindController {
 
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+            session = factory.getContext();
             listUser = userDao.getAll();
             Task parent = null;
             User user = null;
@@ -151,7 +153,7 @@ public class FindController {
         List<User> listUser = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
-
+            session = factory.getContext();
             if(id == null && name == null && pass == null)
                 throw new PersistException("Empty fields! Don't enter all empty fields. ");
 

@@ -92,6 +92,7 @@ public class ExportController {
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
+            session = factory.getContext();
             listUser = userDao.getAll();
             listTask = taskDao.getAll();
             modelAndView.addObject("userListJSP", listUser);
@@ -142,6 +143,7 @@ public class ExportController {
 
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+            session = factory.getContext();
             Task parent = null;
             User user = null;
             if(idParent != null){
@@ -207,7 +209,7 @@ public class ExportController {
         List<User> listUser = null;
         try {
             PostgreSqlUserDao userDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
-
+            session = factory.getContext();
             if(id == null && name == null && pass == null)
                 throw new PersistException("Empty fields! Don't enter all empty fields. ");
 
@@ -260,6 +262,7 @@ public class ExportController {
 
         try {
             PostgreSqlUserDao taskDao = (PostgreSqlUserDao) factory.getDao(session, User.class);
+            session = factory.getContext();
             list = taskDao.getAll();
             Collections.sort(list);
         } catch (PersistException e) {
@@ -308,6 +311,7 @@ public class ExportController {
 
         try {
             PostgreSqlTaskDao taskDao = (PostgreSqlTaskDao) factory.getDao(session, Task.class);
+            session = factory.getContext();
             list = taskDao.getAll();
             Collections.sort(list);
         } catch (PersistException e) {
